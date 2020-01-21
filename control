@@ -1,0 +1,10 @@
+Package: ml.festival.lockwatch2
+Name: LockWatch 2 (iOS 13)
+Depends: mobilesubstrate
+conflicts: gsc.ipad
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: The idea of having an Apple Watch on your lock screen – continued
+Maintainer: Sniper_GER <sniperger@festival.ml>
+Author: Sniper_GER <sniperger@festival.ml>
+Section: Tweaks
