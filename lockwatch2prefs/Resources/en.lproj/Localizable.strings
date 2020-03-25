@@ -1,0 +1,27 @@
+//
+// Localizable.strings
+// LockWatch2
+//
+// Created by janikschmidt on 3/17/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
+//
+
+{
+	"NO_DEVICE_TITLE" = "LockWatch - No device found";
+	"NO_DEVICE_MESSAGE" = "LockWatch could not find any Apple Watch – physical or emulated. Without an Apple Watch, LockWatch does not work.\n\nTo fix this, either pair an Apple Watch to your device (if supported) or select an emulated device from LockWatch's preferences.";
+	
+	"LIBRARY_WATCH_FACES" = "Watch Faces";
+	"LIBRARY_MY_WATCH" = "My Watch";
+	"LIBRARY_APPLE_FACES_HEADER" = "Apple Watch";
+	"LIBRARY_CUSTOM_FACES_HEADER" = "Third-party Faces";
+	"LIBRARY_CUSTOM_INDEV_FOOTER" = "Third-party faces are currently not supported.";
+	
+	"WHATS_NEW_TITLE" = "LockWatch 2 - What's New";
+	"WHATS_NEW_DONE" = "Done";
+	
+	"SYNC_TO_LOCK_SCREEN" = "Synchronize Lock Screen";
+	"SYNC_TO_LOCK_SCREEN_PROMPT" = "This will replace the watch faces on your lock screen with the faces on your Apple Watch. Any customization to existing faces will be lost.\n\nAre you sure you want to continue? Some watch faces, customizations or complications may not be available for certain models.";
+	
+	"ADD_TO_PROMPT" = "Choose a location to add this watch face to.";
+	"ADD_TO_LOCK_SCREEN" = "Lock Screen";
+}

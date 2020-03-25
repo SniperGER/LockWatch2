@@ -1,34 +1,46 @@
 //
-//  LWPageView.m
-//  LockWatch2
+// LWPageView.m
+// LockWatch2
 //
-//  Created by janikschmidt on 1/15/2020.
-//  Copyright © 2020 Team FESTIVAL. All rights reserved.
+// Created by janikschmidt on 3/3/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#import "Core/LWEmulatedDevice.h"
+#define CLAMP(value, min, max) (value - min) / (max - min)
 
-#import "Core/LWPageDelegate.h"
+#import <ClockKit/CLKDevice.h>
+#import <NanoTimeKitCompanion/NTKFace.h>
+#import <NanoTimeKitCompanion/NTKFaceViewController.h>
 
 #import "LWPageView.h"
 
-@implementation LWPageView 
+#import "Core/LWEmulatedCLKDevice.h"
+#import "Core/LWPageDelegate.h"
 
-- (id)init {
-	if (self = [super init]) {
+@implementation LWPageView
+
+- (instancetype)initWithFrame:(CGRect)frame {
+	if (self = [super initWithFrame:frame]) {
 		_device = [CLKDevice currentDevice];
 		
 		[self setShowsHorizontalScrollIndicator:NO];
 		[self setShowsVerticalScrollIndicator:NO];
+		[self setBounces:NO];
 		[self setPagingEnabled:YES];
 		[self setClipsToBounds:NO];
 		[self setDelegate:self];
 		[self setScrollEnabled:YES];
 		
-		_outlineInsets = (UIEdgeInsets){ -8, -8, -8, -8 };
+		_contentAlpha = 0.0;
+		_outlineAlpha = 0.0;
 		
-		_tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+		_tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_handleTap:)];
 		[self addGestureRecognizer:_tapGesture];
+		
+		[self setContentSize:(CGSize){ 0, CGRectGetHeight(_device.actualScreenBounds) * 2 }];
+		
+		[self setScrollEnabled:_allowsDelete];
+		[_tapGesture setEnabled:_allowsSelect];
 	}
 	
 	return self;
@@ -37,45 +49,185 @@
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	
-	CGFloat scale = (_pageSize.width / CGRectGetWidth(_device.actualScreenBounds));
+	[_contentView setBounds:(CGRect){ CGPointZero, _contentViewSize }];
+	[_contentView setCenter:(CGPoint){ CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds) - self.contentOffset.y }];
+	
+	CGFloat scale = _pageSize.width / CGRectGetWidth(_device.actualScreenBounds);
+	CGFloat contentViewScale = (CGRectGetWidth(_device.actualScreenBounds) / CGRectGetWidth(_device.screenBounds)) * scale;
+	[_contentView setTransform:CGAffineTransformMakeScale(contentViewScale, contentViewScale)];
 	
 	if (_outlineView) {
-		[_outlineView setFrame:UIEdgeInsetsInsetRect((CGRect){ CGPointZero, _contentView.frame.size }, _outlineInsets)];
-		[_outlineView setCenter:(CGPoint){ CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds) }];
-		[_outlineView.layer setCornerRadius:(_device.screenCornerRadius * scale) + -_outlineInsets.top];
-		[_outlineView setAlpha:_outlineAlpha];
+		[_outlineView setFrame:UIEdgeInsetsInsetRect(_contentView.frame, _outlineInsets)];
+		[_outlineView setCenter:(CGPoint){ CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds) - self.contentOffset.y }];
+		[_outlineView.layer setCornerRadius:_outlineCornerRadius * scale];
+		
+		if (_outlineView.superview != self) {
+			[_outlineView removeFromSuperview];
+			[self addSubview:_outlineView];
+		}
+		
+		UIBezierPath* path = [UIBezierPath bezierPathWithRoundedRect:_outlineView.bounds cornerRadius:_outlineView.layer.cornerRadius];
+		[path setUsesEvenOddFillRule:YES];
+		[path appendPath:[UIBezierPath bezierPathWithRoundedRect:UIEdgeInsetsInsetRect(_outlineView.bounds, (UIEdgeInsets){ 3, 3, 3, 3 }) cornerRadius:_outlineView.layer.cornerRadius - 3]];
+		
+		[_outlineViewMask setPath:path.CGPath];
+		
+		[self bringSubviewToFront:_contentView];
 	}
+}
+
+- (CGSize)sizeThatFits:(CGSize)size {
+	return (CGSize){ _pageSize.width, CGRectGetHeight(_device.actualScreenBounds) };
 }
 
 #pragma mark - Instance Methods
 
-- (void)applyConfiguration {
-	// self.backgroundColor = [UIColor colorWithRed:(arc4random_uniform(256) / 255.0) green:(arc4random_uniform(256) / 255.0) blue:(arc4random_uniform(256) / 255.0) alpha:1];
-	if (!_outlineView) {
-		_outlineView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:9]];
-		[_outlineView setUserInteractionEnabled:NO];
-		[_outlineView setClipsToBounds:YES];
-		[self insertSubview:_outlineView atIndex:0];
+- (CGFloat)_deleteFractionForOffset:(CGPoint)offset {
+	if (_allowsDelete) {
+		return (offset.y / CGRectGetHeight(self.bounds));
 	}
+	
+	return 0;
 }
 
-- (void)handleTap:(UITapGestureRecognizer*)sender {
+- (void)_handleTap:(UIGestureRecognizer*)sender {
 	if (sender.state == UIGestureRecognizerStateEnded) {
 		[self.pageDelegate pageWasSelected:self];
 	}
 }
 
-- (void)setContentView:(UIView*)contentView {
+- (void)_handleScrollingStopped {
+	if ([self _deleteFractionForOffset:self.contentOffset] > 0.5) {
+		[self.pageDelegate page:self didEndSwipeToDelete:YES];
+	} else if (_swipingToDelete) {
+		[self.pageDelegate page:self didEndSwipeToDelete:NO];
+	}
+	
+	_swipingToDelete = NO;
+}
+
+- (void)applyConfiguration {
+	if (!_outlineView) {
+		_outlineView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+		[_outlineView setClipsToBounds:YES];
+		[_outlineView setUserInteractionEnabled:NO];
+		[self addSubview:_outlineView];
+		
+		_outlineViewMask = [CAShapeLayer layer];
+		[_outlineViewMask setFillRule:kCAFillRuleEvenOdd];
+		
+		[_outlineView.layer setMask:_outlineViewMask];
+	}
+	
+	[_outlineView.layer setCornerRadius:_outlineCornerRadius];
+#if __clang_major__ >= 9
+	if (@available(iOS 13.0, *)) {
+		[_outlineView.layer setCornerCurve:kCACornerCurveContinuous];
+	}
+#endif
+
+	[_outlineView setAlpha:_outlineAlpha];
+}
+
+- (void)cancelDelete:(BOOL)animated {
+	[self setContentOffset:CGPointZero animated:animated];
+	
+	if (!animated) {
+		[self.pageDelegate page:self didEndSwipeToDelete:NO];
+	}
+}
+
+- (void)prepareForReuse {
+	[self setAlpha:1.0];
+	[self setContentOffset:CGPointZero];
+	
+	[self setOutlineAlpha:1];
+	[self setContentAlpha:1];
+	[self setAllowsSelect:NO];
+	
+	[_contentView setTransform:CGAffineTransformIdentity];
+	[self setContentView:nil];
+	
+	_outlineStrokeWidth = 1;
+	_outlineCornerRadius = 0;
+	_outlineInsets = UIEdgeInsetsZero;
+}
+
+- (void)setAllowsDelete:(BOOL)allowsDelete {
+	_allowsDelete = allowsDelete;
+	
+	[self setScrollEnabled:allowsDelete];
+}
+
+- (void)setAllowsSelect:(BOOL)allowsSelect {
+	_allowsSelect = allowsSelect;
+	
+	[_tapGesture setEnabled:allowsSelect];
+}
+
+- (void)setContentAlpha:(CGFloat)contentAlpha {
+	_contentAlpha = contentAlpha;
+	
+	[_contentView setAlpha:contentAlpha];
+}
+
+- (void)setContentView:(nullable UIView*)contentView {
 	if (_contentView != contentView) {
 		[_contentView removeFromSuperview];
 		[_contentView setTransform:CGAffineTransformIdentity];
-		[_contentView setAlpha:1];
+		[_contentView setAlpha:1.0];
 		
 		_contentView = contentView;
+		
 		if (_contentView) {
-			[self addSubview:_contentView];
-			// [contentView setAlpha:_contentAlpha];
+			[self insertSubview:_contentView atIndex:0];
+			[_contentView setAlpha:_contentAlpha];
 		}
+	}
+}
+
+- (void)setContentViewSize:(CGSize)contentViewSize {
+	if (!CGSizeEqualToSize(_contentViewSize, contentViewSize)) {
+		[self setNeedsLayout];
+	}
+	
+	_contentViewSize = contentViewSize;
+}
+
+- (void)setOutlineAlpha:(CGFloat)outlineAlpha {
+	_outlineAlpha = outlineAlpha;
+	
+	[_outlineView setAlpha:outlineAlpha];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView*)scrollView {
+	[self _handleScrollingStopped];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView*)scrollView willDecelerate:(BOOL)decelerate {
+	if (!decelerate) {
+		[self _handleScrollingStopped];
+	}
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView*)scrollView {
+	[self _handleScrollingStopped];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView*)scrollView {
+	if ([self _deleteFractionForOffset:self.contentOffset] < 0.15) {
+		if (!_swipingToDelete) return;
+		
+		[self.pageDelegate page:self didUpdateSwipeToDelete:MIN(MAX(CLAMP([self _deleteFractionForOffset:self.contentOffset], 0.15, 1.0), 0), 1)];
+	} else {
+		if (!_swipingToDelete) {
+			_swipingToDelete = YES;
+			[self.pageDelegate pageDidBeginSwipeToDelete:self];
+		}
+		
+		[self.pageDelegate page:self didUpdateSwipeToDelete:MIN(MAX(CLAMP([self _deleteFractionForOffset:self.contentOffset], 0.15, 1.0), 0), 1)];
 	}
 }
 

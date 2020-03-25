@@ -1,0 +1,32 @@
+//
+// Root.strings
+// LockWatch2
+//
+// Created by janikschmidt on 3/17/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
+//
+
+{
+	"GENERIC_CANCEL" = "Abbrechen";
+	"GENERIC_CONFIRM" = "OK";
+	
+	"GENERAL" = "Allgemein";
+	"GENERAL_ENABLED" = "Aktiviert";
+	
+	"DEVICE_SETTINGS" = "Geräteeinstellungen";
+	"USE_EMULATED_DEVICE" = "Apple Watch simulieren";
+	"EMULATED_DEVICE" = "Apple Watch-Modell";
+
+	"RESET_LIBRARY_TITLE" = "Zifferblätter zurücksetzen";
+	"RESET_LIBRARY_PROMPT" = "Hiermit werden die Zifferblätter auf Werkseinstellungen zurückgesetzt. Jegliche Änderungen an deinen Zifferblättern gehen verloren.\n\nBist du sicher, dass du deine Zifferblätter zurücksetzen möchtest?";
+	"RESET_LIBRARY_CONFIRM" = "Zurücksetzen";
+	"RESET_LIBRARY_FOOTER" = "Es wird empfohlen, die Zifferblätter bei Auswahl eines anderen simulierten Apple Watch-Modells zurückzusetzen. Einige Zifferblätter, Anpassungen oder Komplikationen sind für bestimmte Modelle möglicherweise nicht verfügbar.";
+	
+	"RESTART_SPRINGBOARD_TITLE" = "SpringBoard neu starten";
+	"RESTART_SPRINGBOARD_PROMPT" = "Hiermit werden alle Änderungen gespeichert und das SpringBoard neu gestartet.";
+	"RESTART_SPRINGBOARD_CONFIRM" = "SpringBoard neu starten";
+	
+	"BUTTON_WHATS_NEW" = "Neuigkeiten";
+	"BUTTON_REPORT_ISSUE" = "Problem melden";
+	"BUTTON_MAKE_DONATION" = "Spenden";
+}

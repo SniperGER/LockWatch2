@@ -1,32 +1,40 @@
 //
-//  LWFaceLibraryOverlayView.h
-//  LockWatch2
+// LWFaceLibraryOverlayView.h
+// LockWatch2
 //
-//  Created by janikschmidt on 1/19/2020.
-//  Copyright © 2020 Team FESTIVAL. All rights reserved.
+// Created by janikschmidt on 3/17/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class CLKDevice;
 
-@interface LWFaceLibraryOverlayView : UIScrollView <UIScrollViewDelegate> {
+@interface LWFaceLibraryOverlayView : UIView {
 	CLKDevice* _device;
-	NSMutableDictionary* _titleLabels;
-	
-	CGFloat _previousScrollPosition;
+	UILabel* _leftTitleLabel;
+	UILabel* _rightTitleLabel;
+	CGFloat _leftTitleAlpha;
+	CGFloat _rightTitleAlpha;
+	CGFloat _leftTitleOffset;
+	CGFloat _rightTitleOffset;
+	CGFloat _editTitleLabelWidth;
+	CGFloat _cancelTitleLabelWidth;
 }
 
-@property (nonatomic) CGFloat distanceBetweenLabels;
 @property (nonatomic, readonly) UIButton* cancelButton;
 @property (nonatomic, readonly) UIButton* editButton;
 
-- (id)initForDevice:(CLKDevice*)device;
-- (void)addTitle:(NSString*)title forIndex:(NSInteger)index;
-- (UILabel*)labelAtIndex:(NSInteger)index;
-- (UILabel*)newTitleLabel;
-- (void)scrollToLabelAtIndex:(NSInteger)index animated:(BOOL)animated;
-- (void)setLabelOffset:(CGFloat)offset;
-- (void)updateContentSize;
+- (instancetype)initForDevice:(CLKDevice*)device;
+- (UIButton*)_newButton;
+- (UILabel*)_newTitleLabel;
+- (void)setLeftTitle:(nullable NSString*)leftTitle;
+- (void)setLeftTitleOffset:(CGFloat)leftTitleOffset alpha:(CGFloat)alpha;
+- (void)setRightTitle:(nullable NSString*)rightTitle;
+- (void)setRightTitleOffset:(CGFloat)rightTitleOffset alpha:(CGFloat)alpha;
 
 @end
+
+NS_ASSUME_NONNULL_END

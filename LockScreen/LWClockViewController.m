@@ -1,56 +1,76 @@
 //
-//  LWClockViewController.m
-//  LockWatch2
+// LWClockViewController.m
+// LockWatch2
 //
-//  Created by janikschmidt on 1/13/2020.
-//  Copyright © 2020 Team FESTIVAL. All rights reserved.
+// Created by janikschmidt on 1/23/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#define WATCH_DATA_PATH @"/Library/Application Support/LockWatch/WatchData.plist"
-#define DEBUG_DEVICE @"Watch5,4"
+#define LIBRARY_PATH @"/var/mobile/Library/Preferences/ml.festival.lockwatch2.CurrentFaces.plist"
 
+#import <AudioToolbox/AudioServices.h>
 #import <ClockKit/CLKDevice.h>
-#import <NanoTimeKitCompanion/NTKFace.h>
 #import <NanoTimeKitCompanion/NTKCompanionFaceViewController.h>
+#import <NanoTimeKitCompanion/NTKFace.h>
+#import <NanoTimeKitCompanion/NTKFaceViewController.h>
 
+#import "LWAddPageViewController.h"
 #import "LWClockView.h"
 #import "LWClockViewController.h"
+#import "LWFaceLibraryOverlayView.h"
 #import "LWFaceLibraryViewController.h"
 #import "LWPageScrollView.h"
 #import "LWSwitcherViewController.h"
 
-#import "Core/LWEmulatedDevice.h"
+#import "Core/LWEmulatedCLKDevice.h"
 #import "Core/LWEmulatedNRDevice.h"
+#import "Core/LWORBAnimator.h"
+#import "Core/LWORBTapGestureRecognizer.h"
 #import "Core/LWPersistentFaceCollection.h"
-#import "Core/NTKFaceStyle.h"
+#import "Core/LWPreferences.h"
 
-@interface LWClockViewController () {
-	BOOL _libraryViewIsPresented;
-	BOOL _orbZoomActive;
-	NTKFaceViewController* _faceViewController;
-}
-
+@interface UIDevice (Private)
+- (BOOL)_supportsForceTouch;
 @end
 
-@implementation LWClockViewController 
+@interface NSDistributedNotificationCenter : NSNotificationCenter
+@end
 
-- (id)init {
+@implementation LWClockViewController
+
+- (instancetype)init {
 	if (self = [super init]) {
-		/// TODO: Preferences
-		if ([CLKDevice currentDevice] && false) {
-			_device = [CLKDevice currentDevice];
-		} else {
-			NSDictionary* watchData = [[NSDictionary alloc] initWithContentsOfFile:WATCH_DATA_PATH][DEBUG_DEVICE];
-		
-			NSUUID* uuid = [NSUUID new];
-			LWEmulatedNRDevice* nrDevice = [[LWEmulatedNRDevice alloc] initWithJSONRepresentation:watchData[@"registry"] pairingID:uuid];
-			
-			_device = [[LWEmulatedDevice alloc] initWithJSONRepresentation:watchData[@"device"] nrDevice:nrDevice];
-			[CLKDevice setCurrentDevice:_device];
-		}
+		_preferences = [LWPreferences sharedInstance];
+		_device = [CLKDevice currentDevice];
+
+		if (!_device || !_device.nrDevice) return nil;
 		
 		[self loadAddableFaceCollection];
 		[self loadLibraryFaceCollection];
+		
+		[[NSDistributedNotificationCenter defaultCenter] addObserverForName:@"ml.festival.lockwatch2/ResetLibrary" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification) {
+			_libraryFaceCollection = [LWPersistentFaceCollection defaultLibraryFaceCollectionForDevice:_device];
+			[_libraryFaceCollection addObserver:self];
+			[(LWPersistentFaceCollection*)_libraryFaceCollection synchronize];
+			
+			[self _createOrRecreateFaceContent];
+		}];
+		
+		[[NSDistributedNotificationCenter defaultCenter] addObserverForName:@"ml.festival.lockwatch2/AddToLibrary" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification) {
+			NTKFace* face = [NTKFace faceWithJSONObjectRepresentation:notification.userInfo[@"faceJSON"] forDevice:_device];
+			[_libraryFaceCollection appendFace:face suppressingCallbackToObserver:self];
+			[_libraryFaceCollection setSelectedFace:face suppressingCallbackToObserver:self];
+			[(LWPersistentFaceCollection*)_libraryFaceCollection synchronize];
+			
+			[self _createOrRecreateFaceContent];
+		}];
+		
+		[[NSDistributedNotificationCenter defaultCenter] addObserverForName:@"ml.festival.lockwatch2/SyncLibrary" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification) {
+			_libraryFaceCollection = [[LWPersistentFaceCollection alloc] initWithCollectionIdentifier:@"LibraryFaces" forDevice:_device JSONObjectRepresentation:notification.userInfo[@"faceJSON"]];
+			[(LWPersistentFaceCollection*)_libraryFaceCollection synchronize];
+			
+			[self _createOrRecreateFaceContent];
+		}];
 	}
 	
 	return self;
@@ -61,130 +81,43 @@
 		CGPointZero,
 		{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(_device.actualScreenBounds) }
 	}];
+	
 	[view setDelegate:self];
 	
 	self.view = view;
 	
-	[self createOrRecreateFaceContent];
+	_haveLoadedView = YES;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-	
-	[self createOrRecreateFaceContent];
-}
-
-- (void)didMoveToParentViewController:(UIViewController*)viewController {
+- (void)didMoveToParentViewController:(nullable UIViewController*)viewController {
 	[super didMoveToParentViewController:viewController];
 	
-	[NSLayoutConstraint activateConstraints:@[
-		[self.view.widthAnchor constraintEqualToAnchor:self.view.superview.widthAnchor],
-		[self.view.heightAnchor constraintEqualToConstant:CGRectGetHeight(_device.actualScreenBounds)]
-	]];
+	[self.view setFrame:(CGRect){
+		CGPointZero,
+		{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(_device.actualScreenBounds) }
+	}];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+		CGRect maskBounds = [UIApplication.sharedApplication.keyWindow convertRect:UIScreen.mainScreen.bounds toView:self.view];
+#pragma GCC diagnostic pop
+		
+		CAShapeLayer* mask = [CAShapeLayer layer];
+		[mask setPath:[UIBezierPath bezierPathWithRect:(CGRect){{ 0, CGRectGetMinY(maskBounds) }, UIScreen.mainScreen.bounds.size }].CGPath];
+		[self.view.layer setMask:mask];
+    } completion:nil];
+}
+
+- (BOOL)_canShowWhileLocked {
+	return YES;
 }
 
 #pragma mark - Instance Methods
-
-- (void)createOrRecreateFaceContent {
-	if (_libraryViewController) {
-		[_libraryViewController setDelegate:nil];
-		[self __removeChildViewController:_libraryViewController];
-	}
-	
-	_libraryViewIsPresented = NO;
-	
-	_libraryViewController = [[LWFaceLibraryViewController alloc] initWithLibraryCollection:_libraryFaceCollection addableCollection:_addableFaceCollection];
-	[_libraryViewController setDelegate:self];
-	[self __addChildViewController:_libraryViewController];
-	[_libraryViewController activateWithSelectedFaceViewController:_faceViewController];
-	
-	[NSLayoutConstraint activateConstraints:@[
-		[_libraryViewController.view.topAnchor constraintEqualToAnchor:self.view.topAnchor],
-		[_libraryViewController.view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-		[_libraryViewController.view.widthAnchor constraintEqualToAnchor:self.view.widthAnchor],
-		[_libraryViewController.view.heightAnchor constraintEqualToAnchor:self.view.heightAnchor]
-	]];
-	
-	[self.view layoutIfNeeded];
-}
-
-- (void)freezeCurrentFace {
-	if (_libraryViewController.selectedFaceViewController.dataMode == 3) return;
-	[_libraryViewController.selectedFaceViewController freeze];
-}
-
-- (BOOL)isFaceStyleRestricted:(NTKFaceStyle)style forDevice:(CLKDevice*)device {
-	// Disabled faces for Series 3
-	if (device.sizeClass == 1) {
-		switch (style) {
-			case NTKFaceStyleWhistlerDigital:
-			case NTKFaceStyleWhistlerAnalog:
-			case NTKFaceStyleWhistlerSubdials:
-			case NTKFaceStyleOlympus:
-			case NTKFaceStyleSidereal:
-			case NTKFaceStyleCalifornia:
-			case NTKFaceStyleBlackcomb:
-			case NTKFaceStyleSpectrumAnalog:
-			case NTKFaceStyleWhitetank:
-				return YES;
-			default: return NO;
-		}
-	}
-	
-	// Globally disabled faces
-	switch (style) {
-		case NTKFaceStyleUpNext:
-			return YES;
-		default: return NO;
-	}
-}
-
-- (void)loadAddableFaceCollection {
-	_addableFaceCollection = [[NTKFaceCollection alloc] initWithCollectionIdentifier:@"AddableFaces" deviceUUID:_device.nrDeviceUUID];
-	[_addableFaceCollection addObserver:self];
-}
-
-- (void)loadLibraryFaceCollection {
-	/// TODO: Preferences
-	_libraryFaceCollection = [[LWPersistentFaceCollection alloc] initWithCollectionIdentifier:@"LibraryFaces" deviceUUID:_device.nrDeviceUUID JSONObjectRepresentation:@{}];
-	[_libraryFaceCollection setDebugName:@"clock"];
-	[_libraryFaceCollection addObserver:self];
-	
-#ifndef DISABLE_DEBUG
-	for (int i = 0; i <= 42; i++) {
-		NTKFace* testFace = [NTKFace defaultFaceOfStyle:i forDevice:_device];
-		
-		if (!testFace || [self isFaceStyleRestricted:i forDevice:_device]) continue;
-		[_libraryFaceCollection appendFace:testFace suppressingCallbackToObserver:nil];
-	}
-#endif
-	
-	if (!_libraryFaceCollection.selectedFace) {
-		[_libraryFaceCollection setSelectedFaceIndex:0 suppressingCallbackToObserver:nil];
-	}
-}
-
-- (void)maybeSetOrbEnabled:(BOOL)enabled {
-	if (!enabled) {
-		[(LWClockView*)self.view setOrbZoomEnabled:enabled];
-		return;
-	}
-	
-	if (_faceViewController.dataMode != 1) return;
-	
-	[(LWClockView*)self.view setOrbZoomEnabled:enabled];
-}
-
-- (void)teardownExistingFaceViewControllerIfNeeded {
-	if (_faceViewController) {
-		[self __removeChildViewController:_faceViewController];
-	}
-}
-
-- (void)unfreezeCurrentFace {
-	[_libraryViewController.selectedFaceViewController unfreeze];
-}
 
 - (void)__addChildViewController:(UIViewController*)viewController {
 	if (viewController) {
@@ -202,77 +135,211 @@
 	}
 }
 
+- (void)_beginOrbZoom {
+	[_faceViewController prepareForOrb];
+	_libraryViewIsPresented = YES;
+	
+	[_libraryViewController beginInteractiveLibraryPresentation];
+	
+	_orbZoomActive = YES;
+}
+
+- (void)_createOrRecreateFaceContent {
+	[self _finishLoadingViewIfNecessary];
+	[self _teardownExistingFaceViewControllerIfNeeded];
+	
+	if (_libraryViewController) {
+		[_libraryViewController setDelegate:nil];
+		[self __removeChildViewController:_libraryViewController];
+	}
+	
+	_libraryViewIsPresented = NO;
+	
+	_libraryViewController = [[LWFaceLibraryViewController alloc] initWithLibraryCollection:_libraryFaceCollection addableCollection:_addableFaceCollection];
+	[_libraryViewController setDelegate:self];
+	
+	[self _putLibraryViewControllerIntoClockViewController];
+	[_libraryViewController.view layoutIfNeeded];
+	
+	[NSLayoutConstraint activateConstraints:@[
+		[_libraryViewController.view.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+		[_libraryViewController.view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+		[_libraryViewController.view.widthAnchor constraintEqualToAnchor:self.view.widthAnchor],
+		[_libraryViewController.view.heightAnchor constraintEqualToAnchor:self.view.heightAnchor]
+	]];
+}
+
+- (void)_endFaceLibraryControllerPresentation {
+	_libraryViewIsPresented = NO;
+	[_orbRecognizer setEnabled:YES];
+}
+
+- (void)_endOrbZoom:(BOOL)latched {
+	[_libraryViewController endInteractiveLibraryPresentation];
+	
+	if (latched) {
+		[self _maybeSetOrbEnabled:NO];
+	} else {
+		[self _endFaceLibraryControllerPresentation];
+	}
+	
+	[_faceViewController cleanupAfterOrb:latched];
+	_orbZoomActive = NO;
+}
+
+- (void)_finishLoadingViewIfNecessary {
+	if (!_haveFinishedLoadingView) {
+		_orbRecognizer = [[LWORBTapGestureRecognizer alloc] initWithTarget:nil action:nil];
+		[_orbRecognizer setOrbDelegate:self];
+		[self.view addGestureRecognizer:_orbRecognizer];
+	
+		_orbAnimator = [[LWORBAnimator alloc] initWithORBGestureRecognizer:_orbRecognizer];
+		
+		__weak LWClockViewController* _weak_self = self;
+		[_orbAnimator setBeginHandler:^{
+			[_weak_self _beginOrbZoom];
+		}];
+		[_orbAnimator setProgressHandler:^(CGFloat progress) {
+			[_weak_self _setOrbZoomProgress:progress];
+		}];
+		[_orbAnimator setEndHandler:^(BOOL latched) {
+			[_weak_self _endOrbZoom:latched];
+		}];
+		
+		_haveFinishedLoadingView = YES;
+	}
+}
+
+- (BOOL)_hasRealFaceCollections {
+	if (_libraryFaceCollection.hasLoaded) {
+		return _addableFaceCollection.hasLoaded;
+	}
+	
+	return NO;
+}
+
+- (void)_maybeSetOrbEnabled:(BOOL)enabled {
+	if (!enabled) {
+		[_orbRecognizer setEnabled:NO];
+	}
+	
+	if (_faceViewController.dataMode > 1) return;
+
+	[_orbRecognizer setEnabled:enabled];
+}
+
+- (NTKFaceViewController*)_newFaceControllerForFace:(NTKFace*)face withConfiguration:(void (^)(NTKFaceViewController*))configuration {
+	NTKFaceViewController* faceViewController = [[NTKFaceViewController alloc] initWithFace:face configuration:configuration];
+	[faceViewController configureWithDuration:0.0 block:configuration];
+	
+	return faceViewController;
+}
+
+- (void)_putLibraryViewControllerIntoClockViewController {
+	if (_libraryViewController) {
+		[self __addChildViewController:_libraryViewController];
+		[_libraryViewController activateWithSelectedFaceViewController:_faceViewController];
+	}
+}
+
+- (void)_teardownExistingFaceViewControllerIfNeeded {
+	if (_faceViewController) {
+		[self __removeChildViewController:_faceViewController];
+		_faceViewController = nil;
+	}
+}
+
+- (void)_setOrbZoomProgress:(CGFloat)progress {
+	[_libraryViewController setInteractiveProgress:progress];
+}
+
+
+- (void)dismissCustomizationViewControllers:(BOOL)animated {
+	[_libraryViewController _stopFaceEditing:animated];
+	[_libraryViewController.addFaceViewController dismissAnimated:animated];
+}
+
+- (void)dismissFaceLibraryAnimated:(BOOL)animated {
+	[_libraryViewController _dismissSwitcherAnimated:animated withIndex:_libraryFaceCollection.selectedFaceIndex];
+}
+
+- (BOOL)faceLibraryIsPresented {
+	return _libraryViewController.presented;
+}
+
+- (void)freezeCurrentFace {
+	if (_libraryViewController.selectedFaceViewController.dataMode == 3) return;
+	[_libraryViewController.selectedFaceViewController freeze];
+}
+
+- (void)loadAddableFaceCollection {
+	_addableFaceCollection = [LWPersistentFaceCollection defaultAddableFaceCollectionForDevice:_device];
+}
+
+- (void)loadLibraryFaceCollection {
+	_libraryFaceCollection = [LWPersistentFaceCollection faceCollectionWithContentsOfFile:LIBRARY_PATH 
+																	 collectionIdentifier:@"LibraryFaces"
+																				forDevice:_device];
+	if (!_libraryFaceCollection) {
+		_libraryFaceCollection = [LWPersistentFaceCollection defaultLibraryFaceCollectionForDevice:_device];
+	}
+	
+	[_libraryFaceCollection addObserver:self];
+}
+
+- (void)unfreezeCurrentFace {
+	[_libraryViewController.selectedFaceViewController unfreeze];
+}
+
 #pragma mark - LWClockViewDelegate
 
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event {
 	if (!CGRectContainsPoint(self.view.bounds, point)) return nil;
+	
 	if (_libraryViewIsPresented) {
-		if (!CGRectContainsPoint(_libraryViewController.switcherController.scrollView.frame, point)) {
-			return _libraryViewController.switcherController.scrollView;
-		}
-		return [_libraryViewController.switcherController.view hitTest:point withEvent:event];
-	} else if (CGRectContainsPoint(_libraryViewController.switcherController.scrollView.frame, point)) {
-		return self.view;
+		UIView* view = [_libraryViewController.libraryOverlayView hitTest:point withEvent:event];
+		if (!view && !CGRectContainsPoint(_libraryViewController.switcherController.scrollView.frame, point)) view = _libraryViewController.switcherController.scrollView;
+		if (!view) view = [_libraryViewController.view hitTest:point withEvent:event];
+		
+		return view;
 	}
 	
 	return nil;
 }
 
-- (BOOL)isFaceEditing {
-	return NO;
-}
+#pragma mark - LWORBTapGestureRecoginzerDelegate
 
-- (BOOL)isFaceSwitching {
-	// return _libraryViewController.isFaceSwitching;
-	return NO;
-}
-
-- (void)beginZoom {
-	// [_faceViewController prepareForOrb];
-	
-	_libraryViewIsPresented = YES;
-
-	[_libraryViewController beginInteractiveLibraryPresentation];
-	_orbZoomActive = YES;
-}
-
-- (void)setZoomProgress:(CGFloat)progress {
-	[_libraryViewController setInteractiveProgress:progress];
-}
-
-- (void)endZoom:(BOOL)completed {
-	/// NOTE: arg1=NO -> zoom cancelled
-	[_libraryViewController endInteractiveLibraryPresentation];
-	
-	if (completed) {
-		[self maybeSetOrbEnabled:NO];
-	} else {
-		[_libraryViewController dismissSwitcherAnimated:YES withIndex:_libraryViewController.switcherController.currentPageIndex];
-		_libraryViewIsPresented = NO;
-	}
-	
-	[_faceViewController cleanupAfterOrb:completed];
-	_orbZoomActive = NO;
+- (void)ORBTapGestureRecognizerDidLatch:(LWORBTapGestureRecognizer*)orbRecognizer {
+	AudioServicesPlaySystemSound(1520);
+	[_libraryViewController commitToLibraryPresentation];
 }
 
 #pragma mark - LWFaceLibraryViewControllerDelegate
 
-- (void)faceLibraryViewControllerWillCompleteSelection:(LWFaceLibraryViewController*)faceLibraryViewController {
-	[(LWClockView*)self.view setOrbZoomEnabled:YES];
-	_libraryViewIsPresented = NO;
+- (NTKFaceViewController*)faceLibraryViewController:(LWFaceLibraryViewController*)libraryViewController newViewControllerForFace:(NTKFace*)face configuration:(void (^)(NTKFaceViewController*))configuration {
+	return [self _newFaceControllerForFace:face withConfiguration:configuration];
 }
 
-- (void)faceLibraryViewControllerDidCompleteSelection:(LWFaceLibraryViewController*)faceLibraryViewController {
+- (void)faceLibraryViewControllerDidCompleteSelection:(LWFaceLibraryViewController*)libraryViewController {
 	if (_libraryViewController.selectedFaceViewController != _faceViewController) {
-		[self teardownExistingFaceViewControllerIfNeeded];
-		_faceViewController = _libraryViewController.selectedFaceViewController;
+		[self _teardownExistingFaceViewControllerIfNeeded];
 		
-		_libraryViewIsPresented = NO;
+		_faceViewController = _libraryViewController.selectedFaceViewController;
 	}
+	
+	[self _endFaceLibraryControllerPresentation];
+	
+	[(LWPersistentFaceCollection*)_libraryFaceCollection synchronize];
 }
 
-- (NTKFaceViewController*)faceLibraryViewController:(LWFaceLibraryViewController*)faceLibraryViewController newViewControllerForFace:(NTKFace*)face configuration:(void (^)(NTKFaceViewController*))configuration {
-	return [[NTKCompanionFaceViewController alloc] initWithFace:face configuration:configuration];
+- (void)faceLibraryViewControllerWillCompleteSelection:(LWFaceLibraryViewController*)libraryViewController {}
+
+#pragma mark - NTKFaceCollectionObserver
+
+- (void)faceCollectionDidLoad:(NTKFaceCollection *)collection {
+	if ([self _hasRealFaceCollections] && !_haveLoadedView) {
+		[self _createOrRecreateFaceContent];
+	}
 }
 
 @end

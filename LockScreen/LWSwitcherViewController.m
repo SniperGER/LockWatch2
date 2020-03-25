@@ -1,178 +1,119 @@
 //
-//  LWSwitcherViewController.m
-//  LockWatch2
+// LWSwitcherViewController.m
+// LockWatch2
 //
-//  Created by janikschmidt on 1/14/2020.
-//  Copyright © 2020 Team FESTIVAL. All rights reserved.
+// Created by janikschmidt on 3/3/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#import "LWPageView.h"
+#define CLAMP(value, min, max) (value - min) / (max - min)
+
 #import "LWPageScrollView.h"
+#import "LWPageView.h"
 #import "LWSwitcherViewController.h"
 
-#import "Core/LWEmulatedDevice.h"
-#import "Core/LWPageScrollViewControllerDataSource.h"
-
-@interface LWSwitcherViewController () {
-	CGFloat _previousScrollPosition;
-}
-
-@end
+#import "Core/LWEmulatedCLKDevice.h"
 
 @implementation LWSwitcherViewController
 
-- (id)init {
+- (instancetype)init {
 	return [self initWithScrollOrientation:0];
 }
 
-- (id)initWithScrollOrientation:(NSInteger)scrollOrientation {
+- (instancetype)initWithScrollOrientation:(NSInteger)scrollOrientation {
 	if (scrollOrientation != 0) {
 		[NSException raise:NSInvalidArgumentException format:@"LWSwitcherViewController requires scroll orientation horizontal"];
 	}
-		
-	if (self = [super initWithScrollOrientation:scrollOrientation]) {
-		
-	}
 	
+	self = [super initWithScrollOrientation:scrollOrientation];
 	return self;
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
 	
-	CGFloat _pageWidth = CGRectGetWidth(_device.actualScreenBounds) - ((CGRectGetWidth(_device.actualScreenBounds) - _pageWidthWhenZoomedOut) * _zoomLevel);
-	CGSize pageSize = (CGSize) {
-		_pageWidth,
-		CGRectGetHeight(_device.actualScreenBounds)
-	};
-	CGFloat scale = _pageWidth / CGRectGetWidth(_device.actualScreenBounds);
-
-	[self.scrollView setFrame:(CGRect) {
-		CGPointZero,
-		{ pageSize.width + self.interpageSpacing, (_pageWidth / CGRectGetWidth(_device.actualScreenBounds)) * CGRectGetHeight(_device.actualScreenBounds) }
-	}];
-	[self.scrollView setCenter:(CGPoint){ CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) - (7 * _zoomLevel) }];
+	if ([self zoomedOut] && self.swipeToDeleteInProgress) return;
 	
-	[self.scrollView enumeratePagesWithBlock:^(NSNumber* index, LWPageView* pageView, BOOL* stop) {
-		[pageView setPageSize:pageSize];
-		[pageView setOutlineAlpha:_zoomLevel];
-		
-		[pageView setFrame:(CGRect) {
-			{ (self.interpageSpacing / 2) + ((pageView.pageSize.width + self.interpageSpacing) * index.intValue), 0 },
-			pageView.pageSize
-		}];
-		[pageView setCenter:(CGPoint){ pageView.center.x, CGRectGetMidY(self.scrollView.bounds) }];
-		
-		[pageView.contentView setCenter:(CGPoint){ CGRectGetMidX(pageView.bounds), CGRectGetMidY(pageView.bounds) }];
-		[pageView.contentView setTransform:CGAffineTransformMakeScale(scale, scale)];
-		
-		if (index.intValue != self.scrollView.currentPageIndex) {
-			[pageView setAlpha:(0.35 * _zoomLevel)];
+	[self.scrollView enumeratePagesWithBlock:^(LWPageView* pageView, NSInteger index, BOOL* stop) {
+		if (index != self.scrollView.currentPageIndex) {
+			[pageView setContentAlpha:MIN(_zoomLevel, 0.35)];
+			[pageView setOutlineAlpha:MIN(_zoomLevel, 0.65)];
 		} else {
-			[pageView setAlpha:1.0];
+			[pageView setContentAlpha:1.0];
+			[pageView setOutlineAlpha:_zoomLevel];
 		}
 	}];
 	
-	[self.scrollView setNeedsLayout];
-	[self.scrollView layoutIfNeeded];
-	
 	[self.scrollView performSuppressingScrollCallbacks:^{
-		[self.scrollView updateContentSize];
-		[self.scrollView setContentOffset:[self.scrollView contentOffsetToCenterPageAtIndex:self.scrollView.currentPageIndex]];
+		[self.scrollView _updateContentSize];
+		[self.scrollView setContentOffset:[self.scrollView _contentOffsetToCenterPageAtIndex:self.scrollView.currentPageIndex]];
 	}];
 }
 
 #pragma mark - Instance Methods
 
+- (BOOL)_canDeletePageAtIndex:(NSInteger)index {
+	if (![self zoomedOut] || _animatingZoom) {
+		return NO;
+	} else {
+		return [super _canDeletePageAtIndex:index];
+	}
+}
+
+- (CGRect)_frameForCenteredPage {
+	if (_zoomLevel > 0) {
+		CGFloat pageWidth = CGRectGetWidth(_device.actualScreenBounds) - ((CGRectGetWidth(_device.actualScreenBounds) - _pageWidthWhenZoomedOut) * _zoomLevel);
+		
+		CGRect pageBounds = (CGRect){
+			CGPointZero,
+			{
+				pageWidth,
+				(pageWidth / CGRectGetWidth(_device.actualScreenBounds)) * CGRectGetHeight(_device.actualScreenBounds)
+			}
+		};
+		
+		return (CGRect){
+			{
+				CGRectGetMidX(_device.actualScreenBounds) - CGRectGetMidX(pageBounds),
+				CGRectGetMidY(_device.actualScreenBounds) - CGRectGetMidY(pageBounds) + (-7 * _zoomLevel),
+			},
+			pageBounds.size
+		};
+	} else {
+		return [super _frameForCenteredPage];
+	}
+}
+
+- (void)_setAnimatingZoom:(BOOL)animatingZoom {
+	_animatingZoom = animatingZoom;
+	[self.scrollView setTilingSuspended:animatingZoom];
+	[self updateScrollingEnabled];
+}
+
+- (BOOL)_shouldEnableScrolling {
+	if (!self.zoomedOut || _animatingZoom) {
+		return NO;
+	} else {
+		return [super _shouldEnableScrolling];
+	}
+}
+
+- (void)_updateInterpageSpacing {
+	[self setInterpageSpacing:(MIN(_zoomLevel, 1.0) * (_interpageSpacingWhenZoomedOut - _interpageSpacingWhenZoomedIn)) + _interpageSpacingWhenZoomedIn];
+}
+
+
 - (void)beginIncrementalZoom {
-	[self setAnimatingZoom:YES];
-}
-
-- (CGFloat)currentPageScale {
-	return 1 - ((1 - _pageScaleWhenZoomedOut) * _zoomLevel);
-}
-
-- (void)setIncrementalZoomLevel:(CGFloat)zoomLevel {
-	_zoomLevel = zoomLevel;
-	
-	[self.view setNeedsLayout];
-	[self updateInterpageSpacing];
-	[self.view layoutIfNeeded];
+	[self _setAnimatingZoom:YES];
 }
 
 - (void)endIncrementalZoom {
-	[self setIncrementalZoomLevel:MIN(MAX(roundf(_zoomLevel), 0), 1)];
-	[self setAnimatingZoom:NO];
-	// MIN(MAX(roundf(_zoomLevel), 0), 1)
+	[self setIncrementalZoomLevel:MIN(MAX(floorf(_zoomLevel), 0), 1)];
+	[self _setAnimatingZoom:NO];
+	[self updatePageBehaviors];
 }
 
-- (void)handleScroll:(UIScrollView*)scrollView {
-	if (_zoomLevel != 1) return;
-	
-	[super handleScroll:scrollView];
-	
-	NSInteger pageIndex = MAX(MIN(ceilf(scrollView.contentOffset.x / CGRectGetWidth(scrollView.bounds)), self.scrollView.numberOfPages - 1), 0);
-	CGFloat width = CGRectGetWidth(scrollView.bounds);
-	CGFloat pageProgress = ((pageIndex * width) - scrollView.contentOffset.x) / width;
-	pageProgress = (round(pageProgress * 100)) / 100.0;
-	
-	NSInteger previousPageIndex = (pageIndex > 0) ? pageIndex : 0;
-	NSInteger nextPageIndex = (pageIndex < self.scrollView.numberOfPages - 1) ? pageIndex : self.scrollView.numberOfPages - 1;
-	
-	if (_previousScrollPosition != scrollView.contentOffset.x) {
-		[self.scrollView enumeratePagesWithBlock:^(NSNumber* index, LWPageView* pageView, BOOL* stop) {
-			[pageView setAlpha:0.35];
-		}];
-		
-		if (_previousScrollPosition < scrollView.contentOffset.x) {
-			// Scroll from right to left
-			LWPageView* nextPage = [self.scrollView pageAtIndex:nextPageIndex];
-			
-			if (scrollView.contentOffset.x + width <= scrollView.contentSize.width && scrollView.contentOffset.x > 0) {
-				NSInteger currentPageIndex = MAX(nextPageIndex - 1, 0);
-				LWPageView* currentPage = [self.scrollView pageAtIndex:currentPageIndex];
-				
-				[currentPage setAlpha:MAX(0.35, pageProgress)];
-				[nextPage setAlpha:MAX(0.35, 1 - pageProgress)];
-			} else if (scrollView.contentOffset.x <= 0) {
-				LWPageView* currentPage = [self.scrollView pageAtIndex:pageIndex];
-				[currentPage setAlpha:MAX(0.35, 1 + (scrollView.contentOffset.x / width))];
-			} else {
-				LWPageView* currentPage = [self.scrollView pageAtIndex:pageIndex];
-				[currentPage setAlpha:MAX(0.35, 1 - ((scrollView.contentOffset.x + width) - scrollView.contentSize.width) / width)];
-			}
-		}
-		
-		if (_previousScrollPosition > scrollView.contentOffset.x) {
-			// Scroll from left to right
-			LWPageView* previousPage = [self.scrollView pageAtIndex:previousPageIndex];
-			
-			if (scrollView.contentOffset.x >= 0 && scrollView.contentOffset.x + width <= scrollView.contentSize.width) {
-				NSInteger currentPageIndex = MIN(previousPageIndex - 1, self.scrollView.numberOfPages);
-				LWPageView* currentPage = [self.scrollView pageAtIndex:currentPageIndex];
-				
-				[currentPage setAlpha:MAX(0.35, pageProgress)];
-				[previousPage setAlpha:MAX(0.35, 1 - pageProgress)];
-			} else if (scrollView.contentOffset.x + width > scrollView.contentSize.width) {
-				LWPageView* currentPage = [self.scrollView pageAtIndex:pageIndex];
-				[currentPage setAlpha:MAX(0.35, 1 - ((scrollView.contentOffset.x + width) - scrollView.contentSize.width) / width)];
-			} else {
-				LWPageView* currentPage = [self.scrollView pageAtIndex:pageIndex];
-				[currentPage setAlpha:MAX(0.35, 1 + (scrollView.contentOffset.x / width))];
-			}
-		}
-	}
-	
-	_previousScrollPosition = self.scrollView.contentOffset.x;
-}
-
-- (void)setAnimatingZoom:(BOOL)animatingZoom {
-	_animatingZoom = animatingZoom;
-	
-	[self.scrollView setTilingSuspended:animatingZoom];
-}
-
-- (void)setDataSource:(id <LWPageScrollViewControllerDataSource>)dataSource {
+- (void)setDataSource:(nullable id <LWPageScrollViewControllerDataSource>)dataSource {
 	if (self.dataSource) {
 		[self deactivate];
 	}
@@ -184,36 +125,44 @@
 	}
 }
 
-- (void)updateInterpageSpacing {
-	[super setInterpageSpacing:(MIN(_zoomLevel, 1.0) * (_interpageSpacingWhenZoomedOut - _interpageSpacingWhenZoomedIn)) + _interpageSpacingWhenZoomedIn];
+- (void)setIncrementalZoomLevel:(CGFloat)zoomLevel {
+	_zoomLevel = zoomLevel;
+	
+	[self.view setNeedsLayout];
+	[self _updateInterpageSpacing];
+	[self.view layoutIfNeeded];
 }
 
-- (void)zoomInPageAtIndex:(NSInteger)index animated:(BOOL)animated withAnimations:(void (^)())animations completion:(void (^)(BOOL finished))completion {
+- (BOOL)zoomedOut {
+	return _zoomLevel >= 1;
+}
+
+- (void)zoomInPageAtIndex:(NSInteger)index animated:(BOOL)animated completion:(void (^_Nullable)(BOOL finished))block {
+	[self zoomInPageAtIndex:index animated:animated withAnimations:nil completion:block];
+}
+
+- (void)zoomInPageAtIndex:(NSInteger)index animated:(BOOL)animated withAnimations:(void (^_Nullable)())animations completion:(void (^_Nullable)(BOOL finished))block {
 	_zoomLevel = 0;
 	
 	[self.view setNeedsLayout];
 	
 	if (animated) {
-		[self setAnimatingZoom:YES];
-		
-		[UIView animateWithDuration:_zoomAnimationDuration delay:0 options:0 animations:^{
-			[self updateInterpageSpacing];
-			[self scrollToPageAtIndex:index animated:NO];
-			
-			[self.view layoutIfNeeded];
-			animations();
-		} completion:^(BOOL finished) {
-			[self setAnimatingZoom:NO];
-			completion(finished);
-		}];
-	} else {
-		animations();
-		completion(YES);
+		[self _setAnimatingZoom:YES];
 	}
-}
-
-- (BOOL)zoomedOut {
-	return _zoomLevel > 0;
+		
+	[UIView animateWithDuration:(animated ? _zoomAnimationDuration : 0) delay:0 options:0 animations:^{
+		[self _updateInterpageSpacing];
+		[self scrollToPageAtIndex:index animated:NO];
+		
+		[self.view layoutIfNeeded];
+		animations();
+	} completion:^(BOOL finished) {
+		if (animated) {
+			[self _setAnimatingZoom:NO];
+		}
+		
+		block(finished);
+	}];
 }
 
 @end

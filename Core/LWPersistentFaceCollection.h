@@ -1,8 +1,57 @@
+//
+// LWPersistentFaceCollection.h
+// LockWatch2
+//
+// Created by janikschmidt on 1/23/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
+//
+
+#import <ClockKit/CLKDevice.h>
+#import <NanoTimeKitCompanion/NTKFace.h>
 #import <NanoTimeKitCompanion/NTKFaceCollection.h>
+#import <NanoTimeKitCompanion/NTKFaceCollectionObserver-Protocol.h>
+#import <NanoTimeKitCompanion/NTKPersistentFaceCollection.h>
+
+#import "NTKFaceStyle.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+#if __cplusplus
+extern "C" {
+#endif
+
+void *NTKAllAvailableFaceStyles(void *device);
+void *NTKDefaultLibraryFaceStyles(void *device);
+int NTKDefaultLibrarySelectedFace(void *device);
+
+#if __cplusplus
+}
+#endif
+
+
+
+@interface NTKFaceCollection (JSON)
+- (NSDictionary*)JSONObjectRepresentation;
+@end
 
 @interface LWPersistentFaceCollection : NTKFaceCollection
 
-- (id)initWithCollectionIdentifier:(NSString*)identifier deviceUUID:(NSUUID*)uuid JSONObjectRepresentation:(NSDictionary*)jsonRepresentation;
-- (NSDictionary*)JSONObjectRepresentation;
++ (NSArray*)allAvailableFaceStylesForDevice:(CLKDevice*)device;
++ (NSArray*)defaultLibraryFaceStylesForDevice:(CLKDevice*)device;
++ (int)defaultLibrarySelectedFaceForDevice:(CLKDevice*)device;
++ (instancetype)defaultAddableFaceCollectionForDevice:(CLKDevice*)device;
++ (instancetype)defaultLibraryFaceCollectionForDevice:(CLKDevice*)device;
++ (instancetype)faceCollectionWithContentsOfFile:(NSString*)path collectionIdentifier:(NSString*)identifier forDevice:(CLKDevice*)device;
++ (BOOL)faceStyleIsRestricted:(NTKFaceStyle)style forDevice:(CLKDevice*)device;
+- (instancetype)initWithCollectionIdentifier:(NSString*)identifier forDevice:(CLKDevice*)device faceStyles:(NSArray*)faceStyles selectedFaceIndex:(int)selectedFaceIndex;
+- (instancetype)initWithCollectionIdentifier:(NSString*)identifier forDevice:(CLKDevice*)device JSONObjectRepresentation:(NSDictionary*)jsonObjectRepresentation;
+- (void)addObserver:(id <NTKFaceCollectionObserver>)observer;
+- (BOOL)hasLoaded;
+- (void)notifyLoaded;
+- (void)reset;
+- (BOOL)synchronize;
+- (BOOL)writeToFile:(NSString*)path;
 
 @end
+
+NS_ASSUME_NONNULL_END

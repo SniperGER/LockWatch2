@@ -1,29 +1,46 @@
 //
-//  LWFaceLibraryOverlayView.m
-//  LockWatch2
+// LWFaceLibraryOverlayView.m
+// LockWatch2
 //
-//  Created by janikschmidt on 1/19/2020.
-//  Copyright © 2020 Team FESTIVAL. All rights reserved.
+// Created by janikschmidt on 3/17/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#import "Core/LWEmulatedDevice.h"
+#import "Core/LWEmulatedCLKDevice.h"
 
+#import "LWFaceLibraryOverlayButton.h"
 #import "LWFaceLibraryOverlayView.h"
 
-@implementation LWFaceLibraryOverlayView 
+@implementation LWFaceLibraryOverlayView
 
-- (id)initForDevice:(CLKDevice*)device {
+- (instancetype)initForDevice:(CLKDevice*)device {
 	if (self = [super initWithFrame:device.actualScreenBounds]) {
 		[self setTranslatesAutoresizingMaskIntoConstraints:NO];
 		[self setClipsToBounds:NO];
-		[self setDelegate:self];
 		
 		_device = device;
 		
-		_titleLabels = [NSMutableDictionary dictionary];
+		_leftTitleLabel = [self _newTitleLabel];
+		[self addSubview:_leftTitleLabel];
 		
-		/// TODO: Edit Button
-		/// TODO: Cancel Button
+		_rightTitleLabel = [self _newTitleLabel];
+		[self addSubview:_rightTitleLabel];
+		
+		_editButton = [self _newButton];
+		[_editButton setAdjustsImageWhenDisabled:NO];
+		[_editButton setTitle:[[NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/NanoTimeKitCompanion.framework"] localizedStringForKey:@"EDIT_FACE" value:@"Customize" table:@"ClockFaces"] forState:UIControlStateNormal];
+		[_editButton.titleLabel sizeToFit];
+		
+		_editTitleLabelWidth = CGRectGetWidth(_editButton.titleLabel.bounds);
+		[self addSubview:_editButton];
+		
+		_cancelButton = [self _newButton];
+		[_cancelButton setTitle:[[NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/NanoTimeKitCompanion.framework"] localizedStringForKey:@"CANCEL_ADD_FACE" value:@"Cancel" table:@"ClockFaces"] forState:UIControlStateNormal];
+		[_cancelButton setHidden:YES];
+		[_cancelButton.titleLabel sizeToFit];
+		
+		_cancelTitleLabelWidth = CGRectGetWidth(_cancelButton.titleLabel.bounds);
+		[self addSubview:_cancelButton];
 	}
 	
 	return self;
@@ -32,12 +49,32 @@
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	
-	[_titleLabels enumerateKeysAndObjectsUsingBlock:^(NSNumber* index, UILabel* label, BOOL* stop) {
-		[label sizeToFit];
-		[label setCenter:(CGPoint){ (CGRectGetWidth(self.bounds) / 2) + (CGRectGetWidth(self.bounds) * index.intValue), 14.5 }];
+	CGFloat mainScreenHeight = [[_device.nrDevice valueForProperty:@"mainScreenHeight"] floatValue];
+	CGFloat verticalOffset = 0;
+	
+	if (mainScreenHeight <= 340) {
+		verticalOffset = 1.5;
+	} else if (mainScreenHeight <= 390 || mainScreenHeight <= 394) {
+		verticalOffset = 3.5;
+	} else if (mainScreenHeight <= 448) {
+		verticalOffset = 6;
+	}
+	
+	[_leftTitleLabel setCenter:(CGPoint){
+		CGRectGetMidX(self.bounds) + _leftTitleOffset,
+		CGRectGetMidY(_leftTitleLabel.bounds) + verticalOffset
 	}];
 	
-	[self updateContentSize];
+	[_rightTitleLabel setCenter:(CGPoint){
+		CGRectGetMidX(self.bounds) + _rightTitleOffset,
+		CGRectGetMidY(_rightTitleLabel.bounds) + verticalOffset
+	}];
+	
+	[_editButton setBounds:(CGRect){ CGPointZero, { _editTitleLabelWidth + 24, CGRectGetHeight(_editButton.titleLabel.bounds) + 8 }}];
+	[_editButton setCenter:(CGPoint) { CGRectGetMidX(self.bounds), CGRectGetMaxY(self.bounds) - (CGRectGetHeight(_editButton.bounds) / 2) }];
+	
+	[_cancelButton setBounds:(CGRect){ CGPointZero, { _cancelTitleLabelWidth + 24, CGRectGetHeight(_cancelButton.titleLabel.bounds) + 8 }}];
+	[_cancelButton setCenter:(CGPoint) { CGRectGetMidX(self.bounds), CGRectGetMaxY(self.bounds) - (CGRectGetHeight(_cancelButton.bounds) / 2) }];
 }
 
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event {
@@ -50,171 +87,69 @@
 	}
 }
 
-- (void)setContentOffset:(CGPoint)contentOffset {
-	[super setContentOffset:contentOffset];
-	
-	// [self setLabelOffset:contentOffset.x];
-}
-
 #pragma mark - Instance Methods
 
-- (void)addTitle:(NSString*)title forIndex:(NSInteger)index {
-	if ([_titleLabels objectForKey:@(index)]) return;
+- (UIButton*)_newButton {
+	LWFaceLibraryOverlayButton* button = [LWFaceLibraryOverlayButton buttonWithType:UIButtonTypeCustom];
 	
-	UILabel* titleLabel = [self newTitleLabel];
-	[titleLabel setText:title];
+	CGFloat mainScreenHeight = [[_device.nrDevice valueForProperty:@"mainScreenHeight"] floatValue];
+	if (mainScreenHeight <= 340) {
+		[button.titleLabel setFont:[UIFont systemFontOfSize:15]];
+	} else if (mainScreenHeight <= 390 || mainScreenHeight <= 394) {
+		[button.titleLabel setFont:[UIFont systemFontOfSize:16]];
+	} else if (mainScreenHeight <= 448) {
+		[button.titleLabel setFont:[UIFont systemFontOfSize:17]];
+	}
 	
-	[self addSubview:titleLabel];
-	[titleLabel sizeToFit];
-	// [titleLabel setCenter:(CGPoint){ (CGRectGetWidth(self.bounds) / 2) + ((CGRectGetWidth(self.bounds) / 2) * index), 14.5 }];
-	
-	[_titleLabels setObject:titleLabel forKey:@(index)];
-	
-	// [self updateContentSize];
+	return button;
 }
 
-- (UILabel*)labelAtIndex:(NSInteger)index {
-	if ([_titleLabels objectForKey:@(index)]) return [_titleLabels objectForKey:@(index)];
-	
-	return nil;
-}
-
-- (UILabel*)newTitleLabel {
+- (UILabel*)_newTitleLabel {
 	UILabel* label = [UILabel new];
-	[label setFont:[UIFont systemFontOfSize:14]];
+	
+	CGFloat mainScreenHeight = [[_device.nrDevice valueForProperty:@"mainScreenHeight"] floatValue];
+	if (mainScreenHeight <= 340) {
+		[label setFont:[UIFont systemFontOfSize:12]];
+	} else if (mainScreenHeight <= 390 || mainScreenHeight <= 394) {
+		[label setFont:[UIFont systemFontOfSize:13]];
+	} else if (mainScreenHeight <= 448) {
+		[label setFont:[UIFont systemFontOfSize:14]];
+	}
+	
 	[label setTextColor:[UIColor whiteColor]];
 	
 	return label;
 }
 
-- (void)scrollToLabelAtIndex:(NSInteger)index animated:(BOOL)animated {
-	CGPoint contentOffset = (CGPoint){ CGRectGetWidth(self.bounds) * index, 0 };
-	[self setContentOffset:contentOffset animated:animated];
-	[self setLabelOffset:contentOffset.x];
-}
 
-- (void)setLabelOffset:(CGFloat)offset {
-	NSInteger pageIndex = MAX(MIN(ceilf(offset / _distanceBetweenLabels), _titleLabels.allKeys.count - 1), 0);
-	CGFloat width = _distanceBetweenLabels;
-	CGFloat pageProgress = ((pageIndex * width) - offset) / width;
-	pageProgress = (round(pageProgress * 100)) / 100.0;
-
-	NSInteger previousPageIndex = (pageIndex > 0) ? pageIndex : 0;
-	NSInteger nextPageIndex = (pageIndex < _titleLabels.allKeys.count - 1) ? pageIndex : _titleLabels.allKeys.count - 1;
-	
-	// if (_previousScrollPosition != offset) {
-		[_titleLabels enumerateKeysAndObjectsUsingBlock:^(NSNumber* index, UILabel* label, BOOL* stop) {
-			[label setAlpha:0];
-		}];
-		
-		if (_previousScrollPosition == offset) {
-			UILabel* currentPage = [self labelAtIndex:pageIndex];
-			[currentPage setAlpha:1];
-		}
-		
-		if (_previousScrollPosition < offset) {
-			// Scroll from right to left
-			UILabel* nextPage = [self labelAtIndex:nextPageIndex];
-			
-			if (offset + width <= self.contentSize.width && offset > 0) {
-				NSInteger currentPageIndex = MAX(nextPageIndex - 1, 0);
-				UILabel* currentPage = [self labelAtIndex:currentPageIndex];
-				
-				[currentPage setAlpha:MAX(0, pageProgress)];
-				[nextPage setAlpha:MAX(0, 1 - pageProgress)];
-			} else if (offset <= 0) {
-				UILabel* currentPage = [self labelAtIndex:pageIndex];
-				[currentPage setAlpha:MAX(0.35, 1 + (offset / width))];
-			} else {
-				UILabel* currentPage = [self labelAtIndex:pageIndex];
-				[currentPage setAlpha:MAX(0, 1 - ((offset + width) - self.contentSize.width) / width)];
-			}
-		}
-		
-		if (_previousScrollPosition > offset) {
-			// Scroll from left to right
-			UILabel* previousPage = [self labelAtIndex:previousPageIndex];
-			
-			if (offset >= 0 && offset + width <= self.contentSize.width) {
-				NSInteger currentPageIndex = MIN(previousPageIndex - 1, _titleLabels.allKeys.count);
-				UILabel* currentPage = [self labelAtIndex:currentPageIndex];
-				
-				[currentPage setAlpha:MAX(0, pageProgress)];
-				[previousPage setAlpha:MAX(0, 1 - pageProgress)];
-			} else if (offset + width > self.contentSize.width) {
-				UILabel* currentPage = [self labelAtIndex:pageIndex];
-				[currentPage setAlpha:MAX(0, 1 - ((offset + width) - self.contentSize.width) / width)];
-			} else {
-				UILabel* currentPage = [self labelAtIndex:pageIndex];
-				[currentPage setAlpha:MAX(0.35, 1 + (offset / width))];
-			}
-		}
-	// }
-	
-	_previousScrollPosition = offset;
-}
-
-- (void)updateContentSize {
-	[self setContentSize:(CGSize){ CGRectGetWidth(self.bounds) + (_distanceBetweenLabels * (_titleLabels.allKeys.count - 1)), 0 }];
-}
-
-#pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewDidScroll:(UIScrollView*)scrollView {
-	[self setLabelOffset:scrollView.contentOffset.x];
-	/*NSInteger pageIndex = MAX(MIN(ceilf(scrollView.contentOffset.x / CGRectGetWidth(scrollView.bounds)), _titleLabels.allKeys.count - 1), 0);
-	CGFloat width = CGRectGetWidth(scrollView.bounds);
-	CGFloat pageProgress = ((pageIndex * width) - scrollView.contentOffset.x) / width;
-	pageProgress = (round(pageProgress * 100)) / 100.0;
-	
-	NSInteger previousPageIndex = (pageIndex > 0) ? pageIndex : 0;
-	NSInteger nextPageIndex = (pageIndex < _titleLabels.allKeys.count - 1) ? pageIndex : _titleLabels.allKeys.count - 1;
-	
-	if (_previousScrollPosition != scrollView.contentOffset.x) {
-		[_titleLabels enumerateKeysAndObjectsUsingBlock:^(NSNumber* index, UILabel* label, BOOL* stop) {
-			[label setAlpha:0];
-		}];
-		
-		if (_previousScrollPosition < scrollView.contentOffset.x) {
-			// Scroll from right to left
-			UILabel* nextPage = [self labelAtIndex:nextPageIndex];
-			
-			if (scrollView.contentOffset.x + width <= scrollView.contentSize.width && scrollView.contentOffset.x > 0) {
-				NSInteger currentPageIndex = MAX(nextPageIndex - 1, 0);
-				UILabel* currentPage = [self labelAtIndex:currentPageIndex];
-				
-				[currentPage setAlpha:MAX(0, pageProgress)];
-				[nextPage setAlpha:MAX(0, 1 - pageProgress)];
-			} else if (scrollView.contentOffset.x <= 0) {
-				UILabel* currentPage = [self labelAtIndex:pageIndex];
-				[currentPage setAlpha:MAX(0.35, 1 + (scrollView.contentOffset.x / width))];
-			} else {
-				UILabel* currentPage = [self labelAtIndex:pageIndex];
-				[currentPage setAlpha:MAX(0, 1 - ((scrollView.contentOffset.x + width) - scrollView.contentSize.width) / width)];
-			}
-		}
-		
-		if (_previousScrollPosition > scrollView.contentOffset.x) {
-			// Scroll from left to right
-			UILabel* previousPage = [self labelAtIndex:previousPageIndex];
-			
-			if (scrollView.contentOffset.x >= 0 && scrollView.contentOffset.x + width <= scrollView.contentSize.width) {
-				NSInteger currentPageIndex = MIN(previousPageIndex - 1, _titleLabels.allKeys.count);
-				UILabel* currentPage = [self labelAtIndex:currentPageIndex];
-				
-				[currentPage setAlpha:MAX(0, pageProgress)];
-				[previousPage setAlpha:MAX(0, 1 - pageProgress)];
-			} else if (scrollView.contentOffset.x + width > scrollView.contentSize.width) {
-				UILabel* currentPage = [self labelAtIndex:pageIndex];
-				[currentPage setAlpha:MAX(0, 1 - ((scrollView.contentOffset.x + width) - scrollView.contentSize.width) / width)];
-			} else {
-				UILabel* currentPage = [self labelAtIndex:pageIndex];
-				[currentPage setAlpha:MAX(0.35, 1 + (scrollView.contentOffset.x / width))];
-			}
-		}
+- (void)setLeftTitle:(nullable NSString*)leftTitle {
+	if (![_leftTitleLabel.text isEqualToString:leftTitle]) {
+		[_leftTitleLabel setText:leftTitle];
+		[_leftTitleLabel sizeToFit];
 	}
+}
+
+- (void)setLeftTitleOffset:(CGFloat)leftTitleOffset alpha:(CGFloat)alpha {
+	_leftTitleOffset = leftTitleOffset;
+	_leftTitleAlpha = alpha;
 	
-	_previousScrollPosition = scrollView.contentOffset.x;*/
+	[_leftTitleLabel setAlpha:_leftTitleAlpha];
+	[self setNeedsLayout];
+}
+
+- (void)setRightTitle:(nullable NSString*)rightTitle {
+	if (![_rightTitleLabel.text isEqualToString:rightTitle]) {
+		[_rightTitleLabel setText:rightTitle];
+		[_rightTitleLabel sizeToFit];
+	}
+}
+
+- (void)setRightTitleOffset:(CGFloat)rightTitleOffset alpha:(CGFloat)alpha {
+	_rightTitleOffset = rightTitleOffset;
+	_rightTitleAlpha = alpha;
+	
+	[_rightTitleLabel setAlpha:_rightTitleAlpha];
+	[self setNeedsLayout];
 }
 
 @end

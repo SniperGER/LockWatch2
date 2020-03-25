@@ -1,64 +1,107 @@
 //
-//  LWFaceLibraryViewController.h
-//  LockWatch2
+// LWFaceLibraryViewController.h
+// LockWatch2
 //
-//  Created by janikschmidt on 1/13/2020.
-//  Copyright © 2020 Team FESTIVAL. All rights reserved.
+// Created by janikschmidt on 1/27/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
 #import <UIKit/UIKit.h>
 
+#import <NanoTimeKitCompanion/NTKFaceCollectionObserver-Protocol.h>
+
+#import "Core/LWAddPageViewControllerDelegate.h"
 #import "Core/LWPageScrollViewControllerDataSource.h"
 #import "Core/LWPageScrollViewControllerDelegate.h"
 
-@protocol LWFaceLibraryViewControllerDelegate;
-@class CLKDevice, LWAddPageViewController, LWFaceLibraryOverlayView, LWSwitcherViewController, NTKFace, NTKFaceCollection, NTKFaceViewController;
+NS_ASSUME_NONNULL_BEGIN
 
-@interface LWFaceLibraryViewController : UIViewController <LWPageScrollViewControllerDataSource, LWPageScrollViewControllerDelegate> {
+@protocol LWFaceLibraryViewControllerDelegate;
+@class CLKDevice, LWAddPageViewController, LWFaceLibraryOverlayView, LWSwitcherViewController, NTKFaceCollection, NTKFaceViewController;
+
+@interface LWFaceLibraryViewController : UIViewController <LWAddPageViewControllerDelegate, LWPageScrollViewControllerDataSource, LWPageScrollViewControllerDelegate, NTKFaceCollectionObserver> {
 	CLKDevice* _device;
-	BOOL _active;
-	BOOL _presented;
-	NTKFaceCollection* _addableFaceCollection;
 	NTKFaceCollection* _libraryFaceCollection;
-	NSMapTable* _faceViewControllersByFace;
+    NTKFaceCollection* _addableFaceCollection;
 	LWSwitcherViewController* _switcherController;
-	LWAddPageViewController* _addFaceViewController;
-	LWFaceLibraryOverlayView* _libraryOverlayView;
-	NSMutableSet* _suspendWorkReasons;
+    LWAddPageViewController* _addFaceViewController;
+	BOOL _switcherControllerNeedsReload;
+	NSInteger _waitingToZoomWhileScrollingToIndex;
+    NSMapTable* _faceViewControllersByFace;
+	BOOL _isIncrementallyZooming;
+    BOOL _presented;
+    BOOL _active;
+    NSMutableSet* _suspendWorkReasons;
+	NSInteger _switcherStartingPageIndex;
+	BOOL _deleteUnderway;
+	BOOL _isZoomingToLibrary;
+	CGPoint _previousSwitcherScrollOffset;
+	UIViewController* _editingViewController;
 }
 
-@property (nonatomic, readonly) LWSwitcherViewController* switcherController;
+@property (nonatomic, readonly) BOOL isFaceSwitching;
 @property (nonatomic, readonly) LWAddPageViewController* addFaceViewController;
 @property (nonatomic, readonly) LWFaceLibraryOverlayView* libraryOverlayView;
-@property (nonatomic, readonly) BOOL isFaceReordering;
-@property (nonatomic, readonly) BOOL isFaceSwitching;
+@property (nonatomic, readonly) LWSwitcherViewController* switcherController;
 @property (nonatomic) BOOL isFaceEditing;
+@property (nonatomic, readonly) BOOL presented;
 @property (nonatomic, readonly) NTKFaceViewController* selectedFaceViewController;
-@property (nonatomic) id <LWFaceLibraryViewControllerDelegate> delegate;
+@property (nonatomic, weak) id <LWFaceLibraryViewControllerDelegate> _Nullable delegate;
 
-- (id)initWithLibraryCollection:(NTKFaceCollection*)libraryFaceCollection addableCollection:(NTKFaceCollection*)addableFaceCollection;
+- (instancetype)initWithLibraryCollection:(NTKFaceCollection*)libraryFaceCollection addableCollection:(NTKFaceCollection*)addableFaceCollection;
+- (void)didMoveToParentViewController:(nullable UIViewController*)viewController;
+- (void)viewDidLayoutSubviews;
+- (void)viewDidLoad;
+- (BOOL)_canShowWhileLocked;
+- (LWAddPageViewController*)_addFaceViewController;
+- (void)_adjustLibraryOverlayTransform;
+- (void)_animateSwitcherPageDelete;
+- (void)_beginSuspendingWorkForReason:(NSString*)reason;
+- (void)_cancelDelete;
+- (void)_cancelModalLibraryModification;
+- (BOOL)_canShowAddPage;
+- (void)_cleanupAfterSwitcherPageDelete;
+- (void)_configureForSwitcherPageIndex:(NSInteger)index;
+- (void)_configureForSwitcherScrollFraction:(CGFloat)fraction lowIndex:(NSInteger)lowIndex highIndex:(NSInteger)highIndex;
+- (void)_confirmDelete;
+- (void)_dismissSwitcherAnimated:(BOOL)animated withIndex:(NSInteger)index;
+- (void)_dismissSwitcherAnimated:(BOOL)animated withIndex:(NSInteger)index completion:(void (^_Nullable)())block;
+- (void)_dismissSwitcherAnimated:(BOOL)animated withIndex:(NSInteger)index remainFrozen:(BOOL)remainFrozen completion:(void (^_Nullable)())block;
+- (CGFloat)_editButtonAlphaAtPageIndex:(NSInteger)index;
+- (void)_endIncrementalZoomIfPossibleAndNecessary;
+- (void)_endSuspendingWorkForReason:(NSString*)reason;
+- (NSInteger)_indexOfAddPage;
+- (BOOL)_isSuspendingWorkForReason:(NSString*)reason;
+- (BOOL)_isValidSwitcherIndex:(NSInteger)index;
+- (void)_handleCancelButtonPress;
+- (void)_loadAdjacentFaceViewControllers;
+- (NTKFaceViewController*)_loadFaceViewControllerForFace:(NTKFace*)face;
+- (BOOL)_pageIsEditableAtIndex:(NSInteger)index;
+- (LWPageScrollViewController*)_pageScrollViewControllerForCollection:(NTKFaceCollection*)collection;
+- (void)_prepareForSwitcherPageDelete:(NSInteger)index destinationIndex:(NSInteger)destinationIndex;
+- (void)_scrollToAndSetupFaceAtIndex:(NSInteger)index updateLibraryFaceCollection:(BOOL)updateLibraryFaceCollection;
+- (void)_selectFaceViewController:(NTKFaceViewController*)faceViewController;
+- (void)_selectFaceViewController:(NTKFaceViewController*)faceViewController withDataMode:(NSInteger)dataMode;
+- (void)_setAdjacentFacesToDataMode:(NSInteger)dataMode andFreeze:(BOOL)freeze;
+- (void)_setFaceAtIndex:(NSInteger)index toDataMode:(NSInteger)dataMode andFreeze:(BOOL)freeze;
+- (void)_setSelectedFaceViewController:(NTKFaceViewController*)faceViewController;
+- (void)_setPresented:(BOOL)presented;
+- (void)_startFaceEditing;
+- (void)_stopFaceEditing;
+- (void)_stopFaceEditing:(BOOL)animated;
+- (void)_tearDownDeleteConfirmation;
+- (NSString*)_titleForSwitcherPageAtIndex:(NSInteger)index;
+- (CGFloat)_titleOffsetForSwitcherPageAtIndex:(NSInteger)index;
+- (void)_updateButtonsForSwipeToDeleteFraction:(CGFloat)fraction pageIndex:(NSInteger)index;
+- (void)_zoomInPageAtIndex:(NSInteger)index animated:(BOOL)animated completion:(void (^_Nullable)(BOOL finished))block;
 - (void)activateWithSelectedFaceViewController:(NTKFaceViewController*)faceViewController;
-- (void)adjustLibraryOverlayTransform;
 - (void)beginInteractiveLibraryPresentation;
-- (void)beginSuspendingWorkForReason:(NSString*)reason;
 - (void)commitToLibraryPresentation;
-- (void)dismissSwitcherAnimated:(BOOL)animated withIndex:(NSInteger)index;
-- (void)dismissSwitcherAnimated:(BOOL)animated withIndex:(NSInteger)index completion:(id /* block */)completion;
-- (void)endIncrementalZoomIfPossibleAndNecessary;
 - (void)endInteractiveLibraryPresentation;
-- (void)endSuspendingWorkForReason:(NSString*)reason;
-- (NSInteger)indexOfAddPage;
-- (BOOL)isSuspendingWorkForReason:(NSString*)reason;
-- (NTKFaceViewController*)loadFaceViewControllerForFace:(NTKFace*)face;
-- (id)pageScrollViewControllerForCollection:(NTKFaceCollection*)collection;
-- (void)scrollToAndSetupFaceAtIndex:(NSInteger)index updateLibraryFaceCollection:(BOOL)updateLibraryFaceCollection;
-- (void)selectFaceViewController:(NTKFaceViewController*)faceViewController;
-- (void)selectFaceViewController:(NTKFaceViewController*)faceViewController withDataMode:(NSInteger)dataMode;
-- (void)setAdjacentFacesToDataMode:(NSInteger)dataMode andFreeze:(BOOL)freeze;
-- (void)setFaceAtIndex:(NSInteger)index toDataMode:(NSInteger)dataMode andFreeze:(BOOL)freeze;
+- (void)hideAddPageIfAvailable;
 - (void)setInteractiveProgress:(CGFloat)progress;
-- (void)setPresented:(BOOL)presented;
-- (void)setSelectedFaceViewController:(NTKFaceViewController*)faceViewController;
-- (void)zoomInPageAtIndex:(NSInteger)index animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
+- (void)showAddPageIfAvailable;
 
 @end
+
+NS_ASSUME_NONNULL_END

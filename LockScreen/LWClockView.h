@@ -1,20 +1,23 @@
 //
-//  LWClockView.h
-//  LockWatch2
+// LWClockView.h
+// LockWatch2
 //
-//  Created by janikschmidt on 1/13/2020.
-//  Copyright © 2020 Team FESTIVAL. All rights reserved.
+// Created by janikschmidt on 1/26/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol LWClockViewDelegate;
 
-@interface LWClockView : UIView {
-	UILongPressGestureRecognizer* _longPressGesture;
-}
+@interface LWClockView : UIView
 
-@property (nonatomic) id <LWClockViewDelegate> delegate;
-@property (nonatomic) BOOL orbZoomEnabled;
+@property (nonatomic, weak) id <LWClockViewDelegate> delegate;
+
+- (UIView*)hitTest:(CGPoint)point withEvent:(nullable UIEvent*)event;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -1,11 +1,14 @@
+//
+// FaceFixes.xm
+// LockWatch2
+//
+// Created by janikschmidt on 1/23/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
+//
+
 #import "FaceFixes.h"
 
-%hook NTKDate
-+ (id)faceDate {
-	return [NSDate date];
-}
-%end
-
+%group SpringBoard
 %hook CLKDate
 + (id)unmodifiedDate {
 	return [NSDate date];
@@ -16,7 +19,13 @@
 + (id)complicationDate {
 	return [NSDate date];
 }
-%end
+%end	/// %hook CLKDate
+
+%hook NTKDate
++ (id)faceDate {
+	return [NSDate date];
+}
+%end	/// %hook NTKDate
 
 
 
@@ -27,7 +36,7 @@
 	self.layer.cornerRadius = CGRectGetWidth(self.bounds) / 2;
 	self.clipsToBounds = YES;
 }
-%end	// %hook ARUIRingsView
+%end	/// %hook ARUIRingsView
 
 %hook CALayer
 %new
@@ -52,7 +61,7 @@
 	
 	return %orig;
 }
-%end	// %hook CALayer
+%end	/// %hook CALayer
 
 %hook CLKDevice
 %new
@@ -65,7 +74,16 @@
 		{ screenSize.width / screenScale, screenSize.height / screenScale }
 	};
 }
-%end	// %hook CLKDevice
+
+%new
+- (CGFloat)actualScreenCornerRadius {
+	CGFloat screenScale = [[self.nrDevice valueForProperty:@"screenScale"] floatValue];
+	CGSize screenSize = [[self.nrDevice valueForProperty:@"screenSize"] CGSizeValue];
+	CGRect screenBounds = self.screenBounds;
+	
+	return (((screenSize.width / screenScale) * (screenSize.height / screenScale)) / (CGRectGetWidth(screenBounds) * CGRectGetHeight(screenBounds))) * self.screenCornerRadius;
+}
+%end	/// %hook CLKDevice
 
 %hook CLKVideoPlayerView
 - (void)layoutSubviews {
@@ -78,13 +96,13 @@
 		[self.superview.subviews[5] setBackgroundColor:UIColor.clearColor];
 	}
 }
-%end	// %hook CLKVideoPlayerView
+%end	/// %hook CLKVideoPlayerView
 
 %hook NTKAlbumEmptyView
 - (void)setBackgroundColor:(UIColor*)arg1 {
 	%orig(UIColor.clearColor);
 }
-%end	// %hook NTKAlbumEmptyView
+%end	/// %hook NTKAlbumEmptyView
 
 %hook NTKAnalogFaceView
 - (void)layoutSubviews {
@@ -94,24 +112,30 @@
 		[self.contentView setBackgroundColor:UIColor.clearColor];
 	}
 }
-%end	// %hook NTKAnalogFaceView
+%end	/// %hook NTKAnalogFaceView
 
 %hook NTKAnalogScene
 - (void)setBackgroundColor:(UIColor*)arg1 {
 	%orig(UIColor.clearColor);
 }
-%end	// %hook NTKAnalogScene
+%end	/// %hook NTKAnalogScene
 
 %hook NTKCircularAnalogDialView
 - (void)setBackgroundColor:(UIColor*)arg1 {
 	%orig(UIColor.clearColor);
 }
-%end	// %hook NTKCircularAnalogDialView
+%end	/// %hook NTKCircularAnalogDialView
 
-%hook NTKCompanionFaceViewController
+%hook NTKComplicationDataSource
++ (Class)dataSourceClassForComplicationType:(unsigned long long)type family:(long long)family forDevice:(id)arg3 {
+	return nil;
+}
+%end	/// %hook NTKComplicationDataSource
+
+%hook NTKFaceViewController
 %property (nonatomic, strong) UIVisualEffectView* effectView;
 
-- (id)initWithFace:(id)arg1 configuration:(id)arg2 {
+- (id)initWithFace:(id)arg1 configuration:(id /* block */)arg2 {
 	id r = %orig;
 	
 	self.effectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:17]];
@@ -122,22 +146,22 @@
 - (void)viewDidLayoutSubviews {
 	%orig;
 	
-	[self.view setClipsToBounds:YES];
-	[self.view.layer setCornerRadius:self.face.device.screenCornerRadius];
+	[self.faceView setClipsToBounds:YES];
+	[self.faceView.layer setCornerRadius:self.face.device.screenCornerRadius];
+
+#if __clang_major__ >= 9
+	if (@available(iOS 13, *)) {
+		[self.faceView.layer setCornerCurve:kCACornerCurveContinuous];
+	}
+#endif
 	
-	if (![self.view.subviews containsObject:self.effectView]) {
-		[self.view insertSubview:self.effectView atIndex:0];
+	if (![self.faceView.subviews containsObject:self.effectView]) {
+		[self.faceView insertSubview:self.effectView atIndex:0];
 	}
 	
 	[self.effectView setFrame:self.view.bounds];
 }
-%end	// %hook NTKCompanionFaceViewController
-
-%hook NTKComplicationDataSource
-+ (Class)dataSourceClassForComplicationType:(unsigned long long)type family:(long long)family forDevice:(id)arg3 {
-	return nil;
-}
-%end	// %hook NTKComplicationDataSource
+%end	/// %hook NTKCompanionFaceViewController
 
 %hook NTKExplorerDialView
 - (void)layoutSubviews {
@@ -146,25 +170,31 @@
 	self.layer.cornerRadius = CGRectGetWidth(self.bounds) / 2;
 	self.clipsToBounds = YES;
 }
-%end	// %hook NTKExplorerDialView
+%end	/// %hook NTKExplorerDialView
 
-%hook NTKFaceCollection
-- (BOOL)hasLoaded {
+%hook NTKFaceViewController
+- (BOOL)_canShowWhileLocked {
 	return YES;
 }
-%end	// %hook NTKFaceCollection
+%end	/// %hook NTKCompanionFaceViewController
 
-%hook NTKUpNextCollectionView
-- (void)setBackgroundColor:(UIColor*)arg1 {
-	%orig(UIColor.clearColor);
+%hook NTKPrideDigitalFaceView
+- (void)layoutSubviews {
+	%orig;
+	
+#if !TARGET_OS_SIMULATOR
+	UIView* _bandsView = MSHookIvar<UIView*>(self, "_bandsView");
+	[_bandsView removeFromSuperview];
+	[self insertSubview:_bandsView atIndex:1];
+#endif
 }
-%end	// %hook NTKUpNextCollectionView
+%end
 
 %hook NTKRoundedCornerOverlayView
 - (void)layoutSubviews {
 	self.hidden = YES;
 }
-%end	// %hook NTKRoundedCornerOverlayView
+%end	/// %hook NTKRoundedCornerOverlayView
 
 %hook NTKSiderealDialBackgroundView
 - (void)layoutSubviews {
@@ -173,25 +203,29 @@
 	self.layer.cornerRadius = CGRectGetWidth(self.bounds) / 2;
 	self.clipsToBounds = YES;
 }
-%end	// %hook NTKSiderealDialBackgroundView
+%end	/// %hook NTKSiderealDialBackgroundView
 
 %hook NTKSiderealFaceView
 - (void)setBackgroundColor:(UIColor*)arg1 {
 	%orig(UIColor.clearColor);
 }
-%end	// %hook NTKSiderealFaceView
+%end	/// %hook NTKSiderealFaceView
 
 %hook NTKVictoryAnalogBackgroundView
 - (void)setBackgroundColor:(UIColor*)arg1 {
+	if (CGColorEqualToColor(arg1.CGColor, UIColor.blackColor.CGColor)) {
+		%orig(UIColor.clearColor);
+	} else {
+		%orig;
+	}
+}
+%end	/// %hook NTKVictoryAnalogBackgroundView
+
+%hook NTKUpNextCollectionView
+- (void)setBackgroundColor:(UIColor*)arg1 {
 	%orig(UIColor.clearColor);
 }
-%end	// %hook NTKVictoryAnalogBackgroundView
-
-%hook NTKZeusColorPalette
-- (UIColor*)backgroundColor {
-	return UIColor.clearColor;
-}
-%end	// %hook NTKZeusColorPalette
+%end	/// %hook NTKUpNextCollectionView
 
 %hook SKView
 - (void)setBackgroundColor:(UIColor*)arg1 {
@@ -201,4 +235,22 @@
 - (void)setAllowsTransparency:(BOOL)arg1 {
 	%orig(YES);
 }
-%end	// %hook SKView
+%end	/// %hook SKView
+%end	// %group SpringBoard
+
+
+
+%ctor {
+	@autoreleasepool {
+		LWPreferences* preferences = [LWPreferences sharedInstance];
+		NSString* bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+		
+		if (bundleIdentifier && preferences.enabled) {
+			%init();
+			
+			if ([bundleIdentifier isEqualToString:@"com.apple.springboard"]) {
+				%init(SpringBoard);
+			}
+		}
+	}
+}

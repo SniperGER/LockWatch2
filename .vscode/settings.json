@@ -1,0 +1,6 @@
+{
+	"files.exclude": {
+		"**/_old": true,
+		"**/.theos": true
+	}
+}

@@ -1,0 +1,27 @@
+//
+// Localizable.strings
+// LockWatch2
+//
+// Created by janikschmidt on 3/17/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
+//
+
+{
+	"NO_DEVICE_TITLE" = "LockWatch - Kein Gerät gefunden";
+	"NO_DEVICE_MESSAGE" = "LockWatch konnte keine Apple Watch finden – weder physisch noch simuliert. Ohne Apple Watch funktioniert LockWatch nicht.\n\nUm dieses Problem zu beheben, kannst du, sofern unterstützt, eine Apple Watch mit deinem Gerät koppeln oder ein simuliertes Gerät in den Einstellungen von LockWatch auswählen.";
+	
+	"LIBRARY_WATCH_FACES" = "Zifferblätter";
+	"LIBRARY_MY_WATCH" = "Meine Uhr";
+	"LIBRARY_APPLE_FACES_HEADER" = "Apple Watch";
+	"LIBRARY_CUSTOM_FACES_HEADER" = "Drittanbieter";
+	"LIBRARY_CUSTOM_INDEV_FOOTER" = "Zifferblätter von Drittanbietern werden derzeit nicht unterstützt.";
+	
+	"WHATS_NEW_TITLE" = "LockWatch 2 - Neuigkeiten";
+	"WHATS_NEW_DONE" = "Fertig";
+	
+	"SYNC_TO_LOCK_SCREEN" = "Sperrbildschirm synchronisieren";
+	"SYNC_TO_LOCK_SCREEN_PROMPT" = "Hiermit werden die Zifferblätter auf dem Sperrbildschirm mit denen auf deiner Apple Watch synchronisiert. Jegliche Änderungen an den bisherigen Zifferblättern gehen verloren.\n\nBist du sicher, dass du fortfahren möchtest? Einige Zifferblätter, Anpassungen oder Komplikationen sind für bestimmte Modelle möglicherweise nicht verfügbar.";
+	
+	"ADD_TO_PROMPT" = "Wähle einen Ort, zu dem du das Zifferblatt hinzufügen möchtest.";
+	"ADD_TO_LOCK_SCREEN" = "Sperrbildschirm";
+}

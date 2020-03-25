@@ -1,8 +1,18 @@
+//
+// FaceFixes.h
+// LockWatch2
+//
+// Created by janikschmidt on 1/23/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
+//
+
 #import <ClockKit/CLKDevice.h>
 #import <NanoRegistry/NRDevice.h>
 #import <NanoTimeKitCompanion/NTKFace.h>
+#import <NanoTimeKitCompanion/NTKFaceView.h>
+#import <NanoTimeKitCompanion/NTKFaceViewController.h>
 
-
+#import "Core/LWPreferences.h"
 
 @interface ARUIRingsView : UIView
 @end
@@ -18,15 +28,17 @@
 @property (nonatomic, retain) UIView *contentView;
 @end
 
-@interface NTKCompanionFaceViewController : UIViewController
+@interface NTKFaceViewController (UIEffectView)
 // %property
 @property (nonatomic, strong) UIVisualEffectView* effectView;
-
-- (NTKFace*)face;
-- (UIView*)faceView;
 @end
 
 @interface NTKExplorerDialView : UIView
+@end
+
+@interface NTKPrideDigitalFaceView : UIView {
+	UIView* _bandsView;
+}
 @end
 
 @interface NTKRoundedCornerOverlayView : UIView

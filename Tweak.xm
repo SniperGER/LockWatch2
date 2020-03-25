@@ -1,16 +1,63 @@
+//
+// Tweak.xm
+// LockWatch2
+//
+// Created by janikschmidt on 1/23/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
+//
+
 #import "Tweak.h"
 
-%hook ACXDeviceConnection
-- (void)_onQueue_reEstablishObserverConnectionIfNeeded {
-	return;
-}
-%end	// %hook ACXDeviceConnection
+void JSLog(NSString* logString) {
+	int stepLog = 1024;
+	NSInteger strLen = [@([logString length]) integerValue];
+	NSInteger countInt = strLen / stepLog;
 
+	if (strLen > stepLog) {
+		for (int i=1; i <= countInt; i++) {
+			NSString *character = [logString substringWithRange:NSMakeRange((i*stepLog)-stepLog, stepLog)];
+			NSLog(@"%@", character);
+
+		}
+		NSString *character = [logString substringWithRange:NSMakeRange((countInt*stepLog), strLen-(countInt*stepLog))];
+		NSLog(@"%@", character);
+	} else {
+		NSLog(@"%@", logString);
+	}
+}
+
+void uncaughtExceptionHandler(NSException *exception)
+{
+    JSLog([NSString stringWithFormat:@"[Exception] %@", exception]);
+    JSLog([NSString stringWithFormat:@"[Exception] %@", [exception callStackSymbols]]);
+}
+
+%group SpringBoard
 %hook SpringBoard
 - (void)applicationDidFinishLaunching:(id)arg1 {
 	%orig;
 	
+	NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+	
 	clockViewController = [LWClockViewController new];
+	
+	if (!clockViewController) {
+		NSBundle* prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/lockwatch2.bundle"];
+
+		UIAlertController* alert = [UIAlertController alertControllerWithTitle:[prefBundle localizedStringForKey:@"NO_DEVICE_TITLE" value:nil table:nil]
+																	   message:[prefBundle localizedStringForKey:@"NO_DEVICE_MESSAGE" value:nil table:nil]
+																preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:[prefBundle localizedStringForKey:@"GENERIC_CONFIRM" value:nil table:@"Root"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+		
+		[alert addAction:defaultAction];
+		
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+		[UIApplication.sharedApplication.keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+#pragma GCC diagnostic pop
+		
+		return;
+	}
 	
 	SBLockScreenManager* manager = [%c(SBLockScreenManager) sharedInstance];
 	CSCoverSheetViewController* coverSheet = [manager coverSheetViewController];
@@ -20,28 +67,78 @@
 	[mainPage addChildViewController:clockViewController];
 	[clockViewController didMoveToParentViewController:mainPage];
 }
-%end	// %hook SpringBoard
+%end	/// %hook SpringBoard
 
 %hook SBFLockScreenDateView
 - (void)layoutSubviews {
-	[MSHookIvar<UILabel *>(self,"_timeLabel") removeFromSuperview];
-	[MSHookIvar<UILabel *>(self,"_dateSubtitleView") removeFromSuperview];
-	[MSHookIvar<UILabel *>(self,"_customSubtitleView") removeFromSuperview];
+	if (clockViewController) {
+		[MSHookIvar<UILabel *>(self,"_timeLabel") removeFromSuperview];
+		[MSHookIvar<UILabel *>(self,"_dateSubtitleView") removeFromSuperview];
+		[MSHookIvar<UILabel *>(self,"_customSubtitleView") removeFromSuperview];
+	}
 	
 	%orig;
 	
 	[UIView performWithoutAnimation:^{
 		[clockViewController.view setFrame:(CGRect){
-			CGPointZero,
+			{ 0, CGRectGetMinY(self.frame) },
 			{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(clockViewController.view.bounds) }
 		}];
 		[clockViewController.view setCenter:(CGPoint) {
 			CGRectGetMidX(clockViewController.view.bounds),
-			CGRectGetMidY(self.frame),
+			clockViewController.view.center.y
 		}];
 	}];
 }
-%end	// %hook SBFLockScreenDateView
+%end	/// %hook SBFLockScreenDateView
+
+%hook SBBacklightController
+- (void)_startFadeOutAnimationFromLockSource:(int)arg1 {
+	if (clockViewController.faceLibraryIsPresented) {
+		return;
+	}
+	
+	%orig;
+}
+
+- (void)turnOnScreenFullyWithBacklightSource:(NSInteger)arg1 {
+	[clockViewController unfreezeCurrentFace];
+	
+	%orig;
+}
+
+- (void)_animateBacklightToFactor:(float)arg1 duration:(double)arg2 source:(long long)arg3 silently:(BOOL)arg4 completion:(id /* block */)arg5 {
+	if (arg1 == 0.0 && self.screenIsOn) {
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(arg2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			[clockViewController dismissFaceLibraryAnimated:NO];
+			[clockViewController dismissCustomizationViewControllers:NO];
+			
+			[clockViewController freezeCurrentFace];
+		});
+	}
+	
+	%orig;
+}
+%end	/// %hook SBBacklightController
+
+%hook CSCoverSheetViewController
+- (void)finishUIUnlockFromSource:(int)arg1 {
+	[clockViewController dismissCustomizationViewControllers:YES];
+}
+
+- (void)viewWillAppear:(BOOL)arg1 {
+	[clockViewController unfreezeCurrentFace];
+	
+	%orig;
+}
+
+- (void)viewDidDisappear:(BOOL)arg1 {
+	[clockViewController dismissFaceLibraryAnimated:NO];
+	[clockViewController freezeCurrentFace];
+	
+	%orig;
+}
+%end	/// %hook CSCoverSheetViewController
 
 %hook CSMainPageContentViewController
 - (void)viewDidLayoutSubviews {
@@ -53,53 +150,278 @@
 	
 	[UIView performWithoutAnimation:^{
 		[clockViewController.view setFrame:(CGRect){
-			CGPointZero,
+			{ 0, CGRectGetMinY(dateViewController.view.frame) },
 			{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(clockViewController.view.bounds) }
 		}];
 		[clockViewController.view setCenter:(CGPoint) {
 			CGRectGetMidX(clockViewController.view.bounds),
-			CGRectGetMidY(dateViewController.view.frame),
+			CGRectGetMinY(dateViewController.view.frame) + (CGRectGetHeight(clockViewController.view.bounds) / 2)
 		}];
 	}];
 }
-%end	// %hook CSMainPageContentViewController
+%end	/// %hook CSMainPageContentViewController
 
+static CGFloat notificationOffset = 0;
 
-
-%hook SBBacklightController
-- (void)turnOnScreenFullyWithBacklightSource:(NSInteger)arg1 {
-	[clockViewController unfreezeCurrentFace];
+%hook CSCombinedListViewController
+- (UIEdgeInsets)_listViewDefaultContentInsets {
+    UIEdgeInsets r = %orig;
+    
+	SBFLockScreenDateViewController* dateViewController = [[[objc_getClass("SBLockScreenManager") sharedInstance] coverSheetViewController] dateViewController];
+	CLKDevice* device = [CLKDevice currentDevice];
 	
-	%orig;
-}
-
-- (void)_animateBacklightToFactor:(float)arg1 duration:(double)arg2 source:(long long)arg3 silently:(BOOL)arg4 completion:(id /* block */)arg5 {
-	if (arg1 == 0.0 && self.screenIsOn) {
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(arg2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-			[clockViewController freezeCurrentFace];
-		});
+	if (notificationOffset == 0 && !CGRectIsEmpty([(SBFLockScreenDateView*)dateViewController.view restingFrame]) && !isnan(CGRectGetHeight(device.actualScreenBounds))) {
+		notificationOffset = (CGRectGetMinY([(SBFLockScreenDateView*)dateViewController.view restingFrame]) + CGRectGetHeight(device.actualScreenBounds) + 12) - r.top;
 	}
 	
-	%orig;
-}
-%end	// %hook SBBacklightController
-
-%hook CSCoverSheetViewController
-- (void)viewDidDisappear:(BOOL)arg1 {
-	[clockViewController freezeCurrentFace];
-	%orig;
+	r.top += notificationOffset;
+    
+    return r;
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+	%orig;
+
+	[self _updateListViewContentInset];
+}
+
+- (CGFloat)_minInsetsToPushDateOffScreen {
+	return %orig + notificationOffset;
+}
+%end	/// %hook CSCombinedListViewController
+
+%hook _CSPaddingView
+- (CGSize)paddingSize {
+	return CGSizeZero;
+}
+
+- (void)setPaddingSize:(CGSize)arg1 {
+	%orig(CGSizeZero);
+}
+%end	/// %hook _CSPaddingView
+
+static BOOL scrollEnabled = YES;
+%hook NTKCFaceDetailViewController
+- (BOOL)_canShowWhileLocked {
+	return YES;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	scrollEnabled = YES;
+	%orig;
+}
+
+- (void)viewDidLayoutSubviews {
+	JSLog([NSString stringWithFormat:@"%@", NSThread.callStackSymbols]);
+	CGPoint contentOffset = self.tableView.contentOffset;
+	
+	%orig;
+	[self.tableView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentAutomatic];
+	
+	if (scrollEnabled) {
+		[self.tableView setContentOffset:(CGPoint){ 0, MIN(-self.tableView.adjustedContentInset.top, contentOffset.y) }];
+	}
+}
+
+- (NSInteger)numberOfSectionsInTableView:(id)arg1 {
+	return %orig - 1;
+}
+%end	/// %hook NTKCFaceDetailViewController
+
+%hook NTKCFaceDetailEditOptionCell
+- (void)collectionView:(id)arg1 didSelectItemAtIndexPath:(id)arg2 {
+	scrollEnabled = NO;
+	%orig;
+}
+%end	/// %hook NTKCFaceDetailEditOptionCell
+
+%hook NTKCFaceDetailComplicationPickerCell
+- (void)pickerView:(id)arg1 didSelectRow:(NSInteger)arg2 inComponent:(NSInteger)arg3 {
+	scrollEnabled = NO;
+	%orig;
+}
+%end	/// %hook NTKCFaceDetailEditOptionCell
+
+%hook NTKCCLibraryListViewController
 - (void)viewWillAppear:(BOOL)arg1 {
-	[clockViewController unfreezeCurrentFace];
-	%orig;
+	scrollEnabled = YES;
+	return;
 }
-%end	// %hook CSCoverSheetViewController
+
+- (void)viewDidLayoutSubviews {
+	%orig;
+	
+	[self.tableView setContentInset:self.tableView.safeAreaInsets];
+	
+	if (scrollEnabled) {
+		[self.tableView setContentOffset:(CGPoint){ 0, -self.tableView.adjustedContentInset.top }];
+		scrollEnabled = NO;
+	}
+}
+%end	/// %hook NTKCCLibraryListViewController
+%end	// %group SpringBoard
+
+
+
+%group Bridge
+%hook COSPreferencesAppController
+- (BOOL)application:(id)arg1 didFinishLaunchingWithOptions:(id)arg2 {
+	BOOL r = %orig;
+	NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+	return r;
+}
+%end	/// %hook COSPreferencesAppController
+
+%hook COSSettingsListController
+- (void)viewDidLoad {
+	%orig;
+	
+	NSBundle* prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/lockwatch2.bundle"];
+
+	PSSpecifier* syncSpecifier = [PSSpecifier preferenceSpecifierNamed:[prefBundle localizedStringForKey:@"SYNC_TO_LOCK_SCREEN" value:nil table:nil] target:self set:nil get:nil detail:nil cell:13 edit:nil];
+	[syncSpecifier setButtonAction:@selector(syncToLockscreen)];
+	[self insertSpecifier:syncSpecifier atIndex:4];
+}
+
+%new
+- (void)syncToLockscreen {
+	NSBundle* prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/lockwatch2.bundle"];
+	
+	UIAlertController* alertController = [UIAlertController alertControllerWithTitle:[prefBundle localizedStringForKey:@"SYNC_TO_LOCK_SCREEN" value:nil table:nil]
+																			 message:[prefBundle localizedStringForKey:@"SYNC_TO_LOCK_SCREEN_PROMPT" value:nil table:nil]
+																	  preferredStyle:UIAlertControllerStyleAlert];
+	
+	UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:[prefBundle localizedStringForKey:@"GENERIC_CANCEL" value:nil table:@"Root"] style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:[prefBundle localizedStringForKey:@"GENERIC_CONFIRM" value:nil table:@"Root"] style:UIAlertActionStyleDestructive handler:^(UIAlertAction* action) {
+		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"ml.festival.lockwatch2/SyncLibrary" object:nil userInfo:@{
+			@"faceJSON": self.facesController.library.JSONObjectRepresentation
+		}];
+	}];
+	
+	[alertController addAction:cancelAction];
+	[alertController addAction:confirmAction];
+	[self presentViewController:alertController animated:YES completion:nil];
+}
+%end	/// %hook COSSettingsListController
+
+%hook NTKCFaceDetailViewController
+- (void)_addTapped {
+	NSBundle* prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/lockwatch2.bundle"];
+	
+	UIAlertController* alertController = [UIAlertController alertControllerWithTitle:[prefBundle localizedStringForKey:@"ADD_TO_PROMPT" value:nil table:nil] message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+	
+	CLKDevice* clkDevice = [CLKDevice currentDevice];
+	NRDevice* nrDevice = [clkDevice nrDevice];
+	
+	UIAlertAction* watchAction = [UIAlertAction actionWithTitle:[nrDevice valueForProperty:@"name"] style:UIAlertActionStyleDefault handler:^(UIAlertAction* action) {
+		%orig;
+	}];
+	UIAlertAction* lockScreenAction = [UIAlertAction actionWithTitle:[prefBundle localizedStringForKey:@"ADD_TO_LOCK_SCREEN" value:nil table:nil] style:UIAlertActionStyleDefault handler:^(UIAlertAction* action) {
+		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"ml.festival.lockwatch2/AddToLibrary" object:nil userInfo:@{
+			@"faceJSON": self.face.JSONObjectRepresentation
+		}];
+	}];
+	UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:[prefBundle localizedStringForKey:@"GENERIC_CANCEL" value:nil table:@"Root"] style:UIAlertActionStyleCancel handler:nil];
+	
+	[alertController addAction:watchAction];
+	[alertController addAction:lockScreenAction];
+	[alertController addAction:cancelAction];
+	[self presentViewController:alertController animated:YES completion:nil];
+}
+%end	/// %hook NTKCFaceDetailViewController
+%end	// %group Bridge
+
+
+
+%hook ACXDeviceConnection
+- (void)_onQueue_reEstablishObserverConnectionIfNeeded {
+	return;
+}
+%end	// %hook ACXDeviceConnection
+
+%hook REElementDataSourceController
+- (void)_queue_reloadWithQOS:(unsigned int)arg1 qosOffset:(int)arg2 forceReload:(BOOL)arg3 completion:(id /* block */)arg4 {
+	return;
+}
+%end	// %hook REElementDataSourceController
+
+
+
+#if !TARGET_OS_SIMULATOR
+static BOOL (*old_NTKShowHardwareSpecificFaces)();
+BOOL _NTKShowHardwareSpecificFaces() {
+	return YES;
+}
+#endif
+
+static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* observer, CFStringRef name, const void* object, CFDictionaryRef userInfo) {
+	[preferences reloadPreferences];
+	
+	if (preferences.isEmulatingDevice) {
+		NSDictionary* watchData = [[NSDictionary alloc] initWithContentsOfFile:WATCH_DATA_PATH][preferences.emulatedDeviceType];
+
+		LWEmulatedNRDevice* nrDevice = [[LWEmulatedNRDevice alloc] initWithJSONObjectRepresentation:watchData[@"registry"] pairingID:[NSUUID new]];
+		
+		CLKDevice* device = [[LWEmulatedCLKDevice alloc] initWithJSONObjectRepresentation:watchData[@"device"] forNRDevice:nrDevice];
+		[CLKDevice setCurrentDevice:device];
+	}
+	
+	if (clockViewController) {
+		[clockViewController setDevice:[CLKDevice currentDevice]];
+		
+		SBLockScreenManager* manager = [%c(SBLockScreenManager) sharedInstance];
+		CSCoverSheetViewController* coverSheet = [manager coverSheetViewController];
+		CSMainPageContentViewController* mainPage = [coverSheet mainPageContentViewController];
+		
+		[clockViewController willMoveToParentViewController:mainPage];
+		[clockViewController didMoveToParentViewController:mainPage];
+		
+		[clockViewController loadAddableFaceCollection];
+		[clockViewController loadLibraryFaceCollection];
+		[clockViewController _createOrRecreateFaceContent];
+		
+		notificationOffset = 0;
+	}
+}
+
+
 
 %ctor {
-	if (access(DPKG_PATH, F_OK) == -1 && !TARGET_OS_SIMULATOR) {
-		return;
+	@autoreleasepool {
+		// File integrity check
+		if (access(DPKG_PATH, F_OK) == -1 && !TARGET_OS_SIMULATOR) {
+			NSLog(@"[LockWatch] You are using LockWatch 2 from a source other than https://repo.festival.ml");
+			NSLog(@"[LockWatch] To ensure system stability and security (or what's left of it, thanks to your jailbreak), LockWatch 2 will disable itself now.");
+			
+			return;
+		}
+		
+		preferences = [LWPreferences sharedInstance];
+		
+		NSString* bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+		
+		if (bundleIdentifier && preferences.enabled) {
+			%init();
+			
+			if ([bundleIdentifier isEqualToString:@"com.apple.springboard"]) {
+	#if !TARGET_OS_SIMULATOR
+				MSHookFunction(((void*)MSFindSymbol(NULL, "_NTKShowHardwareSpecificFaces")),(void*)_NTKShowHardwareSpecificFaces, (void**)&old_NTKShowHardwareSpecificFaces);
+	#endif
+				
+				void* customizationBundle = dlopen("/System/Library/NanoPreferenceBundles/Customization/NTKCustomization.bundle/NTKCustomization", RTLD_LAZY);
+				if (!customizationBundle) {
+					NSLog(@"Could not load customization bundle. Watch face management will be partly unavailable.");
+				}
+				
+				CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, LWEmulatedWatchTypeChanged, CFSTR("ml.festival.lockwatch2/WatchSelected"), NULL, CFNotificationSuspensionBehaviorCoalesce);
+				LWEmulatedWatchTypeChanged(NULL, NULL, NULL, NULL, NULL);
+				
+				%init(SpringBoard);
+			}
+			
+			if ([bundleIdentifier isEqualToString:@"com.apple.Bridge"]) {
+				%init(Bridge);
+			}
+		}
 	}
-	
-	%init();
 }

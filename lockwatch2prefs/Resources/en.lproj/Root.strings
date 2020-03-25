@@ -1,0 +1,32 @@
+//
+// Root.strings
+// LockWatch2
+//
+// Created by janikschmidt on 3/17/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
+//
+
+{
+	"GENERIC_CANCEL" = "Cancel";
+	"GENERIC_CONFIRM" = "OK";
+	
+	"GENERAL" = "General";
+	"GENERAL_ENABLED" = "Enabled";
+	
+	"DEVICE_SETTINGS" = "Device Settings";
+	"USE_EMULATED_DEVICE" = "Use Emulated Apple Watch";
+	"EMULATED_DEVICE" = "Apple Watch Model";
+	
+	"RESET_LIBRARY_TITLE" = "Reset Watch Faces";
+	"RESET_LIBRARY_PROMPT" = "This will reset your watch face library to system defaults. Any customization to your watch faces will be lost.\n\nAre you sure you want to reset your watch face library?";
+	"RESET_LIBRARY_CONFIRM" = "Reset";
+	"RESET_LIBRARY_FOOTER" = "When selecting a different emulated Apple Watch model, it is recommended to reset your watch face library. Some watch faces, customizations or complications may not be available for certain models.";
+
+	"RESTART_SPRINGBOARD_TITLE" = "Restart SpringBoard";
+	"RESTART_SPRINGBOARD_PROMPT" = "Restarting SpringBoard will apply all changed settings.";
+	"RESTART_SPRINGBOARD_CONFIRM" = "Restart SpringBoard";
+
+	"BUTTON_WHATS_NEW" = "What's New";
+	"BUTTON_REPORT_ISSUE" = "Report Issue";
+	"BUTTON_MAKE_DONATION" = "Donate";
+}
