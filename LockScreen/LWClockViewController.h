@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 	BOOL _haveLoadedView;
 	BOOL _haveFinishedLoadingView;
 	NSTimer* _libraryTimeoutTimer;
-	UIView* _contentView;
+	CAShapeLayer* _contentViewMask;
 }
 
 @property (nonatomic, readonly) LWPreferences* preferences;
@@ -53,6 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)_putLibraryViewControllerIntoClockViewController;
 - (void)_setOrbZoomProgress:(CGFloat)progress;
 - (void)_teardownExistingFaceViewControllerIfNeeded;
+- (void)_updateMask;
 - (void)dismissCustomizationViewControllers:(BOOL)animated;
 - (void)dismissFaceLibraryAnimated:(BOOL)animated;
 - (BOOL)faceLibraryIsPresented;

@@ -79,7 +79,7 @@ void uncaughtExceptionHandler(NSException *exception)
 	
 	%orig;
 	
-	[UIView performWithoutAnimation:^{
+	// [UIView performWithoutAnimation:^{
 		[clockViewController.view setFrame:(CGRect){
 			{ 0, CGRectGetMinY(self.frame) },
 			{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(clockViewController.view.bounds) }
@@ -88,7 +88,9 @@ void uncaughtExceptionHandler(NSException *exception)
 			CGRectGetMidX(clockViewController.view.bounds),
 			clockViewController.view.center.y
 		}];
-	}];
+		
+		[clockViewController _updateMask];
+	// }];
 }
 %end	/// %hook SBFLockScreenDateView
 
@@ -148,7 +150,7 @@ void uncaughtExceptionHandler(NSException *exception)
 	
 	SBFLockScreenDateViewController* dateViewController = [[[objc_getClass("SBLockScreenManager") sharedInstance] coverSheetViewController] dateViewController];
 	
-	[UIView performWithoutAnimation:^{
+	// [UIView performWithoutAnimation:^{
 		[clockViewController.view setFrame:(CGRect){
 			{ 0, CGRectGetMinY(dateViewController.view.frame) },
 			{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(clockViewController.view.bounds) }
@@ -157,7 +159,7 @@ void uncaughtExceptionHandler(NSException *exception)
 			CGRectGetMidX(clockViewController.view.bounds),
 			CGRectGetMinY(dateViewController.view.frame) + (CGRectGetHeight(clockViewController.view.bounds) / 2)
 		}];
-	}];
+	// }];
 }
 %end	/// %hook CSMainPageContentViewController
 

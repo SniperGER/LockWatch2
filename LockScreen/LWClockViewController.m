@@ -91,25 +91,13 @@
 
 - (void)didMoveToParentViewController:(nullable UIViewController*)viewController {
 	[super didMoveToParentViewController:viewController];
-	
-	[self.view setFrame:(CGRect){
-		CGPointZero,
-		{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(_device.actualScreenBounds) }
-	}];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-		CGRect maskBounds = [UIApplication.sharedApplication.keyWindow convertRect:UIScreen.mainScreen.bounds toView:self.view];
-#pragma GCC diagnostic pop
-		
-		CAShapeLayer* mask = [CAShapeLayer layer];
-		[mask setPath:[UIBezierPath bezierPathWithRect:(CGRect){{ 0, CGRectGetMinY(maskBounds) }, UIScreen.mainScreen.bounds.size }].CGPath];
-		[self.view.layer setMask:mask];
+		[self _updateMask];
     } completion:nil];
 }
 
@@ -251,6 +239,15 @@
 
 - (void)_setOrbZoomProgress:(CGFloat)progress {
 	[_libraryViewController setInteractiveProgress:progress];
+}
+
+- (void)_updateMask {
+	CGRect maskBounds = self.view.superview.bounds;
+	
+	_contentViewMask = [CAShapeLayer layer];
+	[_contentViewMask setFrame:(CGRect){{ 0, -self.view.frame.origin.y }, maskBounds.size }];
+	[_contentViewMask setPath:[UIBezierPath bezierPathWithRect:(CGRect){{ 0, 0 }, maskBounds.size }].CGPath];
+	[self.view.layer setMask:_contentViewMask];
 }
 
 
