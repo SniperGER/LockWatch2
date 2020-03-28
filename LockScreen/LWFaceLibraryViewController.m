@@ -358,7 +358,6 @@
 }
 
 - (NTKFaceViewController*)_loadFaceViewControllerForFace:(NTKFace*)face {
-	NSLog(@"face: %p", face);
 	NTKFaceViewController* faceViewController = [_faceViewControllersByFace objectForKey:face];
 	
 	if (!faceViewController) {
@@ -368,7 +367,6 @@
 		
 		[_faceViewControllersByFace setObject:faceViewController forKey:face];
 	}
-	NSLog(@"facevc: %p", faceViewController);
 	
 	return faceViewController;
 }
