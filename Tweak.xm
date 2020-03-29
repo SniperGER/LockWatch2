@@ -8,36 +8,10 @@
 
 #import "Tweak.h"
 
-void JSLog(NSString* logString) {
-	int stepLog = 1024;
-	NSInteger strLen = [@([logString length]) integerValue];
-	NSInteger countInt = strLen / stepLog;
-
-	if (strLen > stepLog) {
-		for (int i=1; i <= countInt; i++) {
-			NSString *character = [logString substringWithRange:NSMakeRange((i*stepLog)-stepLog, stepLog)];
-			NSLog(@"%@", character);
-
-		}
-		NSString *character = [logString substringWithRange:NSMakeRange((countInt*stepLog), strLen-(countInt*stepLog))];
-		NSLog(@"%@", character);
-	} else {
-		NSLog(@"%@", logString);
-	}
-}
-
-void uncaughtExceptionHandler(NSException *exception)
-{
-    JSLog([NSString stringWithFormat:@"[Exception] %@", exception]);
-    JSLog([NSString stringWithFormat:@"[Exception] %@", [exception callStackSymbols]]);
-}
-
 %group SpringBoard
 %hook SpringBoard
 - (void)applicationDidFinishLaunching:(id)arg1 {
 	%orig;
-	
-	NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
 	
 	clockViewController = [LWClockViewController new];
 	
@@ -214,7 +188,6 @@ static BOOL scrollEnabled = YES;
 }
 
 - (void)viewDidLayoutSubviews {
-	JSLog([NSString stringWithFormat:@"%@", NSThread.callStackSymbols]);
 	CGPoint contentOffset = self.tableView.contentOffset;
 	
 	%orig;
@@ -266,14 +239,6 @@ static BOOL scrollEnabled = YES;
 
 
 %group Bridge
-%hook COSPreferencesAppController
-- (BOOL)application:(id)arg1 didFinishLaunchingWithOptions:(id)arg2 {
-	BOOL r = %orig;
-	NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-	return r;
-}
-%end	/// %hook COSPreferencesAppController
-
 %hook COSSettingsListController
 - (void)viewDidLoad {
 	%orig;
