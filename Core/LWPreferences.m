@@ -53,6 +53,11 @@
 		[_defaults setObject:@"Watch5,4" forKey:@"emulatedDeviceType"];
 	}
 	_emulatedDeviceType = [_defaults objectForKey:@"emulatedDeviceType"];
+	
+	if (![_defaults.allKeys containsObject:@"backgroundEnabled"]) {
+		[_defaults setObject:@YES forKey:@"backgroundEnabled"];
+	}
+	_backgroundEnabled = [[_defaults objectForKey:@"backgroundEnabled"] boolValue];
 }
 
 - (BOOL)synchronize {

@@ -138,7 +138,9 @@
 - (id)initWithFace:(id)arg1 configuration:(id /* block */)arg2 {
 	id r = %orig;
 	
+	if ([[LWPreferences sharedInstance] backgroundEnabled]) {
 	self.effectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:17]];
+	}
 	
 	return r;
 }

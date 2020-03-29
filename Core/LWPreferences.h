@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL enabled;
 @property (nonatomic) BOOL isEmulatingDevice;
 @property (nonatomic) NSString* emulatedDeviceType;
+@property (nonatomic) BOOL backgroundEnabled;
 
 + (instancetype)sharedInstance;
 - (instancetype)init;
