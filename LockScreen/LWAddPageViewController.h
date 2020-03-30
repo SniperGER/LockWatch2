@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 	UITableViewController* _addableFacesViewController;
 	NTKCCLibraryListViewController* _libraryFacesViewController;
 	
-	NSBundle* _prefBundle;
+	NSBundle* _localizableBundle;
 }
 
 @property (nonatomic, readonly, getter=isActive) BOOL active;

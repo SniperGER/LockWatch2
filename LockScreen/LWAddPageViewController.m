@@ -29,7 +29,7 @@
 		_device = [CLKDevice currentDevice];
 		_libraryFaceCollection = libraryFaceCollection;
 		_addableFaceCollection = addableFaceCollection;
-		_prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/lockwatch2.bundle"];
+		_localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
 		
 		_activationButton = [[LWAddPageActivationButton alloc] initWithFrame:(CGRect){{ 0, 0 }, { 57, 57 }}];
 		[_activationButton addTarget:self action:@selector(_activationButtonPress) forControlEvents:UIControlEventTouchUpInside];
@@ -77,8 +77,8 @@
 	[containerViewController.navigationItem setRightBarButtonItem:rightButton];
 	
 	UISegmentedControl* segmentedControl = [[UISegmentedControl alloc] initWithItems:@[
-		[_prefBundle localizedStringForKey:@"LIBRARY_WATCH_FACES" value:nil table:nil],
-		[_prefBundle localizedStringForKey:@"LIBRARY_MY_WATCH" value:nil table:nil]
+		[_localizableBundle localizedStringForKey:@"LIBRARY_WATCH_FACES" value:nil table:nil],
+		[_localizableBundle localizedStringForKey:@"LIBRARY_MY_WATCH" value:nil table:nil]
 	]];
 	[segmentedControl addTarget:self action:@selector(segmentControlDidChange:) forControlEvents: UIControlEventValueChanged];
 	[segmentedControl setSelectedSegmentIndex:0];
@@ -211,7 +211,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
 	switch (section) {
 		case 1:
-			return [_prefBundle localizedStringForKey:@"LIBRARY_CUSTOM_INDEV_FOOTER" value:nil table:nil];
+			return [_localizableBundle localizedStringForKey:@"LIBRARY_CUSTOM_INDEV_FOOTER" value:nil table:nil];
 		default: break;
 	}
 	
@@ -221,9 +221,9 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return [_prefBundle localizedStringForKey:@"LIBRARY_APPLE_FACES_HEADER" value:nil table:nil];
+			return [_localizableBundle localizedStringForKey:@"LIBRARY_APPLE_FACES_HEADER" value:nil table:nil];
 		case 1:
-			return [_prefBundle localizedStringForKey:@"LIBRARY_CUSTOM_FACES_HEADER" value:nil table:nil];
+			return [_localizableBundle localizedStringForKey:@"LIBRARY_CUSTOM_FACES_HEADER" value:nil table:nil];
 		default: break;
 	}
 	

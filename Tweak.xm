@@ -16,12 +16,12 @@
 	clockViewController = [LWClockViewController new];
 	
 	if (!clockViewController) {
-		NSBundle* prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/lockwatch2.bundle"];
+		NSBundle* localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
 
-		UIAlertController* alert = [UIAlertController alertControllerWithTitle:[prefBundle localizedStringForKey:@"NO_DEVICE_TITLE" value:nil table:nil]
-																	   message:[prefBundle localizedStringForKey:@"NO_DEVICE_MESSAGE" value:nil table:nil]
+		UIAlertController* alert = [UIAlertController alertControllerWithTitle:[localizableBundle localizedStringForKey:@"NO_DEVICE_TITLE" value:nil table:nil]
+																	   message:[localizableBundle localizedStringForKey:@"NO_DEVICE_MESSAGE" value:nil table:nil]
 																preferredStyle:UIAlertControllerStyleAlert];
-		UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:[prefBundle localizedStringForKey:@"GENERIC_CONFIRM" value:nil table:@"Root"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+		UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:[localizableBundle localizedStringForKey:@"GENERIC_CONFIRM" value:nil table:@"Root"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
 		
 		[alert addAction:defaultAction];
 		
@@ -243,23 +243,23 @@ static BOOL scrollEnabled = YES;
 - (void)viewDidLoad {
 	%orig;
 	
-	NSBundle* prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/lockwatch2.bundle"];
+	NSBundle* localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
 
-	PSSpecifier* syncSpecifier = [PSSpecifier preferenceSpecifierNamed:[prefBundle localizedStringForKey:@"SYNC_TO_LOCK_SCREEN" value:nil table:nil] target:self set:nil get:nil detail:nil cell:13 edit:nil];
+	PSSpecifier* syncSpecifier = [PSSpecifier preferenceSpecifierNamed:[localizableBundle localizedStringForKey:@"SYNC_TO_LOCK_SCREEN" value:nil table:nil] target:self set:nil get:nil detail:nil cell:13 edit:nil];
 	[syncSpecifier setButtonAction:@selector(syncToLockscreen)];
 	[self insertSpecifier:syncSpecifier atIndex:4];
 }
 
 %new
 - (void)syncToLockscreen {
-	NSBundle* prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/lockwatch2.bundle"];
+	NSBundle* localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
 	
-	UIAlertController* alertController = [UIAlertController alertControllerWithTitle:[prefBundle localizedStringForKey:@"SYNC_TO_LOCK_SCREEN" value:nil table:nil]
-																			 message:[prefBundle localizedStringForKey:@"SYNC_TO_LOCK_SCREEN_PROMPT" value:nil table:nil]
+	UIAlertController* alertController = [UIAlertController alertControllerWithTitle:[localizableBundle localizedStringForKey:@"SYNC_TO_LOCK_SCREEN" value:nil table:nil]
+																			 message:[localizableBundle localizedStringForKey:@"SYNC_TO_LOCK_SCREEN_PROMPT" value:nil table:nil]
 																	  preferredStyle:UIAlertControllerStyleAlert];
 	
-	UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:[prefBundle localizedStringForKey:@"GENERIC_CANCEL" value:nil table:@"Root"] style:UIAlertActionStyleCancel handler:nil];
-	UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:[prefBundle localizedStringForKey:@"GENERIC_CONFIRM" value:nil table:@"Root"] style:UIAlertActionStyleDestructive handler:^(UIAlertAction* action) {
+	UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:[localizableBundle localizedStringForKey:@"GENERIC_CANCEL" value:nil table:@"Root"] style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:[localizableBundle localizedStringForKey:@"GENERIC_CONFIRM" value:nil table:@"Root"] style:UIAlertActionStyleDestructive handler:^(UIAlertAction* action) {
 		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"ml.festival.lockwatch2/SyncLibrary" object:nil userInfo:@{
 			@"faceJSON": self.facesController.library.JSONObjectRepresentation
 		}];
@@ -273,9 +273,9 @@ static BOOL scrollEnabled = YES;
 
 %hook NTKCFaceDetailViewController
 - (void)_addTapped {
-	NSBundle* prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/lockwatch2.bundle"];
+	NSBundle* localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
 	
-	UIAlertController* alertController = [UIAlertController alertControllerWithTitle:[prefBundle localizedStringForKey:@"ADD_TO_PROMPT" value:nil table:nil] message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+	UIAlertController* alertController = [UIAlertController alertControllerWithTitle:[localizableBundle localizedStringForKey:@"ADD_TO_PROMPT" value:nil table:nil] message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 	
 	CLKDevice* clkDevice = [CLKDevice currentDevice];
 	NRDevice* nrDevice = [clkDevice nrDevice];
@@ -283,12 +283,12 @@ static BOOL scrollEnabled = YES;
 	UIAlertAction* watchAction = [UIAlertAction actionWithTitle:[nrDevice valueForProperty:@"name"] style:UIAlertActionStyleDefault handler:^(UIAlertAction* action) {
 		%orig;
 	}];
-	UIAlertAction* lockScreenAction = [UIAlertAction actionWithTitle:[prefBundle localizedStringForKey:@"ADD_TO_LOCK_SCREEN" value:nil table:nil] style:UIAlertActionStyleDefault handler:^(UIAlertAction* action) {
+	UIAlertAction* lockScreenAction = [UIAlertAction actionWithTitle:[localizableBundle localizedStringForKey:@"ADD_TO_LOCK_SCREEN" value:nil table:nil] style:UIAlertActionStyleDefault handler:^(UIAlertAction* action) {
 		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"ml.festival.lockwatch2/AddToLibrary" object:nil userInfo:@{
 			@"faceJSON": self.face.JSONObjectRepresentation
 		}];
 	}];
-	UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:[prefBundle localizedStringForKey:@"GENERIC_CANCEL" value:nil table:@"Root"] style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:[localizableBundle localizedStringForKey:@"GENERIC_CANCEL" value:nil table:@"Root"] style:UIAlertActionStyleCancel handler:nil];
 	
 	[alertController addAction:watchAction];
 	[alertController addAction:lockScreenAction];
