@@ -21,6 +21,8 @@
 	"RESET_LIBRARY_PROMPT" = "This will reset your watch face library to system defaults. Any customization to your watch faces will be lost.\n\nAre you sure you want to reset your watch face library?";
 	"RESET_LIBRARY_CONFIRM" = "Reset";
 	"RESET_LIBRARY_FOOTER" = "When selecting a different emulated Apple Watch model, it is recommended to reset your watch face library. Some watch faces, customizations or complications may not be available for certain models.";
+	
+	"ADVANCED_SETTINGS" = "Advanced";
 
 	"RESTART_SPRINGBOARD_TITLE" = "Restart SpringBoard";
 	"RESTART_SPRINGBOARD_PROMPT" = "Restarting SpringBoard will apply all changed settings.";

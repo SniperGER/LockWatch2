@@ -22,6 +22,8 @@
 	"RESET_LIBRARY_CONFIRM" = "Zurücksetzen";
 	"RESET_LIBRARY_FOOTER" = "Es wird empfohlen, die Zifferblätter bei Auswahl eines anderen simulierten Apple Watch-Modells zurückzusetzen. Einige Zifferblätter, Anpassungen oder Komplikationen sind für bestimmte Modelle möglicherweise nicht verfügbar.";
 	
+	"ADVANCED_SETTINGS" = "Erweitert";
+	
 	"RESTART_SPRINGBOARD_TITLE" = "SpringBoard neu starten";
 	"RESTART_SPRINGBOARD_PROMPT" = "Hiermit werden alle Änderungen gespeichert und das SpringBoard neu gestartet.";
 	"RESTART_SPRINGBOARD_CONFIRM" = "SpringBoard neu starten";

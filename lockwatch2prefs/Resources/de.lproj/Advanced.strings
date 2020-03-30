@@ -1,0 +1,13 @@
+//
+// Advanced.strings
+// LockWatch2
+//
+// Created by janikschmidt on 3/30/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
+//
+
+{
+	"ADVANCED_SETTINGS" = "Erweitert";
+	
+	BACKGROUND_ENABLED = "Hintergrund anzeigen";
+}
