@@ -44,9 +44,8 @@
 	UIView* view = (UIView*)self.delegate;
 	
 	while (view) {
-		if ([view isKindOfClass:_class]) {
-			return YES;
-		}
+		if ([view isKindOfClass:_class]) return YES;
+		if (![view respondsToSelector:@selector(superview)]) return NO;
 		
 		view = view.superview;
 	}
