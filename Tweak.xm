@@ -234,6 +234,14 @@ static BOOL scrollEnabled = YES;
 	}
 }
 %end	/// %hook NTKCCLibraryListViewController
+
+%hook CSCoverSheetViewController
+- (void)_transitionChargingViewToVisible:(BOOL)arg1 showBattery:(BOOL)arg2 animated:(BOOL)arg3 {
+	if (preferences.batteryChargingViewHidden) return;
+
+	%orig;
+}
+%end
 %end	// %group SpringBoard
 
 

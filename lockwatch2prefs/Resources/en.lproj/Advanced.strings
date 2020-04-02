@@ -9,5 +9,6 @@
 {
 	"ADVANCED_SETTINGS" = "Advanced";
 	
-	BACKGROUND_ENABLED = "Show Background";
+	"BACKGROUND_ENABLED" = "Show Background";
+	"BATTERY_CHARGING_VIEW_HIDDEN" = "Hide Battery Charging View";
 }

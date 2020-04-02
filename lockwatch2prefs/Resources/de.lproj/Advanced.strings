@@ -9,5 +9,6 @@
 {
 	"ADVANCED_SETTINGS" = "Erweitert";
 	
-	BACKGROUND_ENABLED = "Hintergrund anzeigen";
+	"BACKGROUND_ENABLED" = "Hintergrund anzeigen";
+	"BATTERY_CHARGING_VIEW_HIDDEN" = "Sperrbildschirm-Batterie verstecken";
 }

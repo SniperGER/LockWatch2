@@ -58,6 +58,11 @@
 		[_defaults setObject:@YES forKey:@"backgroundEnabled"];
 	}
 	_backgroundEnabled = [[_defaults objectForKey:@"backgroundEnabled"] boolValue];
+	
+	if (![_defaults.allKeys containsObject:@"batteryChargingViewHidden"]) {
+		[_defaults setObject:@YES forKey:@"batteryChargingViewHidden"];
+	}
+	_batteryChargingViewHidden = [[_defaults objectForKey:@"batteryChargingViewHidden"] boolValue];
 }
 
 - (BOOL)synchronize {
