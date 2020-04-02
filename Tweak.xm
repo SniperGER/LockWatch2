@@ -37,9 +37,7 @@
 	CSCoverSheetViewController* coverSheet = [manager coverSheetViewController];
 	CSMainPageContentViewController* mainPage = [coverSheet mainPageContentViewController];
 	
-	[mainPage.view addSubview:clockViewController.view];
-	[mainPage addChildViewController:clockViewController];
-	[clockViewController didMoveToParentViewController:mainPage];
+	[mainPage.view.subviews[0] addSubview:clockViewController.view];
 }
 %end	/// %hook SpringBoard
 
@@ -119,8 +117,6 @@
 %hook CSMainPageContentViewController
 - (void)viewDidLayoutSubviews {
 	%orig;
-	
-	[self.view bringSubviewToFront:clockViewController.view];
 	
 	SBFLockScreenDateViewController* dateViewController = [[[objc_getClass("SBLockScreenManager") sharedInstance] coverSheetViewController] dateViewController];
 	
