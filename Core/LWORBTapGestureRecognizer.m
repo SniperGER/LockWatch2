@@ -13,6 +13,11 @@
 
 #import "Core/LWORBTapGestureRecognizerDelegate.h"
 
+@interface UITouch (Private)
+@property (nonatomic, readonly) CGFloat _pressure;
+@property (nonatomic, readonly) CGFloat _maximumPossiblePressure;
+@end
+
 @implementation LWORBTapGestureRecognizer
 
 - (instancetype)initWithTarget:(nullable id)target action:(nullable SEL)action {
@@ -46,7 +51,7 @@
 	if (_usingLongPress) {
 		[self _updateLongPressForTouchesBegan:touches event:event];
 	} else {
-		CGFloat force = touch.force / touch.maximumPossibleForce;
+		CGFloat force = touch._pressure / touch._maximumPossiblePressure;
 		
 		if (touch.type == UITouchTypeStylus) {
 			force = MIN(MAX(CLAMP(force, 0.2, 0.45), 0), 1);
@@ -186,12 +191,12 @@
 
 - (void)_updateWithTouches:(NSSet<UITouch*>*)touches event:(UIEvent*)event {
 	UITouch* touch = touches.anyObject;
-	CGFloat force = (touch.force / touch.maximumPossibleForce);
+	CGFloat force = (touch._pressure / touch._maximumPossiblePressure);
 	
 	if (touch.type == UITouchTypeStylus) {
 		force = MIN(MAX(CLAMP(force, 0.2, 0.45), 0), 1);
 	}
-	
+
 	force = force * _progressMax;
 	
 	if (self.state == UIGestureRecognizerStatePossible) {
