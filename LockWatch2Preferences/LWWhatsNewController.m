@@ -5,11 +5,12 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/lockwatch2.bundle"];
+	NSBundle* prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/LockWatch2Preferences.bundle"];
+	NSBundle* localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
 	
-	[self setTitle:[prefBundle localizedStringForKey:@"WHATS_NEW_TITLE" value:nil table:nil]];
+	[self setTitle:[localizableBundle localizedStringForKey:@"WHATS_NEW_TITLE" value:nil table:nil]];
 	
-	UIBarButtonItem* rightButton = [[UIBarButtonItem alloc] initWithTitle:[prefBundle localizedStringForKey:@"WHATS_NEW_DONE" value:nil table:nil] style:UIBarButtonItemStyleDone target:self action:@selector(dismiss)];
+	UIBarButtonItem* rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismiss)];
 	self.navigationItem.rightBarButtonItem = rightButton;
 	
 	webView = [[WKWebView alloc] initWithFrame:CGRectZero];
