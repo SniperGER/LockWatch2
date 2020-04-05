@@ -12,7 +12,7 @@
 			<key>background</key>
 			<string>#FF9500</string>
 			<key>image</key>
-			<string>/Library/PreferenceBundles/lockwatch2.bundle/header.png</string>
+			<string>/Library/PreferenceBundles/LockWatch2Preferences.bundle/header.png</string>
 			<key>height</key>
 			<integer>158</integer>
 		</dict>

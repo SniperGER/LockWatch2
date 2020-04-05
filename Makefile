@@ -19,6 +19,6 @@ LockWatch2_PRIVATE_FRAMEWORKS = ClockKit NanoRegistry NanoTimeKitCompanion Prefe
 include $(THEOS_MAKE_PATH)/tweak.mk
 
 ifeq ($(THEOS_TARGET_NAME), iphone)
-SUBPROJECTS += lockwatch2prefs
+SUBPROJECTS += LockWatch2Preferences
 include $(THEOS_MAKE_PATH)/aggregate.mk
 endif

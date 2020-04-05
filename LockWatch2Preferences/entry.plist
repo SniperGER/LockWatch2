@@ -5,7 +5,7 @@
 	<key>entry</key>
 	<dict>
 		<key>bundle</key>
-		<string>lockwatch2</string>
+		<string>LockWatch2Preferences</string>
 		<key>cell</key>
 		<string>PSLinkCell</string>
 		<key>detail</key>

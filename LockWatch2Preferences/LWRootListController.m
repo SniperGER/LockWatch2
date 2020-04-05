@@ -12,7 +12,7 @@
 		_specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
 	}
 	
-	prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/lockwatch2.bundle"];
+	prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/LockWatch2Preferences.bundle"];
 
 	return _specifiers;
 }
