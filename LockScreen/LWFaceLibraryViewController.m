@@ -30,6 +30,16 @@
 #import "Core/LWFaceLibraryViewControllerDelegate.h"
 #import "Core/LWPersistentFaceCollection.h"
 
+#if __cplusplus
+extern "C" {
+#endif
+
+NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
+
+#if __cplusplus
+}
+#endif
+
 @interface NSDistributedNotificationCenter : NSNotificationCenter
 @end
 
@@ -558,7 +568,7 @@
 		
 		return [face.name uppercaseString];
 	} else if ([self _indexOfAddPage] == index) {
-		return [[NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/NanoTimeKitCompanion.framework"] localizedStringForKey:@"NEW_FACE" value:@"NEW" table:@"ClockFaces"];
+		return NTKClockFaceLocalizedString(@"NEW_FACE", @"NEW");
 	}
 	
 	return nil;

@@ -10,6 +10,16 @@
 
 #import "LWDeleteConfirmationButton.h"
 
+#if __cplusplus
+extern "C" {
+#endif
+
+NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
+
+#if __cplusplus
+}
+#endif
+
 @implementation LWDeleteConfirmationButton
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -22,7 +32,7 @@
 		[self addSubview:_deleteIconView];
 		
 		_deleteLabel = [UILabel new];
-		[_deleteLabel setText:[[NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/NanoTimeKitCompanion.framework"] localizedStringForKey:@"DELETE_CONFIRMATION" value:@"Delete" table:@"ClockFaces"]];
+		[_deleteLabel setText:NTKClockFaceLocalizedString(@"DELETE_CONFIRMATION", @"Delete")];
 		[_deleteLabel setFont:[UIFont systemFontOfSize:14]];
 		[_deleteLabel setTextColor:[UIColor whiteColor]];
 		[_deleteLabel sizeToFit];

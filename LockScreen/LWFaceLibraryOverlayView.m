@@ -11,6 +11,16 @@
 #import "LWFaceLibraryOverlayButton.h"
 #import "LWFaceLibraryOverlayView.h"
 
+#if __cplusplus
+extern "C" {
+#endif
+
+NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
+
+#if __cplusplus
+}
+#endif
+
 @implementation LWFaceLibraryOverlayView
 
 - (instancetype)initForDevice:(CLKDevice*)device {
@@ -28,14 +38,14 @@
 		
 		_editButton = [self _newButton];
 		[_editButton setAdjustsImageWhenDisabled:NO];
-		[_editButton setTitle:[[NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/NanoTimeKitCompanion.framework"] localizedStringForKey:@"EDIT_FACE" value:@"Customize" table:@"ClockFaces"] forState:UIControlStateNormal];
+		[_editButton setTitle:NTKClockFaceLocalizedString(@"EDIT_FACE", @"Customize") forState:UIControlStateNormal];
 		[_editButton.titleLabel sizeToFit];
 		
 		_editTitleLabelWidth = CGRectGetWidth(_editButton.titleLabel.bounds);
 		[self addSubview:_editButton];
 		
 		_cancelButton = [self _newButton];
-		[_cancelButton setTitle:[[NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/NanoTimeKitCompanion.framework"] localizedStringForKey:@"CANCEL_ADD_FACE" value:@"Cancel" table:@"ClockFaces"] forState:UIControlStateNormal];
+		[_cancelButton setTitle:NTKClockFaceLocalizedString(@"CANCEL_ADD_FACE", @"Cancel") forState:UIControlStateNormal];
 		[_cancelButton setHidden:YES];
 		[_cancelButton.titleLabel sizeToFit];
 		
