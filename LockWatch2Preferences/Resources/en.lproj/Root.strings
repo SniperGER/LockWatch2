@@ -7,9 +7,6 @@
 //
 
 {
-	"GENERIC_CANCEL" = "Cancel";
-	"GENERIC_CONFIRM" = "OK";
-	
 	"GENERAL" = "General";
 	"GENERAL_ENABLED" = "Enabled";
 	

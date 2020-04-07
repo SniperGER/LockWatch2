@@ -7,6 +7,9 @@
 //
 
 {
+	"GENERIC_CANCEL" = "Abbrechen";
+	"GENERIC_CONFIRM" = "OK";
+	
 	"NO_DEVICE_TITLE" = "LockWatch - Kein Gerät gefunden";
 	"NO_DEVICE_MESSAGE" = "LockWatch konnte keine Apple Watch finden – weder physisch noch simuliert. Ohne Apple Watch funktioniert LockWatch nicht.\n\nUm dieses Problem zu beheben, kannst du, sofern unterstützt, eine Apple Watch mit deinem Gerät koppeln oder ein simuliertes Gerät in den Einstellungen von LockWatch auswählen.";
 	

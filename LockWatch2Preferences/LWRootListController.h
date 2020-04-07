@@ -3,6 +3,7 @@
 
 @interface LWRootListController : PSListController {
 	NSBundle* prefBundle;
+	NSBundle* localizableBundle;
 }
 
 @end

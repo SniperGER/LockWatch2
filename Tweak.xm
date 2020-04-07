@@ -21,7 +21,7 @@
 		UIAlertController* alert = [UIAlertController alertControllerWithTitle:[localizableBundle localizedStringForKey:@"NO_DEVICE_TITLE" value:nil table:nil]
 																	   message:[localizableBundle localizedStringForKey:@"NO_DEVICE_MESSAGE" value:nil table:nil]
 																preferredStyle:UIAlertControllerStyleAlert];
-		UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:[localizableBundle localizedStringForKey:@"GENERIC_CONFIRM" value:nil table:@"Root"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+		UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:[localizableBundle localizedStringForKey:@"GENERIC_CONFIRM" value:nil table:nil] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
 		
 		[alert addAction:defaultAction];
 		
@@ -262,8 +262,8 @@ static BOOL scrollEnabled = YES;
 																			 message:[localizableBundle localizedStringForKey:@"SYNC_TO_LOCK_SCREEN_PROMPT" value:nil table:nil]
 																	  preferredStyle:UIAlertControllerStyleAlert];
 	
-	UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:[localizableBundle localizedStringForKey:@"GENERIC_CANCEL" value:nil table:@"Root"] style:UIAlertActionStyleCancel handler:nil];
-	UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:[localizableBundle localizedStringForKey:@"GENERIC_CONFIRM" value:nil table:@"Root"] style:UIAlertActionStyleDestructive handler:^(UIAlertAction* action) {
+	UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:[localizableBundle localizedStringForKey:@"GENERIC_CANCEL" value:nil table:nil] style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:[localizableBundle localizedStringForKey:@"GENERIC_CONFIRM" value:nil table:nil] style:UIAlertActionStyleDestructive handler:^(UIAlertAction* action) {
 		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"ml.festival.lockwatch2/SyncLibrary" object:nil userInfo:@{
 			@"faceJSON": self.facesController.library.JSONObjectRepresentation
 		}];
@@ -292,7 +292,7 @@ static BOOL scrollEnabled = YES;
 			@"faceJSON": self.face.JSONObjectRepresentation
 		}];
 	}];
-	UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:[localizableBundle localizedStringForKey:@"GENERIC_CANCEL" value:nil table:@"Root"] style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:[localizableBundle localizedStringForKey:@"GENERIC_CANCEL" value:nil table:nil] style:UIAlertActionStyleCancel handler:nil];
 	
 	[alertController addAction:watchAction];
 	[alertController addAction:lockScreenAction];

@@ -7,6 +7,9 @@
 //
 
 {
+	"GENERIC_CANCEL" = "Cancel";
+	"GENERIC_CONFIRM" = "OK";
+	
 	"NO_DEVICE_TITLE" = "LockWatch - No device found";
 	"NO_DEVICE_MESSAGE" = "LockWatch could not find any Apple Watch – physical or emulated. Without an Apple Watch, LockWatch does not work.\n\nTo fix this, either pair an Apple Watch to your device (if supported) or select an emulated device from LockWatch's preferences.";
 	
