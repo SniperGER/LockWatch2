@@ -15,7 +15,6 @@
 - (UIView*)hitTest:(CGPoint)point withEvent:(nullable UIEvent*)event {
 	UIView* view = [self.delegate hitTest:point withEvent:event];
 
-	if (!view) view = [super hitTest:point withEvent:event];
 	return view;
 }
 

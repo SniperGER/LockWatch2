@@ -299,6 +299,8 @@
 		if (!view) view = [_libraryViewController.view hitTest:point withEvent:event];
 		
 		return view;
+	} else {
+		if (CGRectContainsPoint(_libraryViewController.switcherController.scrollView.frame, point)) return _libraryViewController.switcherController.scrollView;
 	}
 	
 	return nil;
