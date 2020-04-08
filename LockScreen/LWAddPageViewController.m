@@ -33,6 +33,14 @@
 		
 		_activationButton = [[LWAddPageActivationButton alloc] initWithFrame:(CGRect){{ 0, 0 }, { 57, 57 }}];
 		[_activationButton addTarget:self action:@selector(_activationButtonPress) forControlEvents:UIControlEventTouchUpInside];
+		
+		_faceViewControllers = [NSMutableDictionary dictionary];
+	
+		[_addableFaceCollection enumerateFacesWithIndexesUsingBlock:^(NTKFace* face, NSUInteger index, BOOL* stop) {
+			NTKCompanionFaceViewController* faceViewController = [[NTKCompanionFaceViewController alloc] initWithFace:face];
+		
+			[_faceViewControllers setObject:faceViewController forKey:@(index)];
+		}];
 	}
 	
 	return self;
@@ -114,16 +122,13 @@
 }
 
 - (NTKCompanionFaceViewController*)_viewControllerForFace:(NTKFace*)face {
-	if (!_faceViewControllers) {
-		_faceViewControllers = [NSMapTable weakToWeakObjectsMapTable];
-	}
-	
-	NTKCompanionFaceViewController* faceViewController = [_faceViewControllers objectForKey:face];
+	NSUInteger index = [_addableFaceCollection indexOfFace:face];
+	NTKCompanionFaceViewController* faceViewController = [_faceViewControllers objectForKey:@(index)];
 	
 	if (!faceViewController) {
 		faceViewController = [[NTKCompanionFaceViewController alloc] initWithFace:face];
 		
-		[_faceViewControllers setObject:faceViewController forKey:face];
+		[_faceViewControllers setObject:faceViewController forKey:@(index)];
 	}
 	
 	return faceViewController;

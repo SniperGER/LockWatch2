@@ -236,7 +236,7 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 				
 				[pageView setContentAlpha:LERP(0.35, 1, _fraction)];
 				[pageView setOutlineAlpha:LERP(0.65, 1, _fraction)];
-			} else {
+			} else if (pageView.contentAlpha != 0.35 && pageView.outlineAlpha != 0.65) {
 				[pageView setContentAlpha:0.35];
 				[pageView setOutlineAlpha:0.65];
 			}

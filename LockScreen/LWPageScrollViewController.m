@@ -59,20 +59,22 @@
 			frameForCenteredPage = CGRectInset(frameForCenteredPage, _interpageSpacing / -2, 0);
 		}
 		
-		[_scrollView performSuppressingScrollCallbacks:^{
-			[_scrollView setFrame:frameForCenteredPage];
-			[_scrollView setCenter:(CGPoint){ CGRectGetMidX(self.view.bounds), _scrollView.center.y }];
-			[_scrollView setVisualInsets:(UIEdgeInsets){ 0, 10, 0, 10 }];
-		}];
-		
-		[_scrollView enumeratePagesWithBlock:^(LWPageView* pageView, NSInteger index, BOOL* stop) {
-			[pageView setPageSize:[self _frameForCenteredPage].size];
-			[pageView setContentViewSize:[self _contentViewSizeForPageAtIndex:index]];
-		}];
-		
-		if (_deleteConfirmationView) {
-			[_deleteConfirmationView sizeToFit];
-			[_deleteConfirmationView setCenter:(CGPoint){ CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) - 7 }];
+		if (!CGRectEqualToRect(_scrollView.frame, frameForCenteredPage)) {
+			[_scrollView performSuppressingScrollCallbacks:^{
+				[_scrollView setFrame:frameForCenteredPage];
+				[_scrollView setCenter:(CGPoint){ CGRectGetMidX(self.view.bounds), _scrollView.center.y }];
+				[_scrollView setVisualInsets:(UIEdgeInsets){ 0, 10, 0, 10 }];
+			}];
+			
+			[_scrollView enumeratePagesWithBlock:^(LWPageView* pageView, NSInteger index, BOOL* stop) {
+				[pageView setPageSize:[self _frameForCenteredPage].size];
+				[pageView setContentViewSize:[self _contentViewSizeForPageAtIndex:index]];
+			}];
+			
+			if (_deleteConfirmationView) {
+				[_deleteConfirmationView sizeToFit];
+				[_deleteConfirmationView setCenter:(CGPoint){ CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) - 7 }];
+			}
 		}
 	}
 }

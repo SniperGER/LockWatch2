@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 	NTKFaceCollection* _libraryFaceCollection;
 	NTKFaceCollection* _addableFaceCollection;
 	LWAddPageActivationButton* _activationButton;
-	NSMapTable* _faceViewControllers;
+	NSMutableDictionary* _faceViewControllers;
 	UINavigationController* _navigationController;
 	UITableViewController* _addableFacesViewController;
 	NTKCCLibraryListViewController* _libraryFacesViewController;

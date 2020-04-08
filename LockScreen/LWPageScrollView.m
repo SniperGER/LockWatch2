@@ -38,7 +38,7 @@
 	
 	if (!CGRectIsEmpty(self.bounds)) {
 		if (CGSizeEqualToSize(self.bounds.size, _boundsSizeOnLastLayout)) {
-			[self _tilePagesEagerly:NO];
+			// [self _tilePagesEagerly:NO];
 		} else {
 			[self scrollToPageAtIndex:_currentPageIndex animated:NO];
 			
