@@ -373,6 +373,7 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	if (!faceViewController) {
 		faceViewController = [self.delegate faceLibraryViewController:self newViewControllerForFace:face configuration:^(NTKFaceViewController* faceViewController) {
 			[faceViewController setDataMode:3];
+			[faceViewController freeze];
 		}];
 		
 		[_faceViewControllersByFace setObject:faceViewController forKey:face];
