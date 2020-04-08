@@ -132,21 +132,22 @@
 %end	/// %hook NTKComplicationDataSource
 
 %hook NTKFaceViewController
-%property (nonatomic, strong) UIVisualEffectView* effectView;
+%property (nonatomic, strong) MTMaterialView* materialEffectView;
 
 - (id)initWithFace:(id)arg1 configuration:(id /* block */)arg2 {
 	id r = %orig;
 	
 	if ([[LWPreferences sharedInstance] backgroundEnabled]) {
-	self.effectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:17]];
+		self.materialEffectView = [MTMaterialView materialViewWithRecipe:11 configuration:1 initialWeighting:1];
 	}
 	
 	return r;
 }
 
-- (void)viewDidLayoutSubviews {
+- (void)viewDidLoad {
 	%orig;
 	
+		
 	[self.faceView setClipsToBounds:YES];
 	[self.faceView.layer setCornerRadius:self.face.device.screenCornerRadius];
 
@@ -155,12 +156,19 @@
 		[self.faceView.layer setCornerCurve:kCACornerCurveContinuous];
 	}
 #endif
+}
 	
-	if (![self.faceView.subviews containsObject:self.effectView]) {
-		[self.faceView insertSubview:self.effectView atIndex:0];
+- (void)viewDidLayoutSubviews {
+	%orig;
+	
+	if (![self.faceView.subviews containsObject:self.materialEffectView]) {
+		[self.materialEffectView removeFromSuperview];
+		[self.faceView insertSubview:self.materialEffectView atIndex:0];
 	}
 	
-	[self.effectView setFrame:self.view.bounds];
+	if (!CGRectEqualToRect(self.view.bounds, self.materialEffectView.bounds)) {
+		[self.materialEffectView setFrame:self.view.bounds];
+	}
 }
 %end	/// %hook NTKCompanionFaceViewController
 

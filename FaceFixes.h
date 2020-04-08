@@ -7,6 +7,7 @@
 //
 
 #import <ClockKit/CLKDevice.h>
+#import <MaterialKit/MTMaterialView.h>
 #import <NanoRegistry/NRDevice.h>
 #import <NanoTimeKitCompanion/NTKFace.h>
 #import <NanoTimeKitCompanion/NTKFaceView.h>
@@ -31,6 +32,8 @@
 @interface NTKFaceViewController (UIEffectView)
 // %property
 @property (nonatomic, strong) UIVisualEffectView* effectView;
+// %property
+@property (nonatomic, strong) MTMaterialView* materialEffectView;
 @end
 
 @interface NTKExplorerDialView : UIView
