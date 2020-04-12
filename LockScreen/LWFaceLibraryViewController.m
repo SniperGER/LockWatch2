@@ -55,6 +55,9 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 		_faceViewControllersByFace = [NSMapTable weakToWeakObjectsMapTable];
 		_waitingToZoomWhileScrollingToIndex = -1;
 		_suspendWorkReasons = [NSMutableSet set];
+		
+		_addFaceViewController = [[LWAddPageViewController alloc] initWithLibraryFaceCollection:libraryFaceCollection addableFaceCollection:addableFaceCollection];
+		[_addFaceViewController setDelegate:self];
 	}
 	
 	return self;
@@ -152,11 +155,6 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 
 - (LWAddPageViewController*)_addFaceViewController {
 	if (!NSClassFromString(@"NTKCCLibraryListCell")) return nil;
-	
-	if (!_addFaceViewController) {
-		_addFaceViewController = [[LWAddPageViewController alloc] initWithLibraryFaceCollection:_libraryFaceCollection addableFaceCollection:_addableFaceCollection];
-		[_addFaceViewController setDelegate:self];
-	}
 	
 	return _addFaceViewController;
 }
