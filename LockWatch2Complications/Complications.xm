@@ -42,7 +42,7 @@ void uncaughtExceptionHandler(NSException *exception)
 %end
 
 %hook NTKComplicationDataSource
-+ (Class)dataSourceClassForComplicationType:(unsigned long long)type family:(long long)family forDevice:(id)arg3 {
++ (Class)dataSourceClassForComplicationType:(unsigned long long)type family:(long long)family forDevice:(id)device {
 	NSInteger complicationContent = [[%c(LWPreferences) sharedInstance] complicationContent];
 	if (complicationContent == 0) {
 		return nil;
@@ -113,11 +113,18 @@ void uncaughtExceptionHandler(NSException *exception)
 		default: break;
 	}
 	
+	BOOL acceptsComplicationFamily = YES;
+	if (dataSourceClass) {
+		LWComplicationDataSourceBase* instance = [[dataSourceClass alloc] init];
+		acceptsComplicationFamily = [instance.class acceptsComplicationFamily:family forDevice:device];
+	}
+	
 	if (complicationContent == 2) {
-		if (dataSourceClass) return dataSourceClass;
+		if (dataSourceClass && acceptsComplicationFamily) return dataSourceClass;
 		return %orig;
 	}
 	
+	if (!acceptsComplicationFamily) return nil;
 	return dataSourceClass;
 }
 %end	/// %hook NTKComplicationDataSource

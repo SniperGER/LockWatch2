@@ -10,6 +10,7 @@
 #import <NanoTimeKitCompanion/NTKTimelineDataOperation.h>
 #import <NanoTimeKitCompanion/NTKWellnessTimelineModel.h>
 
+#import "LWComplicationDataSourceBase.h"
 #import "NTKComplicationFamily.h"
 #import "NTKComplicationType.h"
 #import "Core/LWPreferences.h"
