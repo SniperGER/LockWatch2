@@ -32,6 +32,39 @@
 			<key>label</key>
 			<string>BATTERY_CHARGING_VIEW_HIDDEN</string>
 		</dict>
+		
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>default</key>
+			<real>2</real>
+			<key>defaults</key>
+			<string>ml.festival.lockwatch2</string>
+			<key>key</key>
+			<string>complicationContent</string>
+			<key>label</key>
+			<string>COMPLICATION_CONTENT</string>
+			<key>validTitles</key>
+			<array>
+				<string>COMPLICATION_CONTENT_NONE</string>
+				<string>COMPLICATION_CONTENT_DEFAULT</string>
+				<string>COMPLICATION_CONTENT_MIXED</string>
+				<string>COMPLICATION_CONTENT_FINISHED</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<real>0</real>
+				<real>1</real>
+				<real>2</real>
+				<real>3</real>
+			</array>
+		</dict>
 	</array>
 	<key>title</key>
 	<string>ADVANCED_SETTINGS</string>

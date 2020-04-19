@@ -125,12 +125,6 @@
 }
 %end	/// %hook NTKCircularAnalogDialView
 
-%hook NTKComplicationDataSource
-+ (Class)dataSourceClassForComplicationType:(unsigned long long)type family:(long long)family forDevice:(id)arg3 {
-	return nil;
-}
-%end	/// %hook NTKComplicationDataSource
-
 %hook NTKFaceViewController
 %property (nonatomic, strong) MTMaterialView* materialEffectView;
 
@@ -157,7 +151,7 @@
 	}
 #endif
 }
-	
+
 - (void)viewDidLayoutSubviews {
 	%orig;
 	
@@ -219,6 +213,14 @@
 	%orig(UIColor.clearColor);
 }
 %end	/// %hook NTKSiderealFaceView
+
+%hook NTKTimelineDataOperation
+- (void)start {
+	if (!%c(LWComplicationDataSourceBase) || [[LWPreferences sharedInstance] complicationContent] == 0) return;
+	
+	%orig;
+}
+%end	/// %hook NTKTimelineDataOperation
 
 %hook NTKVictoryAnalogBackgroundView
 - (void)setBackgroundColor:(UIColor*)arg1 {

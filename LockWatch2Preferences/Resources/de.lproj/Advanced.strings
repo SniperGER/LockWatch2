@@ -11,4 +11,10 @@
 	
 	"BACKGROUND_ENABLED" = "Hintergrund anzeigen";
 	"BATTERY_CHARGING_VIEW_HIDDEN" = "Sperrbildschirm-Batterie verstecken";
+	
+	"COMPLICATION_CONTENT" = "🛠 Komplikations-Inhalt";
+	"COMPLICATION_CONTENT_NONE" = "Kein Inhalt";
+	"COMPLICATION_CONTENT_DEFAULT" = "Standard-Vorlagen";
+	"COMPLICATION_CONTENT_MIXED" = "Gemischt (Standard & Fertiggestellt)";
+	"COMPLICATION_CONTENT_FINISHED" = "Nur Fertiggestellte";
 }

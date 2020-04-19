@@ -63,6 +63,11 @@
 		[_defaults setObject:@YES forKey:@"batteryChargingViewHidden"];
 	}
 	_batteryChargingViewHidden = [[_defaults objectForKey:@"batteryChargingViewHidden"] boolValue];
+	
+	if (![_defaults.allKeys containsObject:@"complicationContent"]) {
+		[_defaults setObject:@2 forKey:@"complicationContent"];
+	}
+	_complicationContent = [[_defaults objectForKey:@"complicationContent"] integerValue];
 }
 
 - (BOOL)synchronize {

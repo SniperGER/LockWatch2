@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSString* emulatedDeviceType;
 @property (nonatomic) BOOL backgroundEnabled;
 @property (nonatomic) BOOL batteryChargingViewHidden;
+@property (nonatomic) NSInteger complicationContent;
 
 + (instancetype)sharedInstance;
 - (instancetype)init;
