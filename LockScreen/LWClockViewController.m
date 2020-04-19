@@ -36,6 +36,14 @@
 @interface NSDistributedNotificationCenter : NSNotificationCenter
 @end
 
+@interface SBUserAgent : NSObject
+- (BOOL)deviceIsPasscodeLocked;
+@end
+
+@interface SpringBoard : UIApplication
+- (SBUserAgent*)pluginUserAgent;
+@end
+
 @implementation LWClockViewController
 
 - (instancetype)init {
@@ -291,6 +299,7 @@
 #pragma mark - LWClockViewDelegate
 
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event {
+	if ([[(SpringBoard*)[UIApplication sharedApplication] pluginUserAgent] deviceIsPasscodeLocked]) return nil;
 	if (!CGRectContainsPoint(self.view.bounds, point)) return nil;
 	
 	if (_libraryViewIsPresented) {
