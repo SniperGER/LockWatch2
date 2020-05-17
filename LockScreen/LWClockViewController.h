@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) CLKDevice* device;
 @property (nonatomic, readonly) NTKFaceCollection* addableFaceCollection;
 @property (nonatomic, readonly) NTKFaceCollection* libraryFaceCollection;
+@property (nonatomic) CGFloat alignmentPercent;
+@property (nonatomic) UIEdgeInsets dateViewInsets;
 
 - (instancetype)init;
 - (void)loadView;
@@ -60,6 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)freezeCurrentFace;
 - (void)loadAddableFaceCollection;
 - (void)loadLibraryFaceCollection;
+- (void)setAlignmentPercent:(CGFloat)alignmentPercent;
 - (void)unfreezeCurrentFace;
 
 @end

@@ -34,10 +34,10 @@
 	}
 	
 	SBLockScreenManager* manager = [%c(SBLockScreenManager) sharedInstance];
-	CSCoverSheetViewController* coverSheet = [manager coverSheetViewController];
-	CSMainPageContentViewController* mainPage = [coverSheet mainPageContentViewController];
+	CSCoverSheetViewController* coverSheetController = [manager coverSheetViewController];
+	CSMainPageContentViewController* mainPageController = [coverSheetController mainPageContentViewController];
 	
-	[mainPage.view.subviews[0] addSubview:clockViewController.view];
+	[mainPageController.view.subviews[0] addSubview:clockViewController.view];
 }
 %end	/// %hook SpringBoard
 
@@ -51,20 +51,52 @@
 	
 	%orig;
 	
-	// [UIView performWithoutAnimation:^{
-		[clockViewController.view setFrame:(CGRect){
-			{ 0, CGRectGetMinY(self.frame) },
-			{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(clockViewController.view.bounds) }
-		}];
-		[clockViewController.view setCenter:(CGPoint) {
-			CGRectGetMidX(clockViewController.view.bounds),
-			clockViewController.view.center.y
-		}];
-		
-		[clockViewController _updateMask];
-	// }];
+	SBLockScreenManager* manager = [%c(SBLockScreenManager) sharedInstance];
+	CSCoverSheetViewController* coverSheetController = [manager coverSheetViewController];
+	
+	// TODO: Fix delayed layout
+	[coverSheetController viewDidLayoutSubviews];
+}
+
+- (void)setAlignmentPercent:(CGFloat)arg1 {
+	[clockViewController setAlignmentPercent:arg1];
+	
+	return;
 }
 %end	/// %hook SBFLockScreenDateView
+
+%hook CSCoverSheetViewController
+- (void)viewDidLayoutSubviews {
+	%orig;
+	
+	CSCoverSheetViewController* coverSheetController = [[objc_getClass("SBLockScreenManager") sharedInstance] coverSheetViewController];
+	SBFLockScreenDateViewController* dateViewController = [coverSheetController dateViewController];
+	
+	[clockViewController setDateViewInsets:(UIEdgeInsets){
+		0,
+		(CGRectGetWidth(UIScreen.mainScreen.bounds) - CGRectGetWidth(dateViewController.view.bounds)) / 2,
+		0,
+		(CGRectGetWidth(UIScreen.mainScreen.bounds) - CGRectGetWidth(dateViewController.view.bounds)) / 2,
+	}];
+	
+	[clockViewController.view setFrame:(CGRect){
+		{ 0, CGRectGetMinY(dateViewController.view.frame) },
+		{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(clockViewController.view.bounds) }
+	}];
+		
+	[clockViewController.view setNeedsLayout];
+	[clockViewController.view layoutIfNeeded];
+	
+	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation);
+			
+	[clockViewController.view setCenter:(CGPoint) {
+		clockViewController.view.center.x,
+		(isiPhoneLandscape) ? (CGRectGetHeight(clockViewController.view.bounds) / 2) + 48 : CGRectGetMinY(dateViewController.view.frame) + (CGRectGetHeight(clockViewController.view.bounds) / 2)
+	}];
+	
+	[clockViewController _updateMask];
+}
+%end	/// %hook CSMainPageContentViewController
 
 %hook SBBacklightController
 - (void)_startFadeOutAnimationFromLockSource:(int)arg1 {
@@ -114,31 +146,15 @@
 }
 %end	/// %hook CSCoverSheetViewController
 
-%hook CSMainPageContentViewController
-- (void)viewDidLayoutSubviews {
-	%orig;
-	
-	SBFLockScreenDateViewController* dateViewController = [[[objc_getClass("SBLockScreenManager") sharedInstance] coverSheetViewController] dateViewController];
-	
-	// [UIView performWithoutAnimation:^{
-		[clockViewController.view setFrame:(CGRect){
-			{ 0, CGRectGetMinY(dateViewController.view.frame) },
-			{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(clockViewController.view.bounds) }
-		}];
-		[clockViewController.view setCenter:(CGPoint) {
-			CGRectGetMidX(clockViewController.view.bounds),
-			CGRectGetMinY(dateViewController.view.frame) + (CGRectGetHeight(clockViewController.view.bounds) / 2)
-		}];
-	// }];
-}
-%end	/// %hook CSMainPageContentViewController
-
 static CGFloat notificationOffset = 0;
 
 %hook CSCombinedListViewController
 - (UIEdgeInsets)_listViewDefaultContentInsets {
     UIEdgeInsets r = %orig;
     
+	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation);
+	if (isiPhoneLandscape) return r;
+	
 	SBFLockScreenDateViewController* dateViewController = [[[objc_getClass("SBLockScreenManager") sharedInstance] coverSheetViewController] dateViewController];
 	CLKDevice* device = [CLKDevice currentDevice];
 	
@@ -158,6 +174,9 @@ static CGFloat notificationOffset = 0;
 }
 
 - (CGFloat)_minInsetsToPushDateOffScreen {
+	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation);
+	if (isiPhoneLandscape) return %orig;
+	
 	return %orig + notificationOffset;
 }
 %end	/// %hook CSCombinedListViewController

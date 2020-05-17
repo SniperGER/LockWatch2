@@ -7,6 +7,7 @@
 //
 
 #define LIBRARY_PATH @"/var/mobile/Library/Preferences/ml.festival.lockwatch2.CurrentFaces.plist"
+#define CLAMP(value, min, max) (value - min) / (max - min)
 
 #import <AudioToolbox/AudioServices.h>
 #import <ClockKit/CLKDevice.h>
@@ -101,6 +102,24 @@
 	[super didMoveToParentViewController:viewController];
 }
 
+- (void)viewDidLayoutSubviews {
+	[super viewDidLayoutSubviews];
+	
+	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation);
+	CGFloat _centerX = 0;
+	
+	if (!isiPhoneLandscape) {
+		_centerX = CGRectGetMidX(UIScreen.mainScreen.bounds);
+	} else {
+		_centerX = (CGRectGetMinX(CGRectInset(self.view.bounds, _dateViewInsets.left, 0)) + (CGRectGetWidth(_device.actualScreenBounds) / 2)) - ((CGRectGetWidth(_device.actualScreenBounds) + _dateViewInsets.left * 2) * CLAMP(_alignmentPercent + 1, 0, 2));
+	}
+	
+	[_libraryViewController.view setCenter:(CGPoint){
+		_centerX,
+		_libraryViewController.view.center.y
+	}];
+}
+
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 
@@ -158,10 +177,10 @@
 	[_libraryViewController.view layoutIfNeeded];
 	
 	[NSLayoutConstraint activateConstraints:@[
-		[_libraryViewController.view.topAnchor constraintEqualToAnchor:self.view.topAnchor],
-		[_libraryViewController.view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-		[_libraryViewController.view.widthAnchor constraintEqualToAnchor:self.view.widthAnchor],
-		[_libraryViewController.view.heightAnchor constraintEqualToAnchor:self.view.heightAnchor]
+		// [_libraryViewController.view.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+		// [_libraryViewController.view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+		[_libraryViewController.view.widthAnchor constraintEqualToConstant:CGRectGetWidth(_device.actualScreenBounds)],
+		[_libraryViewController.view.heightAnchor constraintEqualToConstant:CGRectGetHeight(_device.actualScreenBounds)]
 	]];
 }
 
@@ -250,11 +269,11 @@
 }
 
 - (void)_updateMask {
-	CGRect maskBounds = self.view.superview.bounds;
+	CGRect maskBounds = UIScreen.mainScreen.bounds;
 	
 	_contentViewMask = [CAShapeLayer layer];
-	[_contentViewMask setFrame:(CGRect){{ 0, -self.view.frame.origin.y }, maskBounds.size }];
-	[_contentViewMask setPath:[UIBezierPath bezierPathWithRect:(CGRect){{ 0, 0 }, maskBounds.size }].CGPath];
+	[_contentViewMask setFrame:(CGRect){{ -CGRectGetWidth(maskBounds), -CGRectGetMinY(self.view.frame) }, { CGRectGetWidth(maskBounds) * 2, CGRectGetHeight(maskBounds) }}];
+	[_contentViewMask setPath:[UIBezierPath bezierPathWithRect:_contentViewMask.bounds].CGPath];
 	[self.view.layer setMask:_contentViewMask];
 }
 
@@ -292,6 +311,13 @@
 	[_libraryFaceCollection addObserver:self];
 }
 
+- (void)setAlignmentPercent:(CGFloat)alignmentPercent {
+	_alignmentPercent = alignmentPercent;
+	
+	[self.view setNeedsLayout];
+	[self.view layoutIfNeeded];
+}
+
 - (void)unfreezeCurrentFace {
 	[_libraryViewController.selectedFaceViewController unfreeze];
 }
@@ -300,16 +326,23 @@
 
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event {
 	if ([[(SpringBoard*)[UIApplication sharedApplication] pluginUserAgent] deviceIsPasscodeLocked]) return nil;
+	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation)) return nil;
+	
 	if (!CGRectContainsPoint(self.view.bounds, point)) return nil;
 	
 	if (_libraryViewIsPresented) {
-		UIView* view = [_libraryViewController.libraryOverlayView hitTest:point withEvent:event];
-		if (!view && !CGRectContainsPoint(_libraryViewController.switcherController.scrollView.frame, point)) view = _libraryViewController.switcherController.scrollView;
-		if (!view) view = [_libraryViewController.view hitTest:point withEvent:event];
+		CGPoint convertedPoint = [self.view convertPoint:point toView:_libraryViewController.view];
+		
+		UIView* view = [_libraryViewController.libraryOverlayView hitTest:convertedPoint withEvent:event];
+		
+		CGRect convertedRect = [_libraryViewController.view convertRect:_libraryViewController.switcherController.scrollView.frame toView:self.view];
+		if (!view && !CGRectContainsPoint(convertedRect, point)) view = _libraryViewController.switcherController.scrollView;
+		if (!view) view = [_libraryViewController.view hitTest:convertedPoint withEvent:event];
 		
 		return view;
 	} else {
-		if (CGRectContainsPoint(_libraryViewController.switcherController.scrollView.frame, point)) return _libraryViewController.switcherController.scrollView;
+		CGRect convertedRect = [_libraryViewController.view convertRect:_libraryViewController.switcherController.scrollView.frame toView:self.view];
+		if (CGRectContainsPoint(convertedRect, point)) return _libraryViewController.switcherController.scrollView;
 	}
 	
 	return nil;

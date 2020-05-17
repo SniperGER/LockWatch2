@@ -77,7 +77,7 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 		[_libraryOverlayView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
 		[_libraryOverlayView.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor],
 		[_libraryOverlayView.widthAnchor constraintEqualToAnchor:self.view.widthAnchor],
-		[_libraryOverlayView.heightAnchor constraintEqualToConstant:CGRectGetHeight(_device.actualScreenBounds)]
+		[_libraryOverlayView.heightAnchor constraintEqualToAnchor:self.view.heightAnchor]
 	]];
 }
 

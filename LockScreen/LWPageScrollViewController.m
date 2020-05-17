@@ -38,10 +38,7 @@
 }
 
 - (void)loadView {
-	UIScrollView* view = [[UIScrollView alloc] initWithFrame:(CGRect){
-		CGPointZero,
-		{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(_device.actualScreenBounds) }
-	}];
+	UIScrollView* view = [[UIScrollView alloc] initWithFrame:_device.actualScreenBounds];
 	[view setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[view setBounces:NO];
 	[view setClipsToBounds:NO];
@@ -62,7 +59,7 @@
 		if (!CGRectEqualToRect(_scrollView.frame, frameForCenteredPage)) {
 			[_scrollView performSuppressingScrollCallbacks:^{
 				[_scrollView setFrame:frameForCenteredPage];
-				[_scrollView setCenter:(CGPoint){ CGRectGetMidX(self.view.bounds), _scrollView.center.y }];
+				[_scrollView setCenter:(CGPoint){ CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) }];
 				[_scrollView setVisualInsets:(UIEdgeInsets){ 0, 10, 0, 10 }];
 			}];
 			
