@@ -273,6 +273,8 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 }
 
 - (void)_dismissSwitcherAnimated:(BOOL)animated withIndex:(NSInteger)index remainFrozen:(BOOL)remainFrozen completion:(void (^_Nullable)())block {
+	if (!_presented) return;
+	
 	if (!_isIncrementallyZooming) {
 		if (index == [self _indexOfAddPage]) {
 			

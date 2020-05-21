@@ -133,7 +133,9 @@
 }
 
 - (void)viewWillAppear:(BOOL)arg1 {
-	[clockViewController unfreezeCurrentFace];
+	if ([[%c(SBBacklightController) sharedInstance] screenIsOn]) {
+		[clockViewController unfreezeCurrentFace];
+	}
 	
 	%orig;
 }

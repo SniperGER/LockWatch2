@@ -68,6 +68,7 @@ extern "C" CFNotificationCenterRef CFNotificationCenterGetDistributedCenter();
 @end
 
 @interface SBBacklightController : NSObject
++ (instancetype)sharedInstance;
 @property(nonatomic, readonly) BOOL screenIsOn;
 @end
 
