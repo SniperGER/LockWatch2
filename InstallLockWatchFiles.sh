@@ -74,8 +74,6 @@ fi
 echo "Downloading firmware..."
 curl -o ${TEMPDIR}/firmware.ipsw ${DOWNLOAD_URL}
 
-exit 0
-
 echo "Extracting Restore.plist..."
 unzip -p "${TEMPDIR}/firmware.ipsw" "Restore.plist" > "${TEMPDIR}/Restore.plist"
 
