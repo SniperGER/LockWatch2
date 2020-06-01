@@ -79,8 +79,10 @@
 		(CGRectGetWidth(UIScreen.mainScreen.bounds) - CGRectGetWidth(dateViewController.view.bounds)) / 2,
 	}];
 	
+	CGFloat dateViewControllerVerticalPosition = (dateViewController.view.layer.position.y - (CGRectGetHeight(dateViewController.view.bounds) / 2));
+	
 	[clockViewController.view setFrame:(CGRect){
-		{ 0, CGRectGetMinY(dateViewController.view.frame) },
+		{ 0, dateViewControllerVerticalPosition },
 		{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(clockViewController.view.bounds) }
 	}];
 		
@@ -91,7 +93,7 @@
 			
 	[clockViewController.view setCenter:(CGPoint) {
 		clockViewController.view.center.x,
-		(isiPhoneLandscape) ? (CGRectGetHeight(clockViewController.view.bounds) / 2) + 48 : CGRectGetMinY(dateViewController.view.frame) + (CGRectGetHeight(clockViewController.view.bounds) / 2)
+		(isiPhoneLandscape) ? (CGRectGetHeight(clockViewController.view.bounds) / 2) + 48 : dateViewControllerVerticalPosition + (CGRectGetHeight(clockViewController.view.bounds) / 2)
 	}];
 	
 	[clockViewController _updateMask];
