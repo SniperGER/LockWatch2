@@ -223,6 +223,20 @@
 %end	/// %hook NTKTimelineDataOperation
 
 %hook NTKVictoryAnalogBackgroundView
+- (id)_dotImage {
+	UIImage* r = %orig;
+	
+	UIGraphicsBeginImageContextWithOptions(r.size, NO, r.scale);
+	
+	CGRect imageRect = (CGRect){{ 0, 0 }, { r.size.width, r.size.height }};
+	[[UIBezierPath bezierPathWithRoundedRect:imageRect cornerRadius:r.size.width / 2] addClip];
+	[r drawInRect:imageRect];
+	
+	UIImage* clippedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return clippedImage;
+}
 - (void)setBackgroundColor:(UIColor*)arg1 {
 	if (CGColorEqualToColor(arg1.CGColor, UIColor.blackColor.CGColor)) {
 		%orig(UIColor.clearColor);
