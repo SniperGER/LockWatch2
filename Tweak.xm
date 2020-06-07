@@ -6,6 +6,7 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
+#import "FaceFixes.h"
 #import "Tweak.h"
 
 %group SpringBoard
@@ -327,6 +328,25 @@ static BOOL scrollEnabled = YES;
 
 
 
+%group PhotonFixes
+%hook PhotonScreenManager
+- (void)setIsShowing:(BOOL)arg1 {
+	%orig;
+	
+	CSCoverSheetViewController* coverSheetController = [[objc_getClass("SBLockScreenManager") sharedInstance] coverSheetViewController];
+	SBFLockScreenDateViewController* dateViewController = [coverSheetController dateViewController];
+	
+	if ([dateViewController respondsToSelector:@selector(ptnFaceViewController)] && dateViewController.ptnFaceViewController != nil) {
+		[(LWClockView*)clockViewController.view setAlpha:arg1 ? 0 : 1 animated:YES];
+	} else {
+		[clockViewController.faceViewController setBackgroundViewAlpha:arg1 ? 0 : 1 animated:YES];
+	}
+}
+%end	/// %hook PhotonScreenManager
+%end	// %group PhotonFixes
+
+
+
 %hook ACXDeviceConnection
 - (void)_onQueue_reEstablishObserverConnectionIfNeeded {
 	return;
@@ -416,6 +436,11 @@ static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* obs
 				LWEmulatedWatchTypeChanged(NULL, NULL, NULL, NULL, NULL);
 				
 				%init(SpringBoard);
+				
+				void* photonPtr = dlopen("/Library/MobileSubstrate/DynamicLibraries/Photon.dylib", RTLD_NOW);
+				if (photonPtr) {
+					%init(PhotonFixes);
+				}
 			}
 			
 			if ([bundleIdentifier isEqualToString:@"com.apple.Bridge"]) {

@@ -18,7 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 @class CLKDevice, LWFaceLibraryViewController, LWORBAnimator, LWORBTapGestureRecognizer, LWPersistentFaceCollection, LWPreferences, NTKFaceCollection, NTKFaceViewController;
 
 @interface LWClockViewController : UIViewController <LWClockViewDelegate, LWFaceLibraryViewControllerDelegate, LWORBTapGestureRecognizerDelegate, NTKFaceCollectionObserver> {
-	NTKFaceViewController* _faceViewController;
 	LWFaceLibraryViewController* _libraryViewController;
 	BOOL _libraryViewIsPresented;
 	LWORBTapGestureRecognizer* _orbRecognizer;
@@ -30,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 	CAShapeLayer* _contentViewMask;
 }
 
+@property (nonatomic, readonly) NTKFaceViewController* faceViewController;
 @property (nonatomic, readonly) LWPreferences* preferences;
 @property (nonatomic) CLKDevice* device;
 @property (nonatomic, readonly) NTKFaceCollection* addableFaceCollection;

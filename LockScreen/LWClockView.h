@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id <LWClockViewDelegate> delegate;
 
 - (UIView*)hitTest:(CGPoint)point withEvent:(nullable UIEvent*)event;
+- (void)setAlpha:(CGFloat)alpha animated:(BOOL)animated;
 
 @end
 

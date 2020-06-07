@@ -28,6 +28,7 @@
 #import "Core/LWEmulatedCLKDevice.h"
 #import "Core/LWEmulatedNRDevice.h"
 #import "Core/LWPersistentFaceCollection.h"
+#import "LockScreen/LWClockView.h"
 #import "LockScreen/LWClockViewController.h"
 
 extern "C" CFNotificationCenterRef CFNotificationCenterGetDistributedCenter();
@@ -61,6 +62,7 @@ extern "C" CFNotificationCenterRef CFNotificationCenterGetDistributedCenter();
 @end
 
 @interface SBFLockScreenDateViewController : UIViewController
+- (id)ptnFaceViewController;
 @end
 
 @interface SBFLockScreenDateView : UIView
