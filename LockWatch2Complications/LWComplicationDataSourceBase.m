@@ -6,8 +6,6 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#import <ClockKit/CLKComplicationTemplate.h>
-
 #import "LWComplicationDataSourceBase.h"
 
 @implementation LWComplicationDataSourceBase
@@ -24,7 +22,7 @@
 	return nil;
 }
 
-- (void)getCurrentTimelineEntryWithHandler:(void (^)(id entry))handler {
+- (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler {
 	handler(nil);
 }
 

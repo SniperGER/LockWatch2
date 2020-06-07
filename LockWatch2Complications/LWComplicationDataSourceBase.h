@@ -6,6 +6,10 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
+#import <ClockKit/CLKDate.h>
+#import <ClockKit/CLKComplicationTemplate.h>
+#import <ClockKit/CLKComplicationTimelineEntry.h>
+#import <NanoTimeKitCompanion/NTKComplication.h>
 #import <NanoTimeKitCompanion/CLKCComplicationDataSourceDelegate-Protocol.h>
 #import <NanoTimeKitCompanion/NTKComplicationDataSource.h>
 
@@ -15,7 +19,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NTKComplicationDataSource ()
-- (void)getCurrentTimelineEntryWithHandler:(void (^)(id entry))handler;
+- (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler;
 - (void)getSupportedTimeTravelDirectionsWithHandler:(void (^)(long long family))handler;
 - (void)getTimelineEndDateWithHandler:(void (^)(NSDate* date))handler;
 - (void)getTimelineEntriesAfterDate:(NSDate*)date limit:(NSUInteger)limit withHandler:(void (^)(NSArray* _Nullable entries))handler;

@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LWWellnessComplicationDataSource : LWComplicationDataSourceBase <NTKWellnessTimelineModelSubscriber>
 
-- (id)initWithComplication:(id)complication family:(long long)family forDevice:(CLKDevice*)device;
+- (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device;
 - (void)dealloc;
 - (CLKComplicationTimelineEntry*)_timelineEntryFromModel:(NTKWellnessEntryModel*)model family:(NTKComplicationFamily)family;
 

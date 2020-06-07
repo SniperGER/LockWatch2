@@ -7,8 +7,6 @@
 //
 
 #import <objc/runtime.h>
-#import <ClockKit/CLKComplicationTemplate.h>
-#import <ClockKit/CLKComplicationTimelineEntry.h>
 
 #import "LWDigitalTimeComplicationDataSource.h"
 
@@ -40,7 +38,7 @@
 	return [self _templateWithShouldDisplayIdealizeState:YES];
 }
 
-- (void)getCurrentTimelineEntryWithHandler:(void (^)(id entry))handler {
+- (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler{
 	CLKComplicationTemplate* template = [self _templateWithShouldDisplayIdealizeState:NO];
 	CLKComplicationTimelineEntry* timelineEntry = [CLKComplicationTimelineEntry entryWithDate:[NSDate date] complicationTemplate:template];
 	

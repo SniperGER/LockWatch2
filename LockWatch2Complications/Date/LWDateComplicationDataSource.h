@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LWDateComplicationDataSource : LWComplicationDataSourceBase
 
-- (id)initWithComplication:(id)complication family:(long long)family forDevice:(CLKDevice*)device;
+- (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device;
 - (CLKComplicationTimelineEntry*)_currentTimelineEntry;
 - (void)_invalidate;
 

@@ -13,7 +13,7 @@ typedef NS_ENUM(NSUInteger, NTKComplicationFamily) {
 /*  3 */	NTKComplicationFamilyUtilitarianLarge,
 /*  4 */	NTKComplicationFamilyCircularSmall,
 /*  5 */	NTKComplicationFamilyUnknown,
-/*  6 */	NTKComplicationFamilyutilitarianSmallFlat,
+/*  6 */	NTKComplicationFamilyUtilitarianSmallFlat,
 /*  7 */	NTKComplicationFamilyExtraLarge,
 /*  8 */	NTKComplicationFamilySignatureCorner,
 /*  9 */	NTKComplicationFamilySignatureBezel,
@@ -25,5 +25,5 @@ typedef NS_ENUM(NSUInteger, NTKComplicationFamily) {
 /* 103 */	NTKComplicationFamilyZeusLower,
 /* 104 */	NTKComplicationFamilyUtilLargeNarrow,
 /* 105 */	NTKComplicationFamilyCircularMedium,
-/* 105 */	NTKComplicationFamilySimpleText
+/* 106 */	NTKComplicationFamilySimpleText
 };

@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL _needsInvalidation;
 }
 
-- (id)initWithComplication:(id)complication family:(long long)family forDevice:(CLKDevice*)device;
+- (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device;
 - (void)dealloc;
 - (CLKComplicationTimelineEntry*)_defaultTimelineEntry;
 - (void)_updateTimelineEntry;

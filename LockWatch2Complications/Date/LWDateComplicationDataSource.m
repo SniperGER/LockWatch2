@@ -7,10 +7,7 @@
 //
 
 #import <objc/runtime.h>
-#import <ClockKit/CLKComplicationTimelineEntry.h>
-#import <ClockKit/CLKDate.h>
 #import <NanoTimeKitCompanion/NTKDateTimelineEntryModel.h>
-#import <NanoTimeKitCompanion/NTKComplication.h>
 
 #import "LWDateComplicationDataSource.h"
 
@@ -22,7 +19,7 @@
 	return [super acceptsComplicationFamily:family forDevice:device];
 }
 
-- (id)initWithComplication:(id)complication family:(long long)family forDevice:(CLKDevice*)device {
+- (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device {
 	if (self = [super initWithComplication:complication family:family forDevice:device]) {
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_invalidate) name:UIApplicationSignificantTimeChangeNotification object:nil];
 		// [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_invalidate) name:CalendarPreferencesNotification_OverlayCalendarID object:nil];
@@ -56,7 +53,7 @@
 	return [[self _currentTimelineEntry] complicationTemplate];
 }
 
-- (void)getCurrentTimelineEntryWithHandler:(void (^)(id entry))handler {
+- (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler {
 	handler([self _currentTimelineEntry]);
 }
 

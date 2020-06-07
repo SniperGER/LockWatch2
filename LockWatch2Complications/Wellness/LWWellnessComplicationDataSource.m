@@ -7,18 +7,15 @@
 //
 
 #import <objc/runtime.h>
-#import <ClockKit/CLKComplicationTimelineEntry.h>
-#import <ClockKit/CLKDate.h>
 #import <HealthKit/HealthKit.h>
 #import <NanoTimeKitCompanion/NTKWellnessEntryModel.h>
 #import <NanoTimeKitCompanion/NTKWellnessTimelineModel.h>
-#import <NanoTimeKitCompanion/NTKComplication.h>
 
 #import "LWWellnessComplicationDataSource.h"
 
 @implementation LWWellnessComplicationDataSource
 
-- (id)initWithComplication:(id)complication family:(long long)family forDevice:(CLKDevice*)device {
+- (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device {
 	if (self = [super initWithComplication:complication family:family forDevice:device]) {
 		[[NTKWellnessTimelineModel sharedModel] addSubscriber:self];
 	}
@@ -45,18 +42,18 @@
 	return [timelineEntry complicationTemplate];
 }
 
-- (id)lockedTemplate {
-	NTKWellnessEntryModel* lockedEntryModel = [NTKWellnessEntryModel lockedEntryModel];
-	CLKComplicationTimelineEntry* timelineEntry = [self _timelineEntryFromModel:lockedEntryModel family:self.family];
-	
-	return [timelineEntry complicationTemplate];
-}
-
-- (void)getCurrentTimelineEntryWithHandler:(void (^)(id entry))handler {
+- (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler {
 	NTKWellnessTimelineModel* timelineModel = [NTKWellnessTimelineModel sharedModel];
 	[timelineModel getCurrentWellnessEntryWithHandler:^(NTKWellnessEntryModel* entryModel) {
 		handler([self _timelineEntryFromModel:entryModel family:self.family]);
 	}];
+}
+
+- (CLKComplicationTemplate*)lockedTemplate {
+	NTKWellnessEntryModel* lockedEntryModel = [NTKWellnessEntryModel lockedEntryModel];
+	CLKComplicationTimelineEntry* timelineEntry = [self _timelineEntryFromModel:lockedEntryModel family:self.family];
+	
+	return [timelineEntry complicationTemplate];
 }
 
 - (Class)richComplicationDisplayViewClassForDevice:(CLKDevice*)device {

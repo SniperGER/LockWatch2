@@ -6,14 +6,13 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#import <ClockKit/CLKComplicationTimelineEntry.h>
 #import <NanoTimeKitCompanion/NTKBatteryTimelineEntryModel.h>
 
 #import "LWBatteryComplicationDataSource.h"
 
 @implementation LWBatteryComplicationDataSource
 
-- (id)initWithComplication:(id)complication family:(long long)family forDevice:(CLKDevice*)device {
+- (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device {
 	if (self = [super initWithComplication:complication family:family forDevice:device]) {
 		UIDevice* currentDevice = [UIDevice currentDevice];
 		[currentDevice setBatteryMonitoringEnabled:YES];
@@ -92,7 +91,7 @@
 	return [[self _currentTimelineEntry] complicationTemplate];
 }
 
-- (void)getCurrentTimelineEntryWithHandler:(void (^)(id entry))handler {
+- (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler {
 	handler([self _currentTimelineEntry]);
 }
 

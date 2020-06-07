@@ -6,7 +6,6 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#import <ClockKit/CLKComplicationTimelineEntry.h>
 #import <MediaRemote/MediaRemote.h>
 
 #import "LWNowPlayingComplicationDataSource.h"
@@ -30,7 +29,7 @@ extern CFStringRef kMRMediaRemoteNowPlayingInfoPlaybackRate;
 
 @implementation LWNowPlayingComplicationDataSource
 
-- (id)initWithComplication:(id)complication family:(long long)family forDevice:(CLKDevice*)device {
+- (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device {
 	if (self = [super initWithComplication:complication family:family forDevice:device]) {
 		_isPaused = NO;
 		_needsInvalidation = NO;
@@ -132,7 +131,7 @@ extern CFStringRef kMRMediaRemoteNowPlayingInfoPlaybackRate;
 	}
 }
 
-- (void)getCurrentTimelineEntryWithHandler:(void (^)(id entry))handler {
+- (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler {
 	if (_nowPlayingEntry) {
 		handler(_nowPlayingEntry);
 	} else {

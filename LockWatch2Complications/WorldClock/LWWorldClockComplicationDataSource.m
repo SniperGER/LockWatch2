@@ -7,7 +7,6 @@
 //
 
 #import <objc/runtime.h>
-#import <ClockKit/CLKComplicationTimelineEntry.h>
 #import <MobileTimer/WorldClockCity.h>
 #import <NanoTimeKitCompanion/NTKWorldClockComplication.h>
 #import <NanoTimeKitCompanion/NTKWorldClockTimelineEntryModel.h>
@@ -16,7 +15,7 @@
 
 @implementation LWWorldClockComplicationDataSource
 
-- (id)initWithComplication:(id)complication family:(long long)family forDevice:(CLKDevice*)device {
+- (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device {
 	if (self = [super initWithComplication:complication family:family forDevice:device]) {
 		[self _startObserving];
 	}
@@ -100,7 +99,7 @@
 	return [[entryModel entryForComplicationFamily:self.family] complicationTemplate];
 }
 
-- (void)getCurrentTimelineEntryWithHandler:(void (^)(id entry))handler {
+- (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler {
 	handler([self _currentTimelineEntry]);
 }
 
