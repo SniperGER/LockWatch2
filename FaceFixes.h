@@ -31,9 +31,9 @@
 
 @interface NTKFaceViewController (UIEffectView)
 // %property
-@property (nonatomic, strong) UIVisualEffectView* effectView;
-// %property
-@property (nonatomic, strong) MTMaterialView* materialEffectView;
+@property (nonatomic, strong) UIView* backgroundView;
+// %new
+- (void)setBackgroundViewAlpha:(CGFloat)alpha animated:(BOOL)animated;
 @end
 
 @interface NTKExplorerDialView : UIView

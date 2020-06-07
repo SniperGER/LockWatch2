@@ -7,6 +7,7 @@
 //
 
 #import "FaceFixes.h"
+#import "Tweak.h"
 
 %group SpringBoard
 %hook CLKDate
@@ -126,14 +127,24 @@
 %end	/// %hook NTKCircularAnalogDialView
 
 %hook NTKFaceViewController
-%property (nonatomic, strong) MTMaterialView* materialEffectView;
+%property (nonatomic, strong) UIView* backgroundView;
 
 - (id)initWithFace:(id)arg1 configuration:(id /* block */)arg2 {
 	id r = %orig;
-	
-	if ([[LWPreferences sharedInstance] backgroundEnabled]) {
-		self.materialEffectView = [MTMaterialView materialViewWithRecipe:11 configuration:1 initialWeighting:1];
+
+	switch ([[LWPreferences sharedInstance] backgroundType]) {
+		case 0: break;
+		case 1:
+			self.backgroundView = [MTMaterialView materialViewWithRecipe:11 configuration:1 initialWeighting:1];
+			break;
+		case 2:
+			self.backgroundView = [UIView new];
+			[self.backgroundView setBackgroundColor:UIColor.blackColor];
+			break;
+		default: break;
 	}
+	
+	if (self.backgroundView) [self.backgroundView setHidden:YES];
 	
 	return r;
 }
@@ -141,7 +152,6 @@
 - (void)viewDidLoad {
 	%orig;
 	
-		
 	[self.faceView setClipsToBounds:YES];
 	[self.faceView.layer setCornerRadius:self.face.device.screenCornerRadius];
 
@@ -155,14 +165,26 @@
 - (void)viewDidLayoutSubviews {
 	%orig;
 	
-	if (![self.faceView.subviews containsObject:self.materialEffectView]) {
-		[self.materialEffectView removeFromSuperview];
-		[self.faceView insertSubview:self.materialEffectView atIndex:0];
+	if (![self.faceView.subviews containsObject:self.backgroundView]) {
+		[self.backgroundView removeFromSuperview];
+		[self.faceView insertSubview:self.backgroundView atIndex:0];
 	}
 	
-	if (!CGRectEqualToRect(self.view.bounds, self.materialEffectView.bounds)) {
-		[self.materialEffectView setFrame:self.view.bounds];
+	if (!CGRectEqualToRect(self.view.bounds, self.backgroundView.bounds)) {
+		[self.backgroundView setFrame:self.view.bounds];
 	}
+}
+
+%new
+- (void)setBackgroundViewAlpha:(CGFloat)alpha animated:(BOOL)animated {
+	if (!animated) {
+		[self.backgroundView setAlpha:alpha];
+		return;
+	}
+	
+	[UIView animateWithDuration:0.9 delay:0 usingSpringWithDamping:1.0 initialSpringVelocity:0.1 options:0 animations:^{
+		[self.backgroundView setAlpha:alpha];
+	} completion:nil];
 }
 %end	/// %hook NTKCompanionFaceViewController
 

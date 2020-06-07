@@ -54,10 +54,10 @@
 	}
 	_emulatedDeviceType = [_defaults objectForKey:@"emulatedDeviceType"];
 	
-	if (![_defaults.allKeys containsObject:@"backgroundEnabled"]) {
-		[_defaults setObject:@YES forKey:@"backgroundEnabled"];
+	if (![_defaults.allKeys containsObject:@"backgroundType"]) {
+		[_defaults setObject:@(1) forKey:@"backgroundType"];
 	}
-	_backgroundEnabled = [[_defaults objectForKey:@"backgroundEnabled"] boolValue];
+	_backgroundType = [[_defaults objectForKey:@"backgroundType"] integerValue];
 	
 	if (![_defaults.allKeys containsObject:@"batteryChargingViewHidden"]) {
 		[_defaults setObject:@YES forKey:@"batteryChargingViewHidden"];

@@ -34,6 +34,10 @@
 - (BOOL)_supportsForceTouch;
 @end
 
+@interface NTKFaceViewController (Background)
+@property (nonatomic, strong) UIView* backgroundView;
+@end
+
 @interface NSDistributedNotificationCenter : NSNotificationCenter
 @end
 
@@ -245,6 +249,8 @@
 
 - (NTKFaceViewController*)_newFaceControllerForFace:(NTKFace*)face withConfiguration:(void (^)(NTKFaceViewController*))configuration {
 	NTKFaceViewController* faceViewController = [[NTKFaceViewController alloc] initWithFace:face configuration:configuration];
+	
+	[faceViewController.backgroundView setHidden:NO];
 	[faceViewController configureWithDuration:0.0 block:configuration];
 	
 	return faceViewController;

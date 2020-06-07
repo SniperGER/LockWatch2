@@ -10,15 +10,29 @@
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSSwitchCell</string>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
 			<key>default</key>
-			<true/>
+			<real>1</real>
 			<key>defaults</key>
 			<string>ml.festival.lockwatch2</string>
 			<key>key</key>
-			<string>backgroundEnabled</string>
+			<string>backgroundType</string>
 			<key>label</key>
-			<string>BACKGROUND_ENABLED</string>
+			<string>BACKGROUND_TYPE</string>
+			<key>validTitles</key>
+			<array>
+				<string>BACKGROUND_TYPE_OFF</string>
+				<string>BACKGROUND_TYPE_TRANSLUCENT</string>
+				<string>BACKGROUND_TYPE_OPAQUE</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<real>0</real>
+				<real>1</real>
+				<real>2</real>
+			</array>
 		</dict>
 		<dict>
 			<key>cell</key>

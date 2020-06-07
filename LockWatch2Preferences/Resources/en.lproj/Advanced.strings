@@ -9,7 +9,11 @@
 {
 	"ADVANCED_SETTINGS" = "Advanced";
 	
-	"BACKGROUND_ENABLED" = "Show Background";
+	"BACKGROUND_TYPE" = "Watch Face Background";
+	"BACKGROUND_TYPE_OFF" = "Off";
+	"BACKGROUND_TYPE_TRANSLUCENT" = "Translucent";
+	"BACKGROUND_TYPE_OPAQUE" = "Solid Black";
+	
 	"BATTERY_CHARGING_VIEW_HIDDEN" = "Hide Battery Charging View";
 	
 	"COMPLICATION_CONTENT" = "🛠 Complication Content";

@@ -9,7 +9,11 @@
 {
 	"ADVANCED_SETTINGS" = "Erweitert";
 	
-	"BACKGROUND_ENABLED" = "Hintergrund anzeigen";
+	"BACKGROUND_TYPE" = "Zifferblatt-Hintergrund";
+	"BACKGROUND_TYPE_OFF" = "Aus";
+	"BACKGROUND_TYPE_TRANSLUCENT" = "Durchsichtig";
+	"BACKGROUND_TYPE_OPAQUE" = "Schwarz";
+	
 	"BATTERY_CHARGING_VIEW_HIDDEN" = "Sperrbildschirm-Batterie verstecken";
 	
 	"COMPLICATION_CONTENT" = "🛠 Komplikations-Inhalt";
