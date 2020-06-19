@@ -212,16 +212,15 @@ extern CFStringRef kMRMediaRemoteNowPlayingInfoTitle;
 		[template setBody2TextProvider:body2TextProvider];
 	}
 	
+#if __clang_major__ >= 9
+	if (@available(iOS 13, *)) {
+		[template setTintColor:UIColor.systemBlueColor];
+	} else {
+		[template setTintColor:SYSTEM_BLUE_COLOR];
+	}
+#else
 	[template setTintColor:SYSTEM_BLUE_COLOR];
-// #if __clang_major__ >= 9
-// 	if (@available(iOS 13, *)) {
-// 		[template setTintColor:UIColor.systemBlueColor];
-// 	} else {
-// 		[template setTintColor:[UIColor colorWithRed:0.039 green:0.518 blue:1.0 alpha:1.0]];
-// 	}
-// #else
-// 	[template setTintColor:[UIColor colorWithRed:0.039 green:0.518 blue:1.0 alpha:1.0]];
-// #endif
+#endif
 	
 	return template;
 }
@@ -243,7 +242,7 @@ extern CFStringRef kMRMediaRemoteNowPlayingInfoTitle;
 	switch (family) {
 		case NTKComplicationFamilyModularLarge: return [self _largeModular];
 		case NTKComplicationFamilyUtilitarianLarge: return [self _largeUtility];
-		case NTKComplicationFamilySignatureRectangular: return [self _graphicRectangular];
+		case NTKComplicationFamilyGraphicRectangular: return [self _graphicRectangular];
 	}
 	
 	return nil;

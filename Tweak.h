@@ -24,6 +24,8 @@
 #import <Preferences/PSSpecifier.h>
 #import <Preferences/PSTableCell.h>
 
+#import "UIWindow+Orientation.h"
+
 #import "Core/LWPreferences.h"
 #import "Core/LWEmulatedCLKDevice.h"
 #import "Core/LWEmulatedNRDevice.h"

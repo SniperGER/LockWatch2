@@ -90,7 +90,7 @@
 	[clockViewController.view setNeedsLayout];
 	[clockViewController.view layoutIfNeeded];
 	
-	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation);
+	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && [UIWindow isLandscapeOrientation];
 			
 	[clockViewController.view setCenter:(CGPoint) {
 		clockViewController.view.center.x,
@@ -157,7 +157,7 @@ static CGFloat notificationOffset = 0;
 - (UIEdgeInsets)_listViewDefaultContentInsets {
     UIEdgeInsets r = %orig;
     
-	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation);
+	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && [UIWindow isLandscapeOrientation];
 	if (isiPhoneLandscape) return r;
 	
 	SBFLockScreenDateViewController* dateViewController = [[[objc_getClass("SBLockScreenManager") sharedInstance] coverSheetViewController] dateViewController];
@@ -179,7 +179,7 @@ static CGFloat notificationOffset = 0;
 }
 
 - (CGFloat)_minInsetsToPushDateOffScreen {
-	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation);
+	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && [UIWindow isLandscapeOrientation];
 	if (isiPhoneLandscape) return %orig;
 	
 	return %orig + notificationOffset;

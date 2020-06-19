@@ -22,6 +22,7 @@
 #import "LWFaceLibraryViewController.h"
 #import "LWPageScrollView.h"
 #import "LWSwitcherViewController.h"
+#import "UIWindow+Orientation.h"
 
 #import "Core/LWEmulatedCLKDevice.h"
 #import "Core/LWEmulatedNRDevice.h"
@@ -109,7 +110,7 @@
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
 	
-	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation);
+	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && [UIWindow isLandscapeOrientation];
 	CGFloat _centerX = 0;
 	
 	if (!isiPhoneLandscape) {
@@ -332,7 +333,7 @@
 
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event {
 	if ([[(SpringBoard*)[UIApplication sharedApplication] pluginUserAgent] deviceIsPasscodeLocked]) return nil;
-	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation)) return nil;
+	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone && [UIWindow isLandscapeOrientation]) return nil;
 	
 	if (!CGRectContainsPoint(self.view.bounds, point)) return nil;
 	
