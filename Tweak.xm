@@ -33,12 +33,6 @@
 		
 		return;
 	}
-	
-	SBLockScreenManager* manager = [%c(SBLockScreenManager) sharedInstance];
-	CSCoverSheetViewController* coverSheetController = [manager coverSheetViewController];
-	CSMainPageContentViewController* mainPageController = [coverSheetController mainPageContentViewController];
-	
-	[mainPageController.view.subviews[0] addSubview:clockViewController.view];
 }
 %end	/// %hook SpringBoard
 
@@ -98,6 +92,17 @@
 	}];
 	
 	[clockViewController _updateMask];
+}
+%end	/// %hook CSCoverSheetViewController
+
+%hook CSMainPageContentViewController
+- (void)viewDidLayoutSubviews {
+	%orig;
+	
+	if (self.view.subviews.count && clockViewController.view.superview != self.view.subviews[0]) {
+		[clockViewController.view removeFromSuperview];
+		[self.view.subviews[0] addSubview:clockViewController.view];
+	}
 }
 %end	/// %hook CSMainPageContentViewController
 
