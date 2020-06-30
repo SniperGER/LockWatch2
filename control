@@ -1,6 +1,6 @@
 Package: ml.festival.lockwatch2
 Name: LockWatch 2 Beta (iOS 13)
-Depends: mobilesubstrate
+Depends: mobilesubstrate, preferenceloader
 Version: 0.0.1
 Architecture: iphoneos-arm
 Description: The idea of having an Apple Watch on your lock screen – continued
