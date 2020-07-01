@@ -7,6 +7,7 @@
 //
 
 #define CLAMP(value, min, max) (value - min) / (max - min)
+#define LERP(a, b, value) a + (b - a) * value
 
 #import "LWPageScrollView.h"
 #import "LWPageView.h"
@@ -14,6 +15,9 @@
 
 #import "Core/LWEmulatedCLKDevice.h"
 
+CGFloat SineEaseInOut(CGFloat p) {
+	return 0.5 * (1 - cos(p * M_PI));
+}
 @implementation LWSwitcherViewController
 
 - (instancetype)init {
@@ -36,8 +40,8 @@
 	
 	[self.scrollView enumeratePagesWithBlock:^(LWPageView* pageView, NSInteger index, BOOL* stop) {
 		if (index != self.scrollView.currentPageIndex) {
-			[pageView setContentAlpha:MIN(_zoomLevel, 0.35)];
-			[pageView setOutlineAlpha:MIN(_zoomLevel, 0.65)];
+			[pageView setContentAlpha:0.35 * MIN(CLAMP(_zoomLevel, 0.5, 1), 1)];
+			[pageView setOutlineAlpha:0.65 * MIN(CLAMP(_zoomLevel, 0.5, 1), 1)];
 		} else {
 			[pageView setContentAlpha:1.0];
 			[pageView setOutlineAlpha:_zoomLevel];
@@ -142,27 +146,32 @@
 }
 
 - (void)zoomInPageAtIndex:(NSInteger)index animated:(BOOL)animated withAnimations:(void (^_Nullable)())animations completion:(void (^_Nullable)(BOOL finished))block {
-	_zoomLevel = 0;
-	
-	[self.view setNeedsLayout];
-	
 	if (animated) {
 		[self _setAnimatingZoom:YES];
 	}
+	
+	CFTimeInterval startTime = CACurrentMediaTime();
+	_displayLink = [CADisplayLink displayLinkWithTarget:^() {
+		CGFloat progress = (CACurrentMediaTime() - startTime) / _zoomAnimationDuration;
+		[self setIncrementalZoomLevel:MIN(MAX(1 - SineEaseInOut(progress), 0), 1)];
 		
-	[UIView animateWithDuration:(animated ? _zoomAnimationDuration : 0) delay:0 options:0 animations:^{
-		[self _updateInterpageSpacing];
-		[self scrollToPageAtIndex:index animated:NO];
-		
-		[self.view layoutIfNeeded];
 		animations();
-	} completion:^(BOOL finished) {
-		if (animated) {
-			[self _setAnimatingZoom:NO];
-		}
 		
-		block(finished);
-	}];
+		if (progress >= 1) {
+			if (animated) {
+				[self _setAnimatingZoom:NO];
+			}
+			
+			block(YES);
+			
+			[_displayLink invalidate];
+			[_displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+			_displayLink = nil;
+			
+			return;
+		}
+	} selector:@selector(invoke)];
+	[_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 @end
