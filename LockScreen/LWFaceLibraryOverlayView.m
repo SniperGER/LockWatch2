@@ -80,10 +80,10 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 		CGRectGetMidY(_rightTitleLabel.bounds) + verticalOffset
 	}];
 	
-	[_editButton setBounds:(CGRect){ CGPointZero, { _editTitleLabelWidth + 24, CGRectGetHeight(_editButton.titleLabel.bounds) + 8 }}];
+	[_editButton setBounds:(CGRect){ CGPointZero, { [[CLKDevice currentDevice] isLuxo] ? _luxoButtonWidth : _editTitleLabelWidth + 24, CGRectGetHeight(_editButton.titleLabel.bounds) + 8 }}];
 	[_editButton setCenter:(CGPoint) { CGRectGetMidX(self.bounds), CGRectGetMaxY(self.bounds) - (CGRectGetHeight(_editButton.bounds) / 2) }];
 	
-	[_cancelButton setBounds:(CGRect){ CGPointZero, { _cancelTitleLabelWidth + 24, CGRectGetHeight(_cancelButton.titleLabel.bounds) + 8 }}];
+	[_cancelButton setBounds:(CGRect){ CGPointZero, { [[CLKDevice currentDevice] isLuxo] ? _luxoButtonWidth : _cancelTitleLabelWidth + 24, CGRectGetHeight(_cancelButton.titleLabel.bounds) + 8 }}];
 	[_cancelButton setCenter:(CGPoint) { CGRectGetMidX(self.bounds), CGRectGetMaxY(self.bounds) - (CGRectGetHeight(_cancelButton.bounds) / 2) }];
 }
 

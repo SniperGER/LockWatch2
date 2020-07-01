@@ -6,6 +6,8 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
+#import <ClockKit/CLKDevice.h>
+
 #import "LWFaceLibraryOverlayButton.h"
 
 @implementation LWFaceLibraryOverlayButton
@@ -16,7 +18,6 @@
 		[_visualEffectView setUserInteractionEnabled:NO];
 		[_visualEffectView setTranslatesAutoresizingMaskIntoConstraints:NO];
 		[_visualEffectView setClipsToBounds:YES];
-		[_visualEffectView.layer setCornerRadius:8];
 		
 #if __clang_major__ >= 9
 		if (@available(iOS 13, *)) {
@@ -35,6 +36,12 @@
 	}
 	
 	return self;
+}
+
+- (void)layoutSubviews {
+	[super layoutSubviews];
+	
+	[_visualEffectView.layer setCornerRadius:[[CLKDevice currentDevice] isLuxo] ? CGRectGetHeight(self.bounds) / 2 : 8];
 }
 
 - (void)setHighlighted:(BOOL)highlighted {

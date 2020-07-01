@@ -130,6 +130,7 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	[_switcherController didMoveToParentViewController:self];
 
 	_libraryOverlayView = [[LWFaceLibraryOverlayView alloc] initForDevice:_device];
+	[_libraryOverlayView setLuxoButtonWidth:(CGRectGetWidth(_device.actualScreenBounds) + 16) * _switcherController.pageScaleWhenZoomedOut];
 	[self.view addSubview:_libraryOverlayView];
 	
 	[_libraryOverlayView.editButton addTarget:self action:@selector(_startFaceEditing) forControlEvents:UIControlEventTouchUpInside];
