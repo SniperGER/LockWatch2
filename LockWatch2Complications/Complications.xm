@@ -35,7 +35,9 @@
 			dataSourceClass = %c(LWWellnessComplicationDataSource);
 			break;
 		case NTKComplicationTypeNextEvent: break; // TODO
-		case NTKComplicationTypeWeather: break; // TODO
+		case NTKComplicationTypeWeather: 
+			dataSourceClass = %c(LWWeatherDataSource);
+			break;
 		case NTKComplicationTypeMoonPhase: break; // TODO
 		case NTKComplicationTypeSunrise: break; // TODO
 		case NTKComplicationTypeBattery: 
@@ -49,7 +51,9 @@
 		case NTKComplicationTypeBreathing: break;
 		case NTKComplicationTypeReminder: break; // TODO
 		case NTKComplicationTypeMediaRemote: break;
-		case NTKComplicationTypeWeatherConditions: break; // TODO
+		case NTKComplicationTypeWeatherConditions:
+			dataSourceClass = %c(LWConditionsDataSource);
+			break;
 		case NTKComplicationTypeMessages: break;
 		case NTKComplicationTypePhone: break;
 		case NTKComplicationTypeMaps: break;
@@ -64,15 +68,21 @@
 			dataSourceClass = %c(LWNowPlayingComplicationDataSource);
 			break;
 		case NTKComplicationTypeRadio: break; // TODO
-		case NTKComplicationTypeWeatherAirQuality: break; // TODO
+		case NTKComplicationTypeWeatherAirQuality: 
+			dataSourceClass = %c(LWAirQualityDataSource);
+			break;
 		case NTKComplicationTypePeople: break;
 		case NTKComplicationTypeSolar: break; // TODO
 		case NTKComplicationTypeAstronomyEarth: break; // TODO
 		case NTKComplicationTypeAstronomyLuna: break; // TODO
 		case NTKComplicationTypeAstronomyOrrery: break; // TODO
 		case NTKComplicationTypePodcast: break;
-		case NTKComplicationTypeWeatherUVIndex: break; // TODO
-		case NTKComplicationTypeWeatherWind: break; // TODO
+		case NTKComplicationTypeWeatherUVIndex:
+			dataSourceClass = %c(LWUltravioletIndexDataSource);
+			break;
+		case NTKComplicationTypeWeatherWind:
+			dataSourceClass = %c(LWWindDataSource);
+			break;
 		case NTKComplicationTypeDigitalTime:
 			dataSourceClass = %c(LWDigitalTimeComplicationDataSource);
 			break;
@@ -184,7 +194,8 @@ static HDActivityCacheManager* activityCacheManager;
 			%init();
 			
 			if ([bundleIdentifier isEqualToString:@"com.apple.springboard"]) {
-				NSLog(@"Complications init");
+				dlopen("/System/Library/NanoTimeKit/ComplicationBundles/WeatherComplicationsCompanion.bundle/WeatherComplicationsCompanion", RTLD_NOW);
+				
 				%init(SpringBoard);
 			}
 			
