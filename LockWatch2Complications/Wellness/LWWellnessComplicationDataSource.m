@@ -58,13 +58,13 @@
 
 - (Class)richComplicationDisplayViewClassForDevice:(CLKDevice*)device {
 	switch (self.family) {
-		case NTKComplicationFamilySignatureCorner:
+		case NTKComplicationFamilyGraphicCorner:
 			return objc_getClass("NTKWellnessRichComplicationCornerView");
-		case NTKComplicationFamilySignatureBezel:
+		case NTKComplicationFamilyGraphicBezel:
 			return objc_getClass("NTKWellnessRichComplicationBezelCircularView");
-		case NTKComplicationFamilySignatureCircular:
+		case NTKComplicationFamilyGraphicCircular:
 			return objc_getClass("NTKWellnessRichComplicationCircularView");
-		case NTKComplicationFamilySignatureRectangular:
+		case NTKComplicationFamilyGraphicRectangular:
 			return objc_getClass("NTKWellnessRichComplicationRectangularView");
 		default: break;
 	}

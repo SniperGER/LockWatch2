@@ -105,9 +105,9 @@
 
 - (Class)richComplicationDisplayViewClassForDevice:(CLKDevice*)device {
 	switch (self.family) {
-		case NTKComplicationFamilySignatureBezel:
+		case NTKComplicationFamilyGraphicBezel:
 			return objc_getClass("NTKWorldClockRichComplicationBezelCircularView");
-		case NTKComplicationFamilySignatureCircular:
+		case NTKComplicationFamilyGraphicCircular:
 			return objc_getClass("NTKWorldClockRichComplicationCircularView");
 		default: break;
 	}

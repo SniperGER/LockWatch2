@@ -19,6 +19,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NTKComplicationDataSource ()
++ (BOOL)acceptsComplicationFamily:(long long)family forDevice:(CLKDevice*)device;
+- (CLKComplicationTemplate*)currentSwitcherTemplate;
 - (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler;
 - (void)getSupportedTimeTravelDirectionsWithHandler:(void (^)(long long family))handler;
 - (void)getTimelineEndDateWithHandler:(void (^)(NSDate* date))handler;
