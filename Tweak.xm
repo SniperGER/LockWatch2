@@ -137,6 +137,8 @@
 
 %hook CSCoverSheetViewController
 - (void)finishUIUnlockFromSource:(int)arg1 {
+	%orig;
+	
 	[clockViewController dismissCustomizationViewControllers:YES];
 }
 
