@@ -385,6 +385,13 @@ static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* obs
 		
 		CLKDevice* device = [[LWEmulatedCLKDevice alloc] initWithJSONObjectRepresentation:watchData[@"device"] forNRDevice:nrDevice];
 		[CLKDevice setCurrentDevice:device];
+	} else if ([CLKDevice currentDevice]) {
+		NSDictionary* watchData = [[CLKDevice currentDevice] JSONObjectRepresentation];
+		
+		NRDevice* nrDevice = [[CLKDevice currentDevice] nrDevice];
+		
+		CLKDevice* device = [[LWEmulatedCLKDevice alloc] initWithJSONObjectRepresentation:watchData forNRDevice:nrDevice];
+		[CLKDevice setCurrentDevice:device];
 	}
 	
 	if (clockViewController) {

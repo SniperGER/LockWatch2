@@ -83,6 +83,21 @@
 	
 	return (((screenSize.width / screenScale) * (screenSize.height / screenScale)) / (CGRectGetWidth(screenBounds) * CGRectGetHeight(screenBounds))) * self.screenCornerRadius;
 }
+
+%new
+- (NSDictionary*)JSONObjectRepresentation {
+	return @{
+		@"_isExplorer": @(self.isExplorer),
+		@"_isLuxo": @(self.isLuxo),
+		@"_isZeusBlack": @(self.isZeusBlack),
+		@"_screenBounds": NSStringFromCGRect(self.screenBounds),
+		@"_screenCornerRadius": @(self.screenCornerRadius),
+		@"_screenScale": @(self.screenScale),
+		@"_sizeClass": @(self.sizeClass),
+		@"_supportsTritium": @(self.supportsTritium),
+		@"_supportsUrsa": @(self.supportsUrsa),
+	};
+}
 %end	/// %hook CLKDevice
 
 %hook CLKVideoPlayerView

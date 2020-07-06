@@ -22,6 +22,11 @@
  - (BOOL)hasSuperviewOfClass:(Class)_class;
 @end
 
+@interface CLKDevice (JSON)
+// %new
+- (NSDictionary*)JSONObjectRepresentation;
+@end
+
 @interface CLKVideoPlayerView : UIView
 @end
 
