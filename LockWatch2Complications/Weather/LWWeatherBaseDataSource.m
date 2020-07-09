@@ -61,7 +61,7 @@
 - (City*)_activeCity {
 	WeatherPreferences* weatherPreferences = [WeatherPreferences sharedPreferences];
 	
-	if ([weatherPreferences isLocalWeatherEnabled] && [weatherPreferences loadActiveCity] == 0) {
+	if ([weatherPreferences isLocalWeatherEnabled] && [weatherPreferences loadActiveCity] == 0 && [weatherPreferences localWeatherCity]) {
 		return [weatherPreferences localWeatherCity];
 	}
 	
@@ -102,6 +102,7 @@
 }
 
 - (void)_updateIfNeeded {
+	if (!_city || !_city.wfLocation || _isUpdating) return;
 	if (time(NULL) - _updateTimestamp >= [LWWeatherBaseDataSource updateInterval]) {
 		NSLog(@"updating");
 		_isUpdating = YES;
