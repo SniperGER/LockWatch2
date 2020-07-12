@@ -6,12 +6,7 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#import <WeatherFoundation/WFAirQualityRequest.h>
-#import <WeatherFoundation/WFForecastRequest.h>
-#import <WeatherFoundation/WFDailyForecastRequest.h>
-#import <WeatherFoundation/WFHourlyForecastRequest.h>
-#import <WeatherFoundation/WFServiceConnection.h>
-#import <WeatherFoundation/WFWeatherConditions.h>
+#import <WeatherFoundation/WeatherFoundation.h>
 
 #import "LWWeatherBaseDataSource.h"
 

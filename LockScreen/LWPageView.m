@@ -9,8 +9,7 @@
 #define CLAMP(value, min, max) (value - min) / (max - min)
 
 #import <ClockKit/CLKDevice.h>
-#import <NanoTimeKitCompanion/NTKFace.h>
-#import <NanoTimeKitCompanion/NTKFaceViewController.h>
+#import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 
 #import "LWPageView.h"
 

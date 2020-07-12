@@ -10,13 +10,8 @@
 #define LERP(a, b, value) a + (b - a) * value
 
 #import <objc/runtime.h>
-#import <Foundation/Foundation.h>
 #import <ClockKit/CLKDevice.h>
-#import <NanoTimeKitCompanion/NTKCFaceDetailViewController.h>
-#import <NanoTimeKitCompanion/NTKFaceCollection.h>
-#import <NanoTimeKitCompanion/NTKFace.h>
-#import <NanoTimeKitCompanion/NTKFaceView.h>
-#import <NanoTimeKitCompanion/NTKFaceViewController.h>
+#import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 
 #import "LWAddPageViewController.h"
 #import "LWDeleteConfirmationButton.h"

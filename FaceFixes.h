@@ -9,9 +9,7 @@
 #import <ClockKit/CLKDevice.h>
 #import <MaterialKit/MTMaterialView.h>
 #import <NanoRegistry/NRDevice.h>
-#import <NanoTimeKitCompanion/NTKFace.h>
-#import <NanoTimeKitCompanion/NTKFaceView.h>
-#import <NanoTimeKitCompanion/NTKFaceViewController.h>
+#import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 
 #import "Core/LWPreferences.h"
 
@@ -30,10 +28,6 @@
 @interface CLKVideoPlayerView : UIView
 @end
 
-@interface NTKAnalogFaceView : UIView
-@property (nonatomic, retain) UIView *contentView;
-@end
-
 @interface NTKFaceViewController (UIEffectView)
 // %property
 @property (nonatomic, strong) UIView* backgroundView;
@@ -41,16 +35,7 @@
 - (void)setBackgroundViewAlpha:(CGFloat)alpha animated:(BOOL)animated;
 @end
 
-@interface NTKExplorerDialView : UIView
-@end
-
 @interface NTKPrideDigitalFaceView : UIView {
 	UIView* _bandsView;
 }
-@end
-
-@interface NTKRoundedCornerOverlayView : UIView
-@end
-
-@interface NTKSiderealDialBackgroundView : UIView
 @end

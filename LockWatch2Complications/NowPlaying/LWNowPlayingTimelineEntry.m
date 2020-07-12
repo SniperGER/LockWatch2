@@ -6,15 +6,7 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#import <ClockKit/CLKComplicationTemplate.h>
-#import <ClockKit/CLKComplicationTemplateGraphicRectangularStandardBody.h>
-#import <ClockKit/CLKComplicationTemplateModularLargeStandardBody.h>
-#import <ClockKit/CLKComplicationTemplateUtilitarianLargeFlat.h>
-#import <ClockKit/CLKFont.h>
-#import <ClockKit/CLKFullColorImageProvider.h>
-#import <ClockKit/CLKImageProvider.h>
-#import <ClockKit/CLKSimpleTextProvider.h>
-#import <ClockKit/CLKTextProviderStyle.h>
+#import <ClockKit/ClockKit.h>
 #import <NanoTimeKitCompanion/NTKOverrideTextProvider.h>
 
 #import "LWNowPlayingTimelineEntry.h"

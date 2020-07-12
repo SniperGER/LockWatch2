@@ -8,8 +8,7 @@
 
 #import <objc/runtime.h>
 #import <HealthKit/HealthKit.h>
-#import <NanoTimeKitCompanion/NTKWellnessEntryModel.h>
-#import <NanoTimeKitCompanion/NTKWellnessTimelineModel.h>
+#import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 
 #import "LWWellnessComplicationDataSource.h"
 

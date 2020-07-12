@@ -6,14 +6,9 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#import <ClockKit/CLKComplicationTemplateGraphicRectangularLargeImage.h>
-#import <ClockKit/CLKComplicationTemplateModularLargeStandardBody.h>
-#import <ClockKit/CLKComplicationTemplateUtilitarianLargeFlat.h>
-#import <ClockKit/CLKSimpleTextProvider.h>
-#import <NanoWeatherComplicationsCompanion/NWCColor.h>
-#import <NanoWeatherComplicationsCompanion/NWCSevenDayForecastView.h>
-#import <WeatherFoundation/WFLocation.h>
-#import <WeatherFoundation/WFWeatherConditions.h>
+#import <ClockKit/ClockKit.h>
+#import <NanoWeatherComplicationsCompanion/NanoWeatherComplicationsCompanion.h>
+#import <WeatherFoundation/WeatherFoundation.h>
 
 #import "NWCUltravioletIndexTemplateFormatter+LWAdditions.h"
 

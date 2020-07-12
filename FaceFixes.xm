@@ -66,7 +66,7 @@
 %hook CLKDevice
 %new
 - (CGRect)actualScreenBounds {
-	CGFloat screenScale = [[self.nrDevice valueForProperty:@"screenScale"] floatValue];
+	CGFloat screenScale = [(NSNumber*)[self.nrDevice valueForProperty:@"screenScale"] floatValue];
 	CGSize screenSize = [[self.nrDevice valueForProperty:@"screenSize"] CGSizeValue];
 	
 	return (CGRect){
@@ -77,7 +77,7 @@
 
 %new
 - (CGFloat)actualScreenCornerRadius {
-	CGFloat screenScale = [[self.nrDevice valueForProperty:@"screenScale"] floatValue];
+	CGFloat screenScale = [(NSNumber*)[self.nrDevice valueForProperty:@"screenScale"] floatValue];
 	CGSize screenSize = [[self.nrDevice valueForProperty:@"screenSize"] CGSizeValue];
 	CGRect screenBounds = self.screenBounds;
 	

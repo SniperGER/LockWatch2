@@ -6,12 +6,8 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#import <ClockKit/CLKDate.h>
-#import <ClockKit/CLKComplicationTemplate.h>
-#import <ClockKit/CLKComplicationTimelineEntry.h>
-#import <NanoTimeKitCompanion/NTKComplication.h>
-#import <NanoTimeKitCompanion/CLKCComplicationDataSourceDelegate-Protocol.h>
-#import <NanoTimeKitCompanion/NTKComplicationDataSource.h>
+#import <ClockKit/ClockKit.h>
+#import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 
 #import "NTKComplicationFamily.h"
 #import "NTKComplicationType.h"

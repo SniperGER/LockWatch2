@@ -8,8 +8,7 @@
 
 #import <objc/runtime.h>
 #import <MobileTimer/WorldClockCity.h>
-#import <NanoTimeKitCompanion/NTKWorldClockComplication.h>
-#import <NanoTimeKitCompanion/NTKWorldClockTimelineEntryModel.h>
+#import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 
 #import "LWWorldClockComplicationDataSource.h"
 

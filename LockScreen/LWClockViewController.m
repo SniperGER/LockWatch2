@@ -11,9 +11,7 @@
 
 #import <AudioToolbox/AudioServices.h>
 #import <ClockKit/CLKDevice.h>
-#import <NanoTimeKitCompanion/NTKCompanionFaceViewController.h>
-#import <NanoTimeKitCompanion/NTKFace.h>
-#import <NanoTimeKitCompanion/NTKFaceViewController.h>
+#import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 
 #import "LWAddPageViewController.h"
 #import "LWClockView.h"

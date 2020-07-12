@@ -7,8 +7,7 @@
 //
 
 #import <HealthKit/HealthKit.h>
-#import <NanoTimeKitCompanion/NTKTimelineDataOperation.h>
-#import <NanoTimeKitCompanion/NTKWellnessTimelineModel.h>
+#import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 
 #import "LWComplicationDataSourceBase.h"
 #import "NTKComplicationFamily.h"

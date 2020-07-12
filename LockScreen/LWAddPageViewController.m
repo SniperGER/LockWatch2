@@ -8,11 +8,7 @@
 
 #import <objc/runtime.h>
 #import <ClockKit/CLKDevice.h>
-#import <NanoTimeKitCompanion/NTKCompanionFaceViewController.h>
-#import <NanoTimeKitCompanion/NTKFace.h>
-#import <NanoTimeKitCompanion/NTKFaceCollection.h>
-#import <NanoTimeKitCompanion/NTKFaceView.h>
-#import <NanoTimeKitCompanion/NTKPersistentFaceCollection.h>
+#import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 #import <NTKCustomization/NTKCCLibraryListViewController.h>
 #import <NTKCustomization/NTKCCLibraryListCell.h>
 

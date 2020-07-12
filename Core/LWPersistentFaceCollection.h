@@ -7,10 +7,7 @@
 //
 
 #import <ClockKit/CLKDevice.h>
-#import <NanoTimeKitCompanion/NTKFace.h>
-#import <NanoTimeKitCompanion/NTKFaceCollection.h>
-#import <NanoTimeKitCompanion/NTKFaceCollectionObserver-Protocol.h>
-#import <NanoTimeKitCompanion/NTKPersistentFaceCollection.h>
+#import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 
 #import "NTKFaceStyle.h"
 

@@ -16,9 +16,7 @@
 
 #include <substrate.h>
 #import <ClockKit/CLKDevice.h>
-#import <NanoTimeKitCompanion/NTKCFaceDetailViewController.h>
-#import <NanoTimeKitCompanion/NTKFace.h>
-#import <NanoTimeKitCompanion/NTKFaceCollection.h>
+#import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 #import <NTKCustomization/NTKCCLibraryListViewController.h>
 #import <Preferences/PSListController.h>
 #import <Preferences/PSSpecifier.h>
