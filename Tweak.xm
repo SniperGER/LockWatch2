@@ -108,7 +108,7 @@
 
 %hook SBBacklightController
 - (void)_startFadeOutAnimationFromLockSource:(int)arg1 {
-	if (clockViewController.faceLibraryIsPresented) {
+	if (clockViewController.isIncrementallyZooming || clockViewController.faceLibraryIsPresented) {
 		return;
 	}
 	

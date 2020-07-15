@@ -99,6 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)commitToLibraryPresentation;
 - (void)endInteractiveLibraryPresentation;
 - (void)hideAddPageIfAvailable;
+- (BOOL)isIncrementallyZooming;
 - (void)setInteractiveProgress:(CGFloat)progress;
 - (void)showAddPageIfAvailable;
 

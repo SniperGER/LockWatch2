@@ -652,6 +652,10 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	// }
 }
 
+- (BOOL)isIncrementallyZooming {
+	return _isIncrementallyZooming;
+}
+
 - (void)setInteractiveProgress:(CGFloat)progress {
 	[_switcherController setIncrementalZoomLevel:progress];
 	[self _adjustLibraryOverlayTransform];

@@ -301,6 +301,10 @@
 	[_libraryViewController.selectedFaceViewController freeze];
 }
 
+- (BOOL)isIncrementallyZooming {
+	return [_libraryViewController isIncrementallyZooming];
+}
+
 - (void)loadAddableFaceCollection {
 	_addableFaceCollection = [LWPersistentFaceCollection defaultAddableFaceCollectionForDevice:_device];
 }

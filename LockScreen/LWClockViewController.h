@@ -60,6 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)dismissFaceLibraryAnimated:(BOOL)animated;
 - (BOOL)faceLibraryIsPresented;
 - (void)freezeCurrentFace;
+- (BOOL)isIncrementallyZooming;
 - (void)loadAddableFaceCollection;
 - (void)loadLibraryFaceCollection;
 - (void)setAlignmentPercent:(CGFloat)alignmentPercent;
