@@ -18,6 +18,7 @@
 CGFloat SineEaseInOut(CGFloat p) {
 	return 0.5 * (1 - cos(p * M_PI));
 }
+
 @implementation LWSwitcherViewController
 
 - (instancetype)init {
@@ -157,7 +158,8 @@ CGFloat SineEaseInOut(CGFloat p) {
 	}
 	
 	CFTimeInterval startTime = CACurrentMediaTime();
-	_displayLink = [CADisplayLink displayLinkWithTarget:^() {
+	
+	_zoomAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:60 / 1000 repeats:YES block:^(NSTimer* timer) {
 		CGFloat progress = (CACurrentMediaTime() - startTime) / _zoomAnimationDuration;
 		[self setIncrementalZoomLevel:MIN(MAX(1 - SineEaseInOut(progress), 0), 1)];
 		
@@ -170,14 +172,12 @@ CGFloat SineEaseInOut(CGFloat p) {
 			
 			block(YES);
 			
-			[_displayLink invalidate];
-			[_displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-			_displayLink = nil;
+			[timer invalidate];
+			_zoomAnimationTimer = nil;
 			
 			return;
 		}
-	} selector:@selector(invoke)];
-	[_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+	}];
 }
 
 @end

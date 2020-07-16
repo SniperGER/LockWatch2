@@ -12,7 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LWSwitcherViewController : LWPageScrollViewController {
-	CADisplayLink* _displayLink;
+	NSTimer* _zoomAnimationTimer;
 }
 
 @property (nonatomic, readonly) BOOL animatingZoom;
