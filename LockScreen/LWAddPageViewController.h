@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class CLKDevice, LWAddPageActivationButton, NTKCCLibraryListViewController, NTKCompanionFaceViewController, NTKFaceCollection;
 
 @interface LWAddPageViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
+	UISegmentedControl* segmentedControl;
 	CLKDevice* _device;
 	NTKFaceCollection* _libraryFaceCollection;
 	NTKFaceCollection* _addableFaceCollection;

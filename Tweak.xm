@@ -108,9 +108,13 @@
 
 %hook SBBacklightController
 - (void)_startFadeOutAnimationFromLockSource:(int)arg1 {
+#ifdef DEMO_MODE
+	return;
+#else
 	if (clockViewController.isIncrementallyZooming || clockViewController.faceLibraryIsPresented) {
 		return;
 	}
+#endif
 	
 	%orig;
 }
@@ -269,6 +273,50 @@ static BOOL scrollEnabled = YES;
 	%orig;
 }
 %end	// %hook CSCoverSheetViewController
+
+%hook BSUICAPackageView
+- (id)initWithPackageName:(id)arg1 inBundle:(id)arg2 {
+#ifdef DEMO_MODE
+	return %orig(nil, nil);
+#else
+	return %orig;
+#endif	
+}
+%end	/// %hook BSUICAPackageView
+
+%hook CSTeachableMomentsContainerViewController
+- (void)_addHomeAffordanceAnimation {
+#ifdef DEMO_MODE
+	return;
+#else
+	%orig;
+#endif
+}
+
+- (void)_addHomeAffordanceResetAnimation {
+#ifdef DEMO_MODE
+	return;
+#else
+	%orig;
+#endif
+}
+
+- (void)_addTextAnimation {
+#ifdef DEMO_MODE
+	return;
+#else
+	%orig;
+#endif
+}
+
+- (void)_addTextResetAnimation {
+#ifdef DEMO_MODE
+	return;
+#else
+	%orig;
+#endif
+}
+%end
 %end	// %group SpringBoard
 
 

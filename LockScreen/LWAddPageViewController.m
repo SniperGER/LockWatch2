@@ -80,7 +80,7 @@
 	UIBarButtonItem* rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismiss)];
 	[containerViewController.navigationItem setRightBarButtonItem:rightButton];
 	
-	UISegmentedControl* segmentedControl = [[UISegmentedControl alloc] initWithItems:@[
+	segmentedControl = [[UISegmentedControl alloc] initWithItems:@[
 		[_localizableBundle localizedStringForKey:@"LIBRARY_WATCH_FACES" value:nil table:nil],
 		[_localizableBundle localizedStringForKey:@"LIBRARY_MY_WATCH" value:nil table:nil]
 	]];
@@ -150,8 +150,8 @@
 	}];
 }
 
-- (void)segmentControlDidChange:(UISegmentedControl*)segmentedControl {
-	switch (segmentedControl.selectedSegmentIndex) {
+- (void)segmentControlDidChange:(UISegmentedControl*)_segmentedControl {
+	switch (_segmentedControl.selectedSegmentIndex) {
 		case 0:
 			[_addableFacesViewController.view setHidden:NO];
 			[_libraryFacesViewController.view setHidden:YES];

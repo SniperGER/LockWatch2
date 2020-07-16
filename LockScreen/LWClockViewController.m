@@ -334,7 +334,9 @@
 #pragma mark - LWClockViewDelegate
 
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event {
+#ifndef DEMO_MODE
 	if ([[(SpringBoard*)[UIApplication sharedApplication] pluginUserAgent] deviceIsPasscodeLocked]) return nil;
+#endif
 	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone && [UIWindow isLandscapeOrientation]) return nil;
 	
 	if (!CGRectContainsPoint(self.view.bounds, point)) return nil;
