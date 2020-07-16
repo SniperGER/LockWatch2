@@ -7,6 +7,7 @@
 //
 
 #import <objc/runtime.h>
+#import <ClockKit/CLKDate.h>
 #import <NanoTimeKitCompanion/NTKDateTimelineEntryModel.h>
 
 #import "LWDateComplicationDataSource.h"
@@ -33,7 +34,7 @@
 
 - (CLKComplicationTimelineEntry*)_currentTimelineEntry {
 	NTKDateTimelineEntryModel* entryModel = [NTKDateTimelineEntryModel new];
-	[entryModel setEntryDate:[NSCalendar.currentCalendar startOfDayForDate:NSDate.date]];
+	[entryModel setEntryDate:[NSCalendar.currentCalendar startOfDayForDate:CLKDate.date]];
 	
 	NTKComplication* complication = (NTKComplication*)self.complication;
 	if (complication.complicationType == NTKComplicationTypeLunarDate) {
