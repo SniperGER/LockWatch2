@@ -24,6 +24,7 @@
 	"RESTART_SPRINGBOARD_TITLE" = "SpringBoard neu starten";
 	"RESTART_SPRINGBOARD_PROMPT" = "Hiermit werden alle Änderungen gespeichert und das SpringBoard neu gestartet.";
 	"RESTART_SPRINGBOARD_CONFIRM" = "SpringBoard neu starten";
+	"RESTART_SPRINGBOARD_CANCEL" = "Abbrechen";
 	
 	"BUTTON_WHATS_NEW" = "Neuigkeiten";
 	"BUTTON_REPORT_ISSUE" = "Problem melden";

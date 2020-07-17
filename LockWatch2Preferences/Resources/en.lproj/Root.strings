@@ -24,6 +24,7 @@
 	"RESTART_SPRINGBOARD_TITLE" = "Restart SpringBoard";
 	"RESTART_SPRINGBOARD_PROMPT" = "Restarting SpringBoard will apply all changed settings.";
 	"RESTART_SPRINGBOARD_CONFIRM" = "Restart SpringBoard";
+	"RESTART_SPRINGBOARD_CANCEL" = "Cancel";
 
 	"BUTTON_WHATS_NEW" = "What's New";
 	"BUTTON_REPORT_ISSUE" = "Report Issue";
