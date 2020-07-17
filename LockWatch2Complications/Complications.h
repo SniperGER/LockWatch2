@@ -8,6 +8,9 @@
 
 #import <HealthKit/HealthKit.h>
 #import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
+#import <NanoWeatherComplicationsCompanion/NWCColor.h>
+#import <NanoWeatherComplicationsCompanion/WFWeatherConditions-NWMLocalizedWind.h>
+#import <WeatherFoundation/WeatherFoundation.h>
 
 #import "LWComplicationDataSourceBase.h"
 #import "NTKComplicationFamily.h"

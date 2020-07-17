@@ -1,6 +1,6 @@
 //
 // NWCConditionsTemplateFormatter+LWAdditions.m
-// LockWatch [SSH: janiks-mac-mini.local]
+// LockWatch
 //
 // Created by janikschmidt on 7/2/2020
 // Copyright © 2020 Team FESTIVAL. All rights reserved

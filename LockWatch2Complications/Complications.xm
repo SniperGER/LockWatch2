@@ -156,6 +156,30 @@
 	[MSHookIvar<HKHealthStore*>(self, "_healthStore") executeQuery:cacheQuery];
 }
 %end	/// %hook NTKWellnessTimelineModel
+
+%hook WFWeatherConditions
+- (BOOL)isNightForecast {
+	BOOL r = %orig;
+	
+	if (!r && [self valueForComponent:@"WFWeatherSunriseTimeComponent"] && [self valueForComponent:@"WFWeatherSunsetTimeComponent"]) {
+		NSDate* currentDate = [NSDate date];
+		NSDate* sunriseTime = [[NSCalendar currentCalendar] dateFromComponents:(NSDateComponents*)[self valueForComponent:@"WFWeatherSunriseTimeComponent"]];
+		NSDate* sunsetTime = [[NSCalendar currentCalendar] dateFromComponents:(NSDateComponents*)[self valueForComponent:@"WFWeatherSunsetTimeComponent"]];
+		
+		return [currentDate compare:sunriseTime] == NSOrderedAscending || [currentDate compare:sunsetTime] == NSOrderedDescending;
+	}
+	
+	return r;
+}
+
+- (id)nwc_conditionImageForComplicationFamily:(NSInteger)arg1 {
+	if (!self.isNightForecast) {
+		return [self nwc_daytimeConditionImageForComplicationFamily:arg1];
+	} else {
+		return [self nwc_nighttimeConditionImageForComplicationFamily:arg1];
+	}
+}
+%end	/// %hook WFWeatherConditions
 %end	// %group SpringBoard
 
 
