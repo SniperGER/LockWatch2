@@ -426,19 +426,31 @@ BOOL _NTKShowHardwareSpecificFaces() {
 static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* observer, CFStringRef name, const void* object, CFDictionaryRef userInfo) {
 	[preferences reloadPreferences];
 	
+	CLKDevice* currentDevice = [CLKDevice currentDevice];
+	
 	if (preferences.isEmulatingDevice) {
 		NSDictionary* watchData = [[NSDictionary alloc] initWithContentsOfFile:WATCH_DATA_PATH][preferences.emulatedDeviceType];
 
 		LWEmulatedNRDevice* nrDevice = [[LWEmulatedNRDevice alloc] initWithJSONObjectRepresentation:watchData[@"registry"] pairingID:[NSUUID new]];
 		
-		CLKDevice* device = [[LWEmulatedCLKDevice alloc] initWithJSONObjectRepresentation:watchData[@"device"] forNRDevice:nrDevice];
+		LWEmulatedCLKDevice* device = [[LWEmulatedCLKDevice alloc] initWithJSONObjectRepresentation:watchData[@"device"] forNRDevice:nrDevice];
+		
+		if (currentDevice.nrDevice) {
+		[device setPhysicalDevice:currentDevice];
+		}
+		
 		[CLKDevice setCurrentDevice:device];
-	} else if ([CLKDevice currentDevice]) {
+	} else if (currentDevice) {
 		NSDictionary* watchData = [[CLKDevice currentDevice] JSONObjectRepresentation];
 		
-		NRDevice* nrDevice = [[CLKDevice currentDevice] nrDevice];
+		NRDevice* nrDevice = [currentDevice nrDevice];
 		
-		CLKDevice* device = [[LWEmulatedCLKDevice alloc] initWithJSONObjectRepresentation:watchData forNRDevice:nrDevice];
+		LWEmulatedCLKDevice* device = [[LWEmulatedCLKDevice alloc] initWithJSONObjectRepresentation:watchData forNRDevice:nrDevice];
+		
+		if (currentDevice.nrDevice) {
+		[device setPhysicalDevice:currentDevice];
+		}
+		
 		[CLKDevice setCurrentDevice:device];
 	}
 	

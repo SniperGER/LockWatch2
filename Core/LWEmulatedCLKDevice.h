@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LWEmulatedCLKDevice : CLKDevice
 
+@property (nonatomic) CLKDevice* physicalDevice;
+
 + (instancetype)deviceWithJSONObjectRepresentation:(NSDictionary*)jsonObjectRepresentation forNRDevice:(NRDevice*)nrDevice;
 - (instancetype)initWithJSONObjectRepresentation:(NSDictionary*)jsonObjectRepresentation forNRDevice:(NRDevice*)nrDevice;
 
