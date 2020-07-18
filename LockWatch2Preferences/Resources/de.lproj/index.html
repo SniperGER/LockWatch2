@@ -29,6 +29,45 @@
 	
 	<body>
 		<article class="markdown-body">
+			<h2>Version 2.0b3-u1</h2>
+			<p><small>Juli 2020</small></p>
+			
+			<p>Nachdem ihr (eigentlich viel zu) lange darauf warten musstet, ist hier das erste Update für LockWatch 2 Beta 3. Neben einigen allgemeinen Verbesserungen (mehr dazu später) bringt dieses Update endlich neue Komplikationen mit sich. Mit diesem Update erhält LockWatch 2 endlich die „großen 5“ Wetter-Komplikationen. Hier eine vollständige Liste der hinzugefügten Komplikationen:</p>
+			
+			<ul>
+				<li>Wetter / Lufttemperatur</li>
+				<li>Wetterbedingungen</li>
+				<li>Wind</li>
+				<li>Luftqualitätsindex (LQI)</li>
+				<li>UV-Index</li>
+			</ul>
+			
+			<p>Außerdem enthält diese Version die folgenden Verbesserungen und Fehlerbehebungen:</p>
+			<ul>
+				<li>Fügt Onboarding & Post-Update-Benachrichtigungen hinzu. Onboarding führt neue und bestehende Nutzer in die Funktionen von LockWatch 2 ein, während Post-Update-Benachrichtigungen die Änderungen eines Updates beschreiben.</li>
+				<li>Fügt Layout-Kompatibilität für <a href="cydia://package/com.cemck.photon">Photon</a> hinzu.</li>
+				<li>Für Zifferblätter kann nun zwischen „Aus“, „Durchsichtig“ oder „Schwarz“ als Hintergrund gewählt werden.</li>
+				<li>Behebt einen Absturz, der beim Ändern der Systemsprache oder der Einstellung „Fetter Text“ auftrat.</li>
+				<li>Behebt Layout-Probleme auf iPhones im Querformat (Landscape).</li>
+				<li>Behebt einen Fehler, dass einige Apple Watch-Modelle vereinzelte Komplikationen nicht anzeigen.</li>
+				<li>Verbessert das Pausieren der Zifferblätter, wenn das Display ausgeschaltet wird.</li>
+				<li>Verbessert das Aussehen des Zifferblatts „Nike Analog“ in iOS 13.5.</li>
+				<li>Verbessert das Aussehen der „Anpassen“/„Abbrechen“-Buttons für Apple Watch Series 4/5.</li>
+				<li>Fügt „preferenceloader“ als Abhängigkeit hinzu. Dass ich das aber auch <em>immer wieder</em> vergesse.</li>
+				<li>Verbesserung der Zoom-Animation beim Auswählen eines Zifferblatts.</li>
+				<li>Lokalisierungs-Anpassungen.</li>
+				<li><strong>Für Entwickler</strong>: Kompiliert für arm64 & arm64e mit iOS 11.2/13.3 Hybrid-SDK auf High Sierra (siehe <a href="https://github.com/SniperGER/iOS13-Private-SDK">https://github.com/SniperGER/iOS13-Private-SDK</a> für mehr Details)</li>
+			</ul>
+			
+			<p><strong>Derzeit bekannte Fehler:</strong></p>
+			<ul>
+				<li>Die Wetter-Komplikationen werden aufgrund fehlender Frameworks dezeit nicht auf iPad unterstützt.</li>
+				<li>Die Komplikation „UV-Index“ kann zu Layout-Fehlern führen, wenn sie mit dem Zifferblatt „Infograph Modular“ verwendet wird. Dies passiert übrigens auch ohne LockWatch als Datenquelle. thx apple.</li>
+				<li>Wetter-Komplikationen werden nach einem Neustart möglicherweise nicht automatisch aktualisiert.<br><strong>Workaround</strong>: Wetterdaten über das Widget „Wetter“ laden und LockWatch erneut anzeigen.</li>
+			</ul>
+		</article>
+		
+		<article class="markdown-body">
 			<h2>Version 2.0b3</h2>
 			<p><small>19. April 2020</small></p>
 			

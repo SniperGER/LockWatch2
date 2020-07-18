@@ -29,6 +29,44 @@
 	
 	<body>
 		<article class="markdown-body">
+			<h2>Version 2.0b3-u1</h2>
+			<p><small>July 2020</small></p>
+			
+			<p>After you had to wait for it (way too long), the first update for LockWatch 2 Beta 3 is here. Including general improvements (more on that later), this update includes the "big 5" Weather complications. Here's a list of every complication added in this update:</p>
+			
+			<ul>
+				<li>Weather / Weather Temp</li>
+				<li>Weather Conditions</li>
+				<li>Wind</li>
+				<li>Air Quality Index (AQI)</li>
+				<li>UV Index</li>
+			</ul>
+			
+			<p>Additionally, this update contains the following bug fixes and improvements:</p>
+			<ul>
+				<li>Adds onboarding and post-update notifications. Onboarding introduces new and existing users to the capabilities of LockWatch 2, while post-update notifications tell you what changed in an update.</li>
+				<li>Adds layout compatibility for <a href="cydia://package/com.cemck/photon">Photon</a>.</li>
+				<li>You can now select between "Off", "Translucent" or "Solid Black" as the watch face background.</li>
+				<li>Fixes a crash that occured when selecting a system language or changing "Bold Fonts".</li>
+				<li>Fixes layout issues on iPhone in landscape mode.</li>
+				<li>Fixes an issue that was causing some Apple Watch models to not show various complications.</li>
+				<li>Improves suspending watch faces when the display is turned off.</li>
+				<li>Improves the appearance of the "Nike Analog" watch face on iOS 13.5.</li>
+				<li>Improves the appearance of the "Customize"/"Cancel" buttons for Apple Watch Series 4/5.</li>
+				<li>Adds "preferenceloader" as a dependency. I guess it's common law to always forget that.</li>
+				<li>Improvements to the zoom animation when selecting a watch face.</li>
+				<li>Improvements to localization.</li>
+				<li><strong>For developers</strong>: Compiled for arm64 and arm64e with an iOS 11.2/13.3 hybrid SDK on High Sierra (see <a href="https://github.com/SniperGER/iOS13-Private-SDK">https://github.com/SniperGER/iOS13-Private-SDK</a> for more details)</li>
+			</ul>
+			
+			<p><strong>Currently known issues:</strong></p>
+			<ul>
+				<li>Weather complications are currently not compatible with iPad due to missing frameworks.</li>
+				<li>The "UV Index" complication may cause layout issues when used with the "Infograph Modular" face. This does, in fact, also happen without LockWatch as a data source. thx apple.</li>
+				<li>Weather complications may not be updated automatically after restarting.<br><strong>Workaround</strong>: Load weather data using the stock "Weather" widget and display LockWatch again.</li>
+				<li>Some weather conditions may be displayed with incorrect colors. This issue is caused by Apple, and fixing it requires a lot of work.</li>
+		</article>
+		<article class="markdown-body">
 			<h2>Version 2.0b3</h2>
 			<p><small>April 19, 2020</small></p>
 			
