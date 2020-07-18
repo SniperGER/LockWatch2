@@ -70,8 +70,38 @@
 	_complicationContent = [[_defaults objectForKey:@"complicationContent"] integerValue];
 }
 
+- (void)setEnabled:(BOOL)enabled {
+	_enabled = enabled;
+	[_defaults setObject:@(enabled) forKey:@"enabled"];
+}
+
+- (void)setIsEmulatingDevice:(BOOL)isEmulatingDevice {
+	_isEmulatingDevice = isEmulatingDevice;
+	[_defaults setObject:@(isEmulatingDevice) forKey:@"isEmulatingDevice"];
+}
+
+- (void)setEmulatedDeviceType:(NSString*)emulatedDeviceType {
+	_emulatedDeviceType = emulatedDeviceType;
+	[_defaults setObject:emulatedDeviceType forKey:@"emulatedDeviceType"];
+}
+
+- (void)setBackgroundType:(NSInteger)backgroundType {
+	_backgroundType = backgroundType;
+	[_defaults setObject:@(backgroundType) forKey:@"backgroundType"];
+}
+
+- (void)setBatteryChargingViewHidden:(BOOL)batteryChargingViewHidden {
+	_batteryChargingViewHidden = batteryChargingViewHidden;
+	[_defaults setObject:@(batteryChargingViewHidden) forKey:@"batteryChargingViewHidden"];
+}
+
+- (void)setComplicationContent:(NSInteger)complicationContent {
+	_complicationContent = complicationContent;
+	[_defaults setObject:@(complicationContent) forKey:@"complicationContent"];
+}
+
 - (BOOL)synchronize {
-	return [_defaults writeToFile:PREFERENCES_PATH atomically:YES];
+	return [_defaults writeToFile:PREFERENCES_PATH atomically:NO];
 }
 
 @end
