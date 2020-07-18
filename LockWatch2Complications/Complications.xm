@@ -179,7 +179,207 @@
 		return [self nwc_nighttimeConditionImageForComplicationFamily:arg1];
 	}
 }
+
+extern "C" UIImage* NWCLocalizedImageNamed(NSString* name);
+
+- (CLKImageProvider*)nwc_conditionImageProviderForComplicationFamily:(NSInteger)arg1 {
+	BOOL isDay = !self.isNightForecast;
+	NSInteger conditionCode = [self _nwc_code];
+	NSString* familyPrefix = [WFWeatherConditions _nwc_prefixForFamily:arg1];
+	
+	NSString* imageName;
+	switch (conditionCode) {
+		case 1:
+			imageName = @"tornado";
+			break;
+		case 2:
+			imageName = @"tropical_storm";
+			break;
+		case 3:
+			imageName = @"hurricane";
+			break;
+		case 4:
+			imageName = [@"severe_thunderstorm" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 5:
+			imageName = [@"scattered_thunderstorm" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 6:
+			imageName = @"flurry_snow_shower";
+			break;
+		case 7:
+			imageName = @"flurry_snow_shower";
+			break;
+		case 8:
+			imageName = @"flurry_snow_shower";
+			break;
+		case 9:
+			imageName = @"flurry_snow_shower";
+			break;
+		case 10:
+			imageName = [@"drizzle" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 11:
+			imageName = @"ice";
+			break;
+		case 12:
+			imageName = [@"rain" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 13:
+			imageName = [@"rain" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 14:
+			imageName = @"flurry";
+			break;
+		case 15:
+			imageName = @"flurry";
+			break;
+		case 16:
+			imageName = @"blowing_snow";
+			break;
+		case 17:
+			imageName = @"flurry";
+			break;
+		case 18:
+			imageName = [@"hail" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 19:
+			imageName = [@"sleet" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 20:
+			imageName = @"dust";
+			break;
+		case 21:
+			imageName = [@"fog" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 22:
+			imageName = @"haze";
+			break;
+		case 23:
+			imageName = @"smoke";
+			break;
+		case 24:
+			imageName = @"breezy";
+			break;
+		case 25:
+			imageName = @"breezy";
+			break;
+		case 26:
+			imageName = @"ice";
+			break;
+		case 27:
+			imageName = [@"mostly_cloudy" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 29:
+			imageName = [@"mostly_cloudy" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 31:
+			imageName = [@"partly_cloudy" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 33:
+			imageName = (isDay ? @"mostly_sunny" : @"clear_night");
+			break;
+		case 35:
+			imageName = (isDay ? @"mostly_sunny" : @"clear_night");
+			break;
+		case 36:
+			imageName = [@"hail" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 37:
+			imageName = @"hot";
+			break;
+		case 38:
+			imageName = [@"scattered_thunderstorm" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 39:
+			imageName = [@"scattered_thunderstorm" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 40:
+			imageName = [@"scattered_showers" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 41:
+			imageName = [@"rain" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 42:
+			imageName = [@"sleet" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 43:
+			imageName = @"flurry";
+			break;
+		case 44:
+			imageName = [@"blizzard" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		case 45:
+			imageName = [@"severe_thunderstorm" stringByAppendingString:(isDay ? @"_day" : @"_night")];
+			break;
+		default: break;
+	}
+	
+	if (!imageName) return nil;
+	
+	NSString* prefixedImageName = [familyPrefix stringByAppendingString:imageName];
+	NSString* backgroundImageName = [prefixedImageName stringByAppendingString:@"_Background"];
+	NSString* foregroundImageName = [prefixedImageName stringByAppendingString:@"_Foreground"];
+	
+	UIImage* onePieceImage = NWCLocalizedImageNamed(prefixedImageName);
+	UIImage* backgroundImage = NWCLocalizedImageNamed(backgroundImageName);
+	UIImage* foregroundImage = NWCLocalizedImageNamed(foregroundImageName);
+	
+	CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:onePieceImage twoPieceImageBackground:backgroundImage twoPieceImageForeground:foregroundImage];
+	
+	NSString* foregroundAccentImageName = [prefixedImageName stringByAppendingString:@"_Accent"];
+	UIImage* foregroundAccentImage = NWCLocalizedImageNamed(foregroundAccentImageName);
+	
+	[imageProvider setForegroundAccentImage:foregroundAccentImage];
+	
+	switch (conditionCode) {
+        case 5:
+        case 20:
+        case 22:
+        case 31:
+        case 38:
+        case 39:
+            [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
+            break;
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+        case 19:
+        case 26:
+        case 30:
+        case 41:
+        case 42:
+            [imageProvider setTintColor:[%c(NWCColor) conditionsBlueTintColor]];
+            break;
+        case 37:
+            [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
+            [imageProvider setForegroundAccentImageColor:UIColor.redColor];
+            break;
+        case 40:
+            [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
+            [imageProvider setForegroundAccentImageColor:[%c(NWCColor) conditionsBlueTintColor]];
+            break;
+        default: break;
+    }
+	
+	return imageProvider;
+}
 %end	/// %hook WFWeatherConditions
+
+%hook CLKImageProvider
+- (id)copyWithZone:(NSZone *)zone {
+	return self;
+}
+%end	/// %hook CLKImageProvider
+
+%hook NTKStackedImagesComplicationImageView
+- (void)layoutSubviews {
+	%orig;
+	
+	[MSHookIvar<UIImageView*>(self, "_foregroundAccentImageView") setTintColor:self.imageProvider.foregroundAccentImageColor];
+}
+%end	/// %hook NTKStackedImagesComplicationImageView
 %end	// %group SpringBoard
 
 
