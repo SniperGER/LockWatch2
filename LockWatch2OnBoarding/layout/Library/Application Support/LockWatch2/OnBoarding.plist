@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Items</key>
+	<array>
+		<!-- Welcome Controller -->
+		<dict>
+			<key>Title</key>
+			<string>ONBOARDING_WELCOME_TITLE</string>
+			<key>DetailText</key>
+			<string>ONBOARDING_WELCOME_DETAIL</string>
+			<key>Icon</key>
+			<string>LockWatch2Icon</string>
+			
+			<key>BulletedItems</key>
+			<array>
+				<dict>
+					<key>Title</key>
+					<string>ONBOARDING_WELCOME_BULLET_1_TITLE</string>
+					<key>Description</key>
+					<string>ONBOARDING_WELCOME_BULLET_1_DESCRIPTION</string>
+					<key>Image</key>
+					<string>Watch</string>
+				</dict>
+				<dict>
+					<key>Title</key>
+					<string>ONBOARDING_WELCOME_BULLET_2_TITLE</string>
+					<key>Description</key>
+					<string>ONBOARDING_WELCOME_BULLET_2_DESCRIPTION</string>
+					<key>Image</key>
+					<string>WatchSizes</string>
+				</dict>
+				<dict>
+					<key>Title</key>
+					<string>ONBOARDING_WELCOME_BULLET_3_TITLE</string>
+					<key>Description</key>
+					<string>ONBOARDING_WELCOME_BULLET_3_DESCRIPTION</string>
+					<key>Image</key>
+					<string>GitHub</string>
+				</dict>
+			</array>
+			
+			<key>Buttons</key>
+			<array>
+				<dict>
+					<key>Type</key>
+					<string>Bold</string>
+					<key>Title</key>
+					<string>ONBOARDING_COMMON_CONTINUE</string>
+				</dict>
+				<dict>
+					<key>Type</key>
+					<string>Link</string>
+					<key>Title</key>
+					<string>ONBOARDING_COMMON_SKIP</string>
+				</dict>
+			</array>
+			
+			<key>ItemIdentifier</key>
+			<string>WelcomeFlowItem</string>
+			<key>Controller</key>
+			<string>LWOWelcomeController</string>
+			<key>NextFlowItem</key>
+			<string>DeviceTypeSelectionFlowItem</string>
+			<key>IsRootController</key>
+			<true/>
+		</dict>
+		
+		<!-- Device Type Selection -->
+		<dict>
+			<key>Title</key>
+			<string>ONBOARDING_DEVICE_TITLE</string>
+			<key>DetailText</key>
+			<string>ONBOARDING_DEVICE_DETAIL</string>
+			
+			<key>TableViewSections</key>
+			<array>
+				<dict>
+					<key>Items</key>
+					<array>
+						<dict>
+							<key>Title</key>
+							<string>ONBOARDING_DEVICE_PHYSICAL</string>
+							<key>NextFlowItem</key>
+							<string>SyncFlowItem</string>
+						</dict>
+						<dict>
+							<key>Title</key>
+							<string>ONBOARDING_DEVICE_EMULATED</string>
+							<key>NextFlowItem</key>
+							<string>DeviceSizeSelectionFlowItem</string>
+						</dict>
+					</array>
+					<key>FooterText</key>
+					<string>ONBOARDING_DEVICE_FOOTER</string>
+				</dict>
+			</array>
+			
+			<key>ItemIdentifier</key>
+			<string>DeviceTypeSelectionFlowItem</string>
+			<key>Controller</key>
+			<string>LWODeviceTypeSelectionController</string>
+		</dict>
+		
+		<!-- Device Model Selection -->
+		<dict>
+			<key>Title</key>
+			<string>ONBOARDING_EMULATED_TYPE_TITLE</string>
+			<key>DetailText</key>
+			<string>ONBOARDING_EMULATED_TYPE_DETAIL</string>
+			
+			<key>Items</key>
+			<dict>
+				<key>LeftItem</key>
+				<dict>
+					<key>Title</key>
+					<string>ONBOARDING_EMULATED_TYPE_SERIES3</string>
+					<key>Image</key>
+					<string>Watch-M5-regular</string>
+					<key>NextFlowItem</key>
+					<string>DeviceSizeSelectionFlowItem_Series3</string>
+				</dict>
+				<key>RightItem</key>
+				<dict>
+					<key>Title</key>
+					<string>ONBOARDING_EMULATED_TYPE_SERIES5</string>
+					<key>Image</key>
+					<string>Watch-M5-448h</string>
+					<key>NextFlowItem</key>
+					<string>DeviceSizeSelectionFlowItem_Series5</string>
+				</dict>
+			</dict>
+			
+			<key>Buttons</key>
+			<array>
+				<dict>
+					<key>Type</key>
+					<string>Bold</string>
+					<key>Title</key>
+					<string>ONBOARDING_COMMON_CONTINUE</string>
+				</dict>
+			</array>
+			
+			<key>ItemIdentifier</key>
+			<string>DeviceSizeSelectionFlowItem</string>
+			<key>Controller</key>
+			<string>FSVLOBDualItemSelectionController</string>
+		</dict>
+		
+		<!-- Device Size - Series 3 -->
+		<dict>
+			<key>Title</key>
+			<string>ONBOARDING_EMULATED_SIZE_TITLE</string>
+			<key>DetailText</key>
+			<string>ONBOARDING_EMULATED_SIZE_DETAIL</string>
+			
+			<key>Items</key>
+			<dict>
+				<key>LeftItem</key>
+				<dict>
+					<key>Title</key>
+					<string>ONBOARDING_EMULATED_SIZE_38MM</string>
+					<key>Image</key>
+					<string>Watch-M5-compact</string>
+					<key>Value</key>
+					<string>Watch3,3</string>
+				</dict>
+				<key>RightItem</key>
+				<dict>
+					<key>Title</key>
+					<string>ONBOARDING_EMULATED_SIZE_42MM</string>
+					<key>Image</key>
+					<string>Watch-M5-regular</string>
+					<key>Value</key>
+					<string>Watch3,4</string>
+				</dict>
+			</dict>
+			
+			<key>Buttons</key>
+			<array>
+				<dict>
+					<key>Type</key>
+					<string>Bold</string>
+					<key>Title</key>
+					<string>ONBOARDING_COMMON_CONTINUE</string>
+				</dict>
+			</array>
+			
+			<key>ItemIdentifier</key>
+			<string>DeviceSizeSelectionFlowItem_Series3</string>
+			<key>NextFlowItem</key>
+			<string>SwitcherOnBoardingItem</string>
+			<key>Controller</key>
+			<string>LWODeviceSizeSelectionController</string>
+		</dict>
+		<!-- Device Size - Series 5 -->
+		<dict>
+			<key>Title</key>
+			<string>ONBOARDING_EMULATED_SIZE_TITLE</string>
+			<key>DetailText</key>
+			<string>ONBOARDING_EMULATED_SIZE_DETAIL</string>
+			
+			<key>Items</key>
+			<dict>
+				<key>LeftItem</key>
+				<dict>
+					<key>Title</key>
+					<string>ONBOARDING_EMULATED_SIZE_40MM</string>
+					<key>Image</key>
+					<string>Watch-M5-394h</string>
+					<key>Value</key>
+					<string>Watch5,3</string>
+				</dict>
+				<key>RightItem</key>
+				<dict>
+					<key>Title</key>
+					<string>ONBOARDING_EMULATED_SIZE_44MM</string>
+					<key>Image</key>
+					<string>Watch-M5-448h</string>
+					<key>Value</key>
+					<string>Watch5,4</string>
+				</dict>
+			</dict>
+			
+			<key>Buttons</key>
+			<array>
+				<dict>
+					<key>Type</key>
+					<string>Bold</string>
+					<key>Title</key>
+					<string>ONBOARDING_COMMON_CONTINUE</string>
+				</dict>
+			</array>
+			
+			<key>ItemIdentifier</key>
+			<string>DeviceSizeSelectionFlowItem_Series5</string>
+			<key>NextFlowItem</key>
+			<string>SwitcherOnBoardingItem</string>
+			<key>Controller</key>
+			<string>LWODeviceSizeSelectionController</string>
+		</dict>
+		
+		<!-- Watch face sync -->
+		<dict>
+			<key>Title</key>
+			<string>ONBOARDING_SYNC_TITLE</string>
+			<key>DetailText</key>
+			<string>ONBOARDING_SYNC_DETAIL</string>
+			
+			<key>Buttons</key>
+			<array>
+				<dict>
+					<key>Type</key>
+					<string>Bold</string>
+					<key>Title</key>
+					<string>ONBOARDING_SYNC_CONFIGURE</string>
+				</dict>
+				
+				<dict>
+					<key>Type</key>
+					<string>Link</string>
+					<key>Title</key>
+					<string>ONBOARDING_COMMON_CONFIGURE_LATER</string>
+				</dict>
+			</array>
+			
+			<key>ItemIdentifier</key>
+			<string>SyncFlowItem</string>
+			<key>NextFlowItem</key>
+			<string>SwitcherOnBoardingItem</string>
+			<key>Controller</key>
+			<string>LWOPhysicalSyncController</string>
+		</dict>
+		
+		<!-- OnBoarding - Switcher -->
+		<dict>
+			<key>Title</key>
+			<string>ONBOARDING_SWITCHER_TITLE</string>
+			<key>DetailText</key>
+			<string>ONBOARDING_SWITCHER_DETAIL</string>
+			<key>AssetPath</key>
+			<string>Switcher</string>
+			
+			<key>Buttons</key>
+			<array>
+				<dict>
+					<key>Type</key>
+					<string>Bold</string>
+					<key>Title</key>
+					<string>ONBOARDING_COMMON_CONTINUE</string>
+				</dict>
+			</array>
+			
+			<key>ItemIdentifier</key>
+			<string>SwitcherOnBoardingItem</string>
+			<key>NextFlowItem</key>
+			<string>LibraryOnBoardingItem</string>
+			<key>Controller</key>
+			<string>FSVLOBMediaController</string>
+		</dict>
+		
+		<!-- OnBoarding - Library -->
+		<dict>
+			<key>Title</key>
+			<string>ONBOARDING_LIBRARY_TITLE</string>
+			<key>DetailText</key>
+			<string>ONBOARDING_LIBRARY_DETAIL</string>
+			<key>AssetPath</key>
+			<string>Library</string>
+			
+			<key>Buttons</key>
+			<array>
+				<dict>
+					<key>Type</key>
+					<string>Bold</string>
+					<key>Title</key>
+					<string>ONBOARDING_COMMON_CONTINUE</string>
+				</dict>
+			</array>
+			
+			<key>ItemIdentifier</key>
+			<string>LibraryOnBoardingItem</string>
+			<key>NextFlowItem</key>
+			<string>CustomizeOnBoardingItem</string>
+			<key>Controller</key>
+			<string>FSVLOBMediaController</string>
+		</dict>
+		
+		<!-- OnBoarding - Customize -->
+		<dict>
+			<key>Title</key>
+			<string>ONBOARDING_CUSTOMIZE_TITLE</string>
+			<key>DetailText</key>
+			<string>ONBOARDING_CUSTOMIZE_DETAIL</string>
+			<key>AssetPath</key>
+			<string>Customize</string>
+			
+			<key>Buttons</key>
+			<array>
+				<dict>
+					<key>Type</key>
+					<string>Bold</string>
+					<key>Title</key>
+					<string>ONBOARDING_COMMON_CONTINUE</string>
+				</dict>
+			</array>
+			
+			<key>ItemIdentifier</key>
+			<string>CustomizeOnBoardingItem</string>
+			<key>NextFlowItem</key>
+			<string>SetupFinishedFlowItem</string>
+			<key>Controller</key>
+			<string>FSVLOBMediaController</string>
+		</dict>
+		
+		<!-- Finished Controller -->
+		<dict>
+			<key>Title</key>
+			<string>ONBOARDING_WELCOME_TITLE</string>
+			
+			<key>Buttons</key>
+			<array>
+				<dict>
+					<key>Type</key>
+					<string>Bold</string>
+					<key>Title</key>
+					<string>ONBOARDING_GET_STARTED</string>
+				</dict>
+			</array>
+			
+			<key>ItemIdentifier</key>
+			<string>SetupFinishedFlowItem</string>
+			<key>Controller</key>
+			<string>LWOSetupFinishedController</string>
+		</dict>
+	</array>
+</dict>
+</plist>

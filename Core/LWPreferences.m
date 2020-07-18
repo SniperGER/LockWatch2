@@ -68,6 +68,16 @@
 		[_defaults setObject:@2 forKey:@"complicationContent"];
 	}
 	_complicationContent = [[_defaults objectForKey:@"complicationContent"] integerValue];
+	
+	if (![_defaults.allKeys containsObject:@"onBoardingCompleted"]) {
+		[_defaults setObject:@NO forKey:@"onBoardingCompleted"];
+	}
+	_onBoardingCompleted = [[_defaults objectForKey:@"onBoardingCompleted"] boolValue];
+	
+	if (![_defaults.allKeys containsObject:@"upgradeLastVersion"]) {
+		[_defaults setObject:[NSString stringWithUTF8String:__VERSION] forKey:@"upgradeLastVersion"];
+	}
+	_upgradeLastVersion = [_defaults objectForKey:@"upgradeLastVersion"];
 }
 
 - (void)setEnabled:(BOOL)enabled {
@@ -99,6 +109,18 @@
 	_complicationContent = complicationContent;
 	[_defaults setObject:@(complicationContent) forKey:@"complicationContent"];
 }
+
+
+- (void)setOnBoardingCompleted:(BOOL)onBoardingCompleted {
+	_onBoardingCompleted = onBoardingCompleted;
+	[_defaults setObject:@(onBoardingCompleted) forKey:@"onBoardingCompleted"];
+}
+
+- (void)setUpgradeLastVersion:(NSString*)upgradeLastVersion {
+	_upgradeLastVersion = upgradeLastVersion;
+	[_defaults setObject:upgradeLastVersion forKey:@"upgradeLastVersion"];
+}
+
 
 - (BOOL)synchronize {
 	return [_defaults writeToFile:PREFERENCES_PATH atomically:NO];

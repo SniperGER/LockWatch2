@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL batteryChargingViewHidden;
 @property (nonatomic) NSInteger complicationContent;
 
+@property (nonatomic) BOOL onBoardingCompleted;
+@property (nonatomic) NSString* upgradeLastVersion;
+
 + (instancetype)sharedInstance;
 - (instancetype)init;
 - (void)reloadPreferences;

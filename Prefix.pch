@@ -1,0 +1,9 @@
+//
+// Prefix.pch
+// LockWatch2
+//
+// Created by janikschmidt on 7/6/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
+//
+
+#define __VERSION "2.0b3-u1"

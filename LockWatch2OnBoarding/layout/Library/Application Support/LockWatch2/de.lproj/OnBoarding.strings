@@ -1,0 +1,90 @@
+//
+// OnBoarding.strings
+// LockWatch2
+//
+// Created by janikschmidt on 7/4/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
+//
+
+{
+	// Common Strings
+	"ONBOARDING_COMMON_HEADER" = "LockWatch 2";
+	"ONBOARDING_COMMON_CONTINUE" = "Fortfahren";
+	"ONBOARDING_COMMON_SKIP" = "Überspringen";
+	"ONBOARDING_COMMON_CONFIGURE_LATER" = "Später konfigurieren";
+	"ONBOARDING_GET_STARTED" = "Los geht's";
+	
+	// OnBoarding Notification
+	"ONBOARDING_NOTIFICATION_TITLE" = "Willkommen bei LockWatch 2";
+	"ONBOARDING_NOTIFICATION_MESSAGE" = "Schließe das Setup ab, um LockWatch 2 nach deinen Wünschen anzupassen.";
+	
+	// Upgrade Notification
+	"ONBOARDING_UPGRADE_NOTIFICATION_TITLE" = "Update abgeschlossen";
+	"ONBOARDING_UPGRADE_NOTIFICATION_MESSAGE" = "LockWatch 2 wurde aktualisiert. Möchtest du sehen, was neu ist?";
+	
+	
+	
+	// OnBoarding Welcome
+	"ONBOARDING_WELCOME_TITLE" = "Willkommen bei LockWatch 2";
+	"ONBOARDING_WELCOME_DETAIL" = "Danke, dass du LockWatch 2 installiert hast!\n\nIn nur wenigen Schritten kannst du LockWatch 2 so anpassen, dass es deinen Wünschen entspricht.";
+	
+	"ONBOARDING_WELCOME_BULLET_1_TITLE" = "Zifferblätter synchronisieren";
+	"ONBOARDING_WELCOME_BULLET_1_DESCRIPTION" = "Nutze deine gekoppelte Apple Watch, um deine eigenen Zifferblätter auf dem Sperrbildschirm zu nutzen.";
+	"ONBOARDING_WELCOME_BULLET_2_TITLE" = "Ein anderes Modell simulieren";
+	"ONBOARDING_WELCOME_BULLET_2_DESCRIPTION" = "Wähle zwischen verschiedenen Apple Watch-Modellen und Größen, um LockWatch 2 nach deinen Wünschen anzupassen.";
+	"ONBOARDING_WELCOME_BULLET_3_TITLE" = "Kostenlos & Open Source. So, wie es sein sollte.";
+	"ONBOARDING_WELCOME_BULLET_3_DESCRIPTION" = "Sieh dir den Quellcode auf GitHub an. Oder spende etwas, um die Arbeit von Team FESTIVAL zu unterstützen.";
+	
+	
+	
+	// Device Type
+	"ONBOARDING_DEVICE_TITLE" = "Hast du eine Apple Watch?";
+	"ONBOARDING_DEVICE_DETAIL" = "Nutze deine Apple Watch für LockWatch 2 und synchronisiere deine Zifferblätter auf dem Sperrbildschirm.";
+	
+	"ONBOARDING_DEVICE_PHYSICAL" = "„%@” benutzen";
+	"ONBOARDING_DEVICE_PHYSICAL_NOT_AVAILABLE" = "Keine Apple Watch verfügbar";
+	"ONBOARDING_DEVICE_EMULATED" = "Ich habe keine Apple Watch";
+	
+	"ONBOARDING_DEVICE_FOOTER" = "Du hast eine Apple Watch, aber du möchtest, dass ein anderes Modell dargestellt wird? Wähle „Ich habe keine Apple Watch“, um ein anderes Modell zu simulieren. Deine Zifferblätter können später über die App „Watch“ mit dem Sperrbildschirm synchronisiert werden.";
+	
+	
+	
+	// Emulated Device Model
+	"ONBOARDING_EMULATED_TYPE_TITLE" = "Apple Watch-Modell auswählen";
+	"ONBOARDING_EMULATED_TYPE_DETAIL" = "Wähle ein Apple Watch-Modell aus, das simuliert werden soll. Das Modell kann jederzeit in den Einstellungen geändert werden.";
+	"ONBOARDING_EMULATED_TYPE_SERIES3" = "Series 3";
+	"ONBOARDING_EMULATED_TYPE_SERIES5" = "Series 5";
+	
+	// Emulated Case Size
+	"ONBOARDING_EMULATED_SIZE_TITLE" = "Gehäusegröße auswählen";
+	"ONBOARDING_EMULATED_SIZE_DETAIL" = "Wähle eine Gehäusegröße aus, die simuliert werden soll. Die Größe kann jederzeit in den Einstellungen geändert werden.";
+	"ONBOARDING_EMULATED_SIZE_38MM" = "38mm";
+	"ONBOARDING_EMULATED_SIZE_40MM" = "40mm";
+	"ONBOARDING_EMULATED_SIZE_42MM" = "42mm";
+	"ONBOARDING_EMULATED_SIZE_44MM" = "44mm";
+	
+	
+	
+	// Sync watch faces
+	"ONBOARDING_SYNC_TITLE" = "Zifferblätter synchronisieren";
+	"ONBOARDING_SYNC_DETAIL" = "Nutze die Zifferblätter, die du bereits auf deiner Apple Watch konfiguriert hast, auf deinem Sperrbildschirm.\n\nDie Zifferblätter auf dem Sperrbildschirm können jederzeit über die App „Watch“ mit deiner Apple Watch synchronisiert werden. Die Zifferblätter auf deiner Uhr sind davon nicht betroffen.";
+	"ONBOARDING_SYNC_CONFIGURE" = "Synchronisieren";
+	
+	
+	
+	// OnBoarding - Switcher
+	"ONBOARDING_SWITCHER_TITLE" = "Zifferblätter wechseln";
+	"ONBOARDING_SWITCHER_DETAIL" = "Tippe und halte das aktuelle Zifferblatt, um zwischen verschiedenen Zifferblättern zu wechseln. Tippe erneut auf ein Zifferblatt, um es auszuwählen.\nAuf Geräten mit 3D Touch kannst du fest auf das Zifferblatt drücken. Hast du ein iPad, kannst du sogar deinen Apple Pencil benutzen.";
+	
+	// OnBoarding - Library
+	"ONBOARDING_LIBRARY_TITLE" = "Hinzufügen, verschieben, löschen";
+	"ONBOARDING_LIBRARY_DETAIL" = "Tippe auf [+], um aus verschiedenen Zifferblättern ein neues hinzuzufügen. Über „Meine Uhr” kannst du Zifferblätter beliebig verschieben.\nUm ein Zifferblatt zu löschen, wische nach oben und tippe auf „Löschen”.";
+	
+	// OnBoarding - Customize
+	"ONBOARDING_CUSTOMIZE_TITLE" = "Zifferblätter anpassen";
+	"ONBOARDING_CUSTOMIZE_DETAIL" = "Um ein Zifferblatt anzupassen, tippe auf „Anpassen”. Hier kannst du Farbe und Aussehen deines Zifferblatts anpassen, sowie Komplikationen auswählen.";
+	
+	// Respring alert
+	"ONBOARDING_RESTART_SPRINGBOARD_TITLE" = "SpringBoard neu starten?";
+	"ONBOARDING_RESTART_SPRINGBOARD_MESSAGE" = "SpringBoard muss neu gestartet werden, damit die Änderungen übernommen werden können.\n\nMöchtest du SpringBoard jetzt neu starten?";
+}

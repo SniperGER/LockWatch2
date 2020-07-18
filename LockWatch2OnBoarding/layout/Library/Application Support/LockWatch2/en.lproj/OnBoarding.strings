@@ -1,0 +1,90 @@
+//
+// OnBoarding.strings
+// LockWatch2
+//
+// Created by janikschmidt on 7/4/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
+//
+
+{
+	// Common Strings
+	"ONBOARDING_COMMON_HEADER" = "LockWatch 2";
+	"ONBOARDING_COMMON_CONTINUE" = "Continue";
+	"ONBOARDING_COMMON_SKIP" = "Skip";
+	"ONBOARDING_COMMON_CONFIGURE_LATER" = "Configure later";
+	"ONBOARDING_GET_STARTED" = "Tap to finish";
+	
+	// OnBoarding Notification
+	"ONBOARDING_NOTIFICATION_TITLE" = "Welcome to LockWatch 2";
+	"ONBOARDING_NOTIFICATION_MESSAGE" = "Complete the setup to personalize LockWatch 2 to your liking.";
+	
+	// Upgrade Notification
+	"ONBOARDING_UPGRADE_NOTIFICATION_TITLE" = "Update completed";
+	"ONBOARDING_UPGRADE_NOTIFICATION_MESSAGE" = "LockWatch 2 has been updated. Would you like to see what's new?";
+	
+	
+	
+	// OnBoarding Welcome
+	"ONBOARDING_WELCOME_TITLE" = "Welcome to LockWatch 2";
+	"ONBOARDING_WELCOME_DETAIL" = "Thank you for installing LockWatch 2!\n\nIn just a few simple steps you can customize LockWatch 2 to match your personality.";
+	
+	"ONBOARDING_WELCOME_BULLET_1_TITLE" = "Sync watch faces";
+	"ONBOARDING_WELCOME_BULLET_1_DESCRIPTION" = "Use your paired Apple Watch to use your own watch faces on the lock screen.";
+	"ONBOARDING_WELCOME_BULLET_2_TITLE" = "Emulate a different model";
+	"ONBOARDING_WELCOME_BULLET_2_DESCRIPTION" = "Choose between various Apple Watch models and sizes to customize LockWatch 2 to your liking.";
+	"ONBOARDING_WELCOME_BULLET_3_TITLE" = "Free & Open Source. As it should be.";
+	"ONBOARDING_WELCOME_BULLET_3_DESCRIPTION" = "Have a look at the source code on GitHub. Or donate a little amount to support Team FESTIVAL.";
+	
+	
+	
+	// Device Type
+	"ONBOARDING_DEVICE_TITLE" = "Do you own an Apple Watch?";
+	"ONBOARDING_DEVICE_DETAIL" = "Use your existing Apple Watch for LockWatch 2 and sync your watch faces to the lock screen.";
+	
+	"ONBOARDING_DEVICE_PHYSICAL" = "Use \"%@\"";
+	"ONBOARDING_DEVICE_PHYSICAL_NOT_AVAILABLE" = "No Apple Watch available";
+	"ONBOARDING_DEVICE_EMULATED" = "I don't own an Apple Watch";
+	
+	"ONBOARDING_DEVICE_FOOTER" = "Own an Apple Watch, but you want a different model to be displayed? Choose \"I don't own an Apple Watch\" to emulate a different device. Your watch faces can be synced later via the \"Watch\" app.";
+	
+	
+	
+	// Emulated Device Model
+	"ONBOARDING_EMULATED_TYPE_TITLE" = "Choose Apple Watch model";
+	"ONBOARDING_EMULATED_TYPE_DETAIL" = "Choose an Apple Watch model to be emulated. The emulated model can be changed anytime via Settings.";
+	"ONBOARDING_EMULATED_TYPE_SERIES3" = "Series 3";
+	"ONBOARDING_EMULATED_TYPE_SERIES5" = "Series 5";
+	
+	// Emulated Case Size
+	"ONBOARDING_EMULATED_SIZE_TITLE" = "Choose case size";
+	"ONBOARDING_EMULATED_SIZE_DETAIL" = "Choose a case size to be emulated. The emulated size can be changed anytime via Settings";
+	"ONBOARDING_EMULATED_SIZE_38MM" = "38mm";
+	"ONBOARDING_EMULATED_SIZE_40MM" = "40mm";
+	"ONBOARDING_EMULATED_SIZE_42MM" = "42mm";
+	"ONBOARDING_EMULATED_SIZE_44MM" = "44mm";
+	
+	
+	
+	// Sync watch faces
+	"ONBOARDING_SYNC_TITLE" = "Sync your watch faces";
+	"ONBOARDING_SYNC_DETAIL" = "Use your personalized watch faces on your lock screen.\n\nWatch faces on your lock screen can be synced at any time using the \"Watch\" app. The watch faces on your Apple Watch won't be affected.";
+	"ONBOARDING_SYNC_CONFIGURE" = "Sync watch faces";
+	
+	
+	
+	// OnBoarding - Switcher
+	"ONBOARDING_SWITCHER_TITLE" = "Switch watch faces";
+	"ONBOARDING_SWITCHER_DETAIL" = "Tap and hold the current watch face to switch between different faces. Tap again on a watch face to select it.\nOn devices with 3D Touch, you can press firmly on the watch face. If you have an iPad, you can even your your Apple Pencil.";
+	
+	// OnBoarding - Library
+	"ONBOARDING_LIBRARY_TITLE" = "Add, move, delete";
+	"ONBOARDING_LIBRARY_DETAIL" = "Tap on [+] to add a watch face from the library. Existing faces can be moved using \"My Watch\".\nTo delete a watch face, swipe up and press \"Delete\".";
+	
+	// OnBoarding - Customize
+	"ONBOARDING_CUSTOMIZE_TITLE" = "Customize watch faces";
+	"ONBOARDING_CUSTOMIZE_DETAIL" = "To customize a watch face, tap on \"Customize\". Here you can select a color and change its apperance, or choose complications.";
+	
+	// Respring alert
+	"ONBOARDING_RESTART_SPRINGBOARD_TITLE" = "Restart SpringBoard?";
+	"ONBOARDING_RESTART_SPRINGBOARD_MESSAGE" = "SpringBoard has to be restarted in order to apply settings.\n\nWould you like to restart SpringBoard now?";
+}

@@ -13,7 +13,7 @@ include $(THEOS)/makefiles/common.mk
 TWEAK_NAME = LockWatch2
 
 LockWatch2_FILES = $(wildcard *.xm) $(wildcard *.m) $(wildcard Core/*.m) $(wildcard LockScreen/*.m)
-LockWatch2_CFLAGS = -fobjc-arc -I$(THEOS_PROJECT_DIR) -I$(THEOS_PROJECT_DIR)/Headers
+LockWatch2_CFLAGS = -fobjc-arc -I$(THEOS_PROJECT_DIR) -I$(THEOS_PROJECT_DIR)/Headers -include Prefix.pch
 LockWatch2_PRIVATE_FRAMEWORKS = ClockComplications ClockKit MaterialKit MobileTimer NanoRegistry NanoTimeKitCompanion Preferences ProtocolBuffer
 
 include $(THEOS_MAKE_PATH)/tweak.mk
@@ -21,5 +21,6 @@ include $(THEOS_MAKE_PATH)/tweak.mk
 ifeq ($(THEOS_TARGET_NAME), iphone)
 SUBPROJECTS += LockWatch2Complications
 SUBPROJECTS += LockWatch2Preferences
+SUBPROJECTS += LockWatch2OnBoarding
 include $(THEOS_MAKE_PATH)/aggregate.mk
 endif
