@@ -317,6 +317,17 @@ static BOOL scrollEnabled = YES;
 #endif
 }
 %end
+
+%hook CSFixedFooterView
+- (void)layoutSubviews {
+#ifdef DEMO_MODE
+	[self setHidden:YES];
+	return;
+#else
+	%orig;
+#endif
+}
+%end
 %end	// %group SpringBoard
 
 
@@ -426,7 +437,7 @@ BOOL _NTKShowHardwareSpecificFaces() {
 static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* observer, CFStringRef name, const void* object, CFDictionaryRef userInfo) {
 	[preferences reloadPreferences];
 	
-	CLKDevice* currentDevice = [CLKDevice currentDevice];
+	LWEmulatedCLKDevice* currentDevice = [LWEmulatedCLKDevice currentDevice];
 	
 	if (preferences.isEmulatingDevice) {
 		NSDictionary* watchData = [[NSDictionary alloc] initWithContentsOfFile:WATCH_DATA_PATH][preferences.emulatedDeviceType];
@@ -435,8 +446,10 @@ static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* obs
 		
 		LWEmulatedCLKDevice* device = [[LWEmulatedCLKDevice alloc] initWithJSONObjectRepresentation:watchData[@"device"] forNRDevice:nrDevice];
 		
-		if (currentDevice.nrDevice) {
-		[device setPhysicalDevice:currentDevice];
+		if ([currentDevice respondsToSelector:@selector(physicalDevice)] && currentDevice.physicalDevice) {
+			[device setPhysicalDevice:currentDevice.physicalDevice];
+		} else if (currentDevice.nrDevice) {
+			[device setPhysicalDevice:currentDevice];
 		}
 		
 		[CLKDevice setCurrentDevice:device];
@@ -447,8 +460,10 @@ static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* obs
 		
 		LWEmulatedCLKDevice* device = [[LWEmulatedCLKDevice alloc] initWithJSONObjectRepresentation:watchData forNRDevice:nrDevice];
 		
-		if (currentDevice.nrDevice) {
-		[device setPhysicalDevice:currentDevice];
+		if ([currentDevice respondsToSelector:@selector(physicalDevice)] && currentDevice.physicalDevice) {
+			[device setPhysicalDevice:currentDevice.physicalDevice];
+		} else if (currentDevice.nrDevice) {
+			[device setPhysicalDevice:currentDevice];
 		}
 		
 		[CLKDevice setCurrentDevice:device];
@@ -456,13 +471,6 @@ static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* obs
 	
 	if (clockViewController) {
 		[clockViewController setDevice:[CLKDevice currentDevice]];
-		
-		SBLockScreenManager* manager = [%c(SBLockScreenManager) sharedInstance];
-		CSCoverSheetViewController* coverSheet = [manager coverSheetViewController];
-		CSMainPageContentViewController* mainPage = [coverSheet mainPageContentViewController];
-		
-		[clockViewController willMoveToParentViewController:mainPage];
-		[clockViewController didMoveToParentViewController:mainPage];
 		
 		[clockViewController loadAddableFaceCollection];
 		[clockViewController loadLibraryFaceCollection];

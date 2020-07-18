@@ -54,6 +54,9 @@ extern "C" CFNotificationCenterRef CFNotificationCenterGetDistributedCenter();
 - (SBFLockScreenDateViewController*)dateViewController;
 @end
 
+@interface CSFixedFooterView : UIView
+@end
+
 @interface CSMainPageContentViewController : UIViewController
 @end
 

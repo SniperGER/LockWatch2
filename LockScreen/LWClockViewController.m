@@ -61,7 +61,7 @@
 		[self loadLibraryFaceCollection];
 		
 		[[NSDistributedNotificationCenter defaultCenter] addObserverForName:@"ml.festival.lockwatch2/ResetLibrary" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification) {
-			_libraryFaceCollection = [LWPersistentFaceCollection defaultLibraryFaceCollectionForDevice:_device];
+			_libraryFaceCollection = [LWPersistentFaceCollection defaultLibraryFaceCollectionForDevice:[CLKDevice currentDevice]];
 			[_libraryFaceCollection addObserver:self];
 			[(LWPersistentFaceCollection*)_libraryFaceCollection synchronize];
 			
