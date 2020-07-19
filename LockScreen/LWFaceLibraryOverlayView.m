@@ -6,8 +6,11 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
+#import <SpringBoardUIServices/SBUILegibilityLabel.h>
+
 #import "Core/LWEmulatedCLKDevice.h"
 
+#import "LWClockViewController.h"
 #import "LWFaceLibraryOverlayButton.h"
 #import "LWFaceLibraryOverlayView.h"
 
@@ -51,6 +54,8 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 		
 		_cancelTitleLabelWidth = CGRectGetWidth(_cancelButton.titleLabel.bounds);
 		[self addSubview:_cancelButton];
+		
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_legibilitySettingsChanged) name:@"ml.festival.lockwatch2/LegibilitySettingsChanged" object:nil];
 	}
 	
 	return self;
@@ -99,6 +104,11 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 
 #pragma mark - Instance Methods
 
+- (void)_legibilitySettingsChanged {
+	[_leftTitleLabel setLegibilitySettings:[LWClockViewController legibilitySettings]];
+	[_rightTitleLabel setLegibilitySettings:[LWClockViewController legibilitySettings]];
+}
+
 - (UIButton*)_newButton {
 	LWFaceLibraryOverlayButton* button = [LWFaceLibraryOverlayButton buttonWithType:UIButtonTypeCustom];
 	
@@ -114,8 +124,8 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	return button;
 }
 
-- (UILabel*)_newTitleLabel {
-	UILabel* label = [UILabel new];
+- (SBUILegibilityLabel*)_newTitleLabel {
+	SBUILegibilityLabel* label = [SBUILegibilityLabel new];
 	
 	CGFloat mainScreenHeight = [[_device.nrDevice valueForProperty:@"mainScreenHeight"] floatValue];
 	if (mainScreenHeight <= 340) {
@@ -126,15 +136,15 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 		[label setFont:[UIFont systemFontOfSize:14]];
 	}
 	
-	[label setTextColor:[UIColor whiteColor]];
+	[label setLegibilitySettings:[LWClockViewController legibilitySettings]];
 	
 	return label;
 }
 
 
 - (void)setLeftTitle:(nullable NSString*)leftTitle {
-	if (![_leftTitleLabel.text isEqualToString:leftTitle]) {
-		[_leftTitleLabel setText:leftTitle];
+	if (![_leftTitleLabel.string isEqualToString:leftTitle]) {
+		[_leftTitleLabel setString:leftTitle];
 		[_leftTitleLabel sizeToFit];
 	}
 }
@@ -148,8 +158,8 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 }
 
 - (void)setRightTitle:(nullable NSString*)rightTitle {
-	if (![_rightTitleLabel.text isEqualToString:rightTitle]) {
-		[_rightTitleLabel setText:rightTitle];
+	if (![_rightTitleLabel.string isEqualToString:rightTitle]) {
+		[_rightTitleLabel setString:rightTitle];
 		[_rightTitleLabel sizeToFit];
 	}
 }

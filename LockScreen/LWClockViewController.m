@@ -48,7 +48,30 @@
 - (SBUserAgent*)pluginUserAgent;
 @end
 
+
+
+BOOL UIColorIsLightColor(UIColor* color) {
+	CGFloat red, green, blue, alpha;
+	[color getRed:&red green:&green blue:&blue alpha:&alpha];
+	
+	CGFloat brightness = ((red * 299) + (green * 587) + (blue * 114)) / 1000;
+	
+	return brightness >= 0.5;
+}
+
 @implementation LWClockViewController
+
+static _UILegibilitySettings* _legibilitySettings;
+
++ (_UILegibilitySettings*)legibilitySettings {
+	return _legibilitySettings;
+}
+
++ (void)setLegibilitySettings:(_UILegibilitySettings*)legibilitySettings {
+	_legibilitySettings = legibilitySettings;
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"ml.festival.lockwatch2/LegibilitySettingsChanged" object:nil userInfo:nil];
+}
 
 - (instancetype)init {
 	if (self = [super init]) {

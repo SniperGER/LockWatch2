@@ -10,18 +10,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class CLKDevice;
+@class CLKDevice, SBUILegibilityLabel;
 
 @interface LWDeleteConfirmationButton : UIControl {
 	CLKDevice *_device;
     UIImageView *_deleteIconView;
-    UILabel *_deleteLabel;
+    SBUILegibilityLabel *_deleteLabel;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame;
 - (void)layoutSubviews;
 - (void)setHighlighted:(BOOL)highlighted;
 - (CGSize)sizeThatFits:(CGSize)size;
+- (void)_legibilitySettingsChanged;
 
 @end
 

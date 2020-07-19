@@ -11,10 +11,19 @@
 #import <ClockKit/CLKDevice.h>
 #import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 
+#import "LWClockViewController.h"
 #import "LWPageView.h"
 
 #import "Core/LWEmulatedCLKDevice.h"
 #import "Core/LWPageDelegate.h"
+
+@interface _UILegibilitySettings : NSObject
+- (UIColor*)primaryColor;
+@end
+
+
+
+extern BOOL UIColorIsLightColor(UIColor* color);
 
 @implementation LWPageView
 
@@ -40,6 +49,8 @@
 		
 		[self setScrollEnabled:_allowsDelete];
 		[_tapGesture setEnabled:_allowsSelect];
+		
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_legibilitySettingsChanged) name:@"ml.festival.lockwatch2/LegibilitySettingsChanged" object:nil];
 	}
 	
 	return self;
@@ -105,9 +116,24 @@
 	_swipingToDelete = NO;
 }
 
+- (void)_legibilitySettingsChanged {
+	if (!_outlineView) return;
+	
+	_UILegibilitySettings* legibilitySettings = [LWClockViewController legibilitySettings];
+	UIBlurEffect* effect;
+	
+	if (UIColorIsLightColor(legibilitySettings.primaryColor)) {
+		effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+	} else {
+		effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+	}
+	
+	[_outlineView setEffect:effect];
+}
+
 - (void)applyConfiguration {
 	if (!_outlineView) {
-		_outlineView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+		_outlineView = [[UIVisualEffectView alloc] initWithEffect:nil];
 		[_outlineView setClipsToBounds:YES];
 		[_outlineView setUserInteractionEnabled:NO];
 		[self addSubview:_outlineView];
@@ -126,6 +152,8 @@
 #endif
 
 	[_outlineView setAlpha:_outlineAlpha];
+	
+	[self _legibilitySettingsChanged];
 }
 
 - (void)cancelDelete:(BOOL)animated {

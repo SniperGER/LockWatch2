@@ -10,12 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class CLKDevice;
+@class CLKDevice, SBUILegibilityLabel;
 
 @interface LWFaceLibraryOverlayView : UIView {
 	CLKDevice* _device;
-	UILabel* _leftTitleLabel;
-	UILabel* _rightTitleLabel;
+	SBUILegibilityLabel* _leftTitleLabel;
+	SBUILegibilityLabel* _rightTitleLabel;
 	CGFloat _leftTitleAlpha;
 	CGFloat _rightTitleAlpha;
 	CGFloat _leftTitleOffset;
@@ -29,8 +29,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat luxoButtonWidth;
 
 - (instancetype)initForDevice:(CLKDevice*)device;
+- (void)_legibilitySettingsChanged;
 - (UIButton*)_newButton;
-- (UILabel*)_newTitleLabel;
+- (SBUILegibilityLabel*)_newTitleLabel;
 - (void)setLeftTitle:(nullable NSString*)leftTitle;
 - (void)setLeftTitleOffset:(CGFloat)leftTitleOffset alpha:(CGFloat)alpha;
 - (void)setRightTitle:(nullable NSString*)rightTitle;

@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (id)initWithFrame:(CGRect)frame;
 - (void)setHighlighted:(BOOL)highlighted;
+- (void)_legibilitySettingsChanged;
 
 @end
 

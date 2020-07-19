@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LWPageView : UIScrollView <UIScrollViewDelegate> {
 	CLKDevice* _device;
     UITapGestureRecognizer* _tapGesture;
-    UIView* _outlineView;
+    UIVisualEffectView* _outlineView;
 	UIView* _outlineInnerView;
 	CAShapeLayer* _outlineViewMask;
     UIView* _overlayView;
@@ -43,6 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (CGFloat)_deleteFractionForOffset:(CGPoint)offset;
 - (void)_handleTap:(UIGestureRecognizer*)sender;
 - (void)_handleScrollingStopped;
+- (void)_legibilitySettingsChanged;
 - (void)applyConfiguration;
 - (void)cancelDelete:(BOOL)animated;
 - (void)prepareForReuse;

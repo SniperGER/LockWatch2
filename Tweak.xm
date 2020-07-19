@@ -58,6 +58,12 @@
 	
 	return;
 }
+
+- (void)setLegibilitySettings:(_UILegibilitySettings*)arg1 {
+	%orig;
+	
+	[LWClockViewController setLegibilitySettings:arg1];
+}
 %end	/// %hook SBFLockScreenDateView
 
 %hook CSCoverSheetViewController

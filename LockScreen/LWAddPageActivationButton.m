@@ -6,7 +6,16 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
+#import "LWClockViewController.h"
 #import "LWAddPageActivationButton.h"
+
+@interface _UILegibilitySettings : NSObject
+- (UIColor*)primaryColor;
+@end
+
+
+
+extern BOOL UIColorIsLightColor(UIColor* color);
 
 @implementation LWAddPageActivationButton
 
@@ -14,7 +23,7 @@
 	if (self = [super initWithFrame:frame]) {
 		[self setClipsToBounds:YES];
 	
-		_effectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+		_effectView = [[UIVisualEffectView alloc] initWithEffect:nil];
 		[_effectView setFrame:frame];
 		[_effectView setUserInteractionEnabled:NO];
 		[self addSubview:_effectView];
@@ -46,6 +55,9 @@
 		
 		[mask setPath:path.CGPath];
 		[_effectView.layer setMask:mask];
+		
+		[self _legibilitySettingsChanged];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_legibilitySettingsChanged) name:@"ml.festival.lockwatch2/LegibilitySettingsChanged" object:nil];
 	}
 	
 	return self;
@@ -62,8 +74,23 @@
     [super setHighlighted:highlighted];
 	
 	[UIView animateWithDuration:highlighted ? 0.0 : 0.2 animations:^{
-		[self setAlpha:highlighted ? 0.2 : 1.0];
+		[self setAlpha:highlighted ? 0.4 : 1.0];
 	}];
+}
+
+#pragma mark - Instance Methods
+
+- (void)_legibilitySettingsChanged {
+	_UILegibilitySettings* legibilitySettings = [LWClockViewController legibilitySettings];
+	UIBlurEffect* effect;
+	
+	if (UIColorIsLightColor(legibilitySettings.primaryColor)) {
+		effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+	} else {
+		effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+	}
+	
+	[_effectView setEffect:effect];
 }
 
 @end

@@ -8,13 +8,22 @@
 
 #import <ClockKit/CLKDevice.h>
 
+#import "LWClockViewController.h"
 #import "LWFaceLibraryOverlayButton.h"
+
+@interface _UILegibilitySettings : NSObject
+- (UIColor*)primaryColor;
+@end
+
+
+
+extern BOOL UIColorIsLightColor(UIColor* color);
 
 @implementation LWFaceLibraryOverlayButton
 
 - (id)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
-		_visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+		_visualEffectView = [[UIVisualEffectView alloc] initWithEffect:nil];
 		[_visualEffectView setUserInteractionEnabled:NO];
 		[_visualEffectView setTranslatesAutoresizingMaskIntoConstraints:NO];
 		[_visualEffectView setClipsToBounds:YES];
@@ -33,6 +42,9 @@
 			[_visualEffectView.widthAnchor constraintEqualToAnchor:self.widthAnchor],
 			[_visualEffectView.heightAnchor constraintEqualToAnchor:self.heightAnchor]
 		]];
+		
+		[self _legibilitySettingsChanged];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_legibilitySettingsChanged) name:@"ml.festival.lockwatch2/LegibilitySettingsChanged" object:nil];
 	}
 	
 	return self;
@@ -48,8 +60,23 @@
     [super setHighlighted:highlighted];
 	
 	[UIView animateWithDuration:highlighted ? 0.0 : 0.2 animations:^{
-		[self setAlpha:highlighted ? 0.2 : 1.0];
+		[self setAlpha:highlighted ? 0.4 : 1.0];
 	}];
+}
+
+#pragma mark - Instance Methods
+
+- (void)_legibilitySettingsChanged {
+	_UILegibilitySettings* legibilitySettings = [LWClockViewController legibilitySettings];
+	UIBlurEffect* effect;
+	
+	if (UIColorIsLightColor(legibilitySettings.primaryColor)) {
+		effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+	} else {
+		effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+	}
+	
+	[_visualEffectView setEffect:effect];
 }
 
 @end

@@ -7,7 +7,9 @@
 //
 
 #import <ClockKit/CLKDevice.h>
+#import <SpringBoardUIServices/SBUILegibilityLabel.h>
 
+#import "LWClockViewController.h"
 #import "LWDeleteConfirmationButton.h"
 
 #if __cplusplus
@@ -31,14 +33,14 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 		[_deleteIconView setTintColor:[UIColor colorWithRed:255.0/255.0 green:69.0/255.0 blue:58.0/255.0 alpha:1]];
 		[self addSubview:_deleteIconView];
 		
-		_deleteLabel = [UILabel new];
-		[_deleteLabel setText:NTKClockFaceLocalizedString(@"DELETE_CONFIRMATION", @"Delete")];
+		_deleteLabel = [SBUILegibilityLabel new];
+		[_deleteLabel setString:NTKClockFaceLocalizedString(@"DELETE_CONFIRMATION", @"Delete")];
 		[_deleteLabel setFont:[UIFont systemFontOfSize:14]];
-		[_deleteLabel setTextColor:[UIColor whiteColor]];
+		[_deleteLabel setLegibilitySettings:[LWClockViewController legibilitySettings]];
 		[_deleteLabel sizeToFit];
 		[self addSubview:_deleteLabel];
 		
-		self.backgroundColor = [UIColor.magentaColor colorWithAlphaComponent:0];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_legibilitySettingsChanged) name:@"ml.festival.lockwatch2/LegibilitySettingsChanged" object:nil];
 	}
 	
 	return self;
@@ -60,6 +62,12 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 
 - (CGSize)sizeThatFits:(CGSize)size {
 	return (CGSize){ CGRectGetWidth(_deleteLabel.bounds), CGRectGetHeight(_deleteIconView.bounds) + 7.5 + CGRectGetHeight(_deleteLabel.bounds) };
+}
+
+#pragma mark - Instance Methods
+
+- (void)_legibilitySettingsChanged {
+	[_deleteLabel setLegibilitySettings:[LWClockViewController legibilitySettings]];
 }
 
 @end
