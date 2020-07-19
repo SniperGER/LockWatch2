@@ -41,8 +41,6 @@
 #pragma mark - Instance Methods
 
 - (void)__discardData {
-	NSLog(@"discarding data");
-	
 	_currentAirQualityConditions = nil;
 	_currentConditions = nil;
 	_currentDayForecasts = nil;
@@ -99,7 +97,6 @@
 - (void)_updateIfNeeded {
 	if (!_city || !_city.wfLocation || _isUpdating) return;
 	if (time(NULL) - _updateTimestamp >= [LWWeatherBaseDataSource updateInterval]) {
-		NSLog(@"updating");
 		_isUpdating = YES;
 		
 		// _currentAirQualityConditions = nil;
@@ -115,7 +112,6 @@
 		// Air Quality
 		dispatch_group_enter(dispatchGroup);
 		WFAirQualityRequest* airQualityRequest = [WFAirQualityRequest airQualityRequestForLocation:_city.wfLocation locale:[NSLocale autoupdatingCurrentLocale] completionHandler:^(WFAirQualityConditions* conditions) {
-			NSLog(@"got air quality conditions: %@", conditions);
 			_currentAirQualityConditions = conditions;
 			
 			dispatch_group_leave(dispatchGroup);
@@ -125,7 +121,6 @@
 		// Current Conditions
 		dispatch_group_enter(dispatchGroup);
 		WFForecastRequest* forecastRequest = [WFForecastRequest forecastRequestForLocation:_city.wfLocation date:[self _nwkDateComponentsForDate:NSDate.date] completionHandler:^(WFWeatherConditions* conditions) {
-			NSLog(@"got conditions: %@", conditions);
 			_currentConditions = conditions;
 			
 			dispatch_group_leave(dispatchGroup);
@@ -135,7 +130,6 @@
 		// Day Forecasts
 		dispatch_group_enter(dispatchGroup);
 		WFDailyForecastRequest* dailyForecastRequest = [[WFDailyForecastRequest alloc] initWithLocation:_city.wfLocation completionHandler:^(NSArray<WFWeatherConditions*>* dayForecasts) {
-			NSLog(@"got day forecasts: %@", dayForecasts);
 			_currentDayForecasts = dayForecasts;
 			
 			dispatch_group_leave(dispatchGroup);
@@ -145,7 +139,6 @@
 		// Hourly Forecasts
 		dispatch_group_enter(dispatchGroup);
 		WFHourlyForecastRequest* hourlyForecastRequest = [[WFHourlyForecastRequest alloc] initWithLocation:_city.wfLocation completionHandler:^(NSArray<WFWeatherConditions*>* hourlyForecasts) {
-			NSLog(@"got hourly forecasts: %@", hourlyForecasts);
 			_currentHourlyForecasts = hourlyForecasts;
 			
 			dispatch_group_leave(dispatchGroup);
@@ -155,7 +148,6 @@
 		
 		
 		dispatch_group_notify(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
-			NSLog(@"update completed");
 			_isUpdating = NO;
 			
 			if (_currentAirQualityConditions && _currentConditions && _currentDayForecasts && _currentHourlyForecasts) {

@@ -327,8 +327,8 @@ NSDate* demoDate() {
 }
 
 - (void)handleStyleDidChange {
-	NSLog(@"handleStyleDidChange (dataMode: %ld)", MSHookIvar<NSInteger>(self, "_currentDataMode"));
 	%orig;
+	
 	[self _playNextVideoForEvent:5 animated:NO];
 }
 

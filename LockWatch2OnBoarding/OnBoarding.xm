@@ -152,7 +152,6 @@ void showLWUpgradeNotification() {
 
 %hook BBServer
 - (id)initWithQueue:(id)arg1 {
-	NSLog(@"BBServer initWithQueue");
 	bulletinServer = %orig;
 	return bulletinServer;
 }
