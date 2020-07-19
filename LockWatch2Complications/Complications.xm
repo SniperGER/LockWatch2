@@ -161,12 +161,14 @@
 - (BOOL)isNightForecast {
 	BOOL r = %orig;
 	
-	if (!r && [self valueForComponent:@"WFWeatherSunriseTimeComponent"] && [self valueForComponent:@"WFWeatherSunsetTimeComponent"]) {
-		NSDate* currentDate = [NSDate date];
-		NSDate* sunriseTime = [[NSCalendar currentCalendar] dateFromComponents:(NSDateComponents*)[self valueForComponent:@"WFWeatherSunriseTimeComponent"]];
-		NSDate* sunsetTime = [[NSCalendar currentCalendar] dateFromComponents:(NSDateComponents*)[self valueForComponent:@"WFWeatherSunsetTimeComponent"]];
+	if ([self valueForComponent:@"WFWeatherSunriseTimeComponent"] && [self valueForComponent:@"WFWeatherSunsetTimeComponent"]) {
+		NSCalendar* calendar = [NSCalendar currentCalendar];
 		
-		return [currentDate compare:sunriseTime] == NSOrderedAscending || [currentDate compare:sunsetTime] == NSOrderedDescending;
+		NSDate* forecastTime = [calendar dateFromComponents:(NSDateComponents*)[self valueForComponent:@"WFWeatherForecastTimeComponent"]];
+		NSDate* sunriseTime = [calendar dateFromComponents:(NSDateComponents*)[self valueForComponent:@"WFWeatherSunriseTimeComponent"]];
+		NSDate* sunsetTime = [calendar dateFromComponents:(NSDateComponents*)[self valueForComponent:@"WFWeatherSunsetTimeComponent"]];
+		
+		return ([calendar isDateInToday:sunriseTime] && [forecastTime timeIntervalSinceReferenceDate] < [sunriseTime timeIntervalSinceReferenceDate]) || ([calendar isDateInToday:sunriseTime] && [forecastTime timeIntervalSinceReferenceDate] >= [sunsetTime timeIntervalSinceReferenceDate]);
 	}
 	
 	return r;
