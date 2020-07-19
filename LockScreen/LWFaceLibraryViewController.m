@@ -291,6 +291,11 @@ NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 		}];
 		
 		[_selectedFaceViewController unfreeze];
+		
+		if ([_selectedFaceViewController.faceView respondsToSelector:@selector(_faceLibraryDismissed)]) {
+			[_selectedFaceViewController.faceView performSelector:@selector(_faceLibraryDismissed)];
+		}
+		
 		[_selectedFaceViewController.view layoutIfNeeded];
 		
 		[self _zoomInPageAtIndex:index animated:animated completion:^(BOOL finished) {

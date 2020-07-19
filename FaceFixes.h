@@ -6,7 +6,7 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#import <ClockKit/CLKDevice.h>
+#import <ClockKit/ClockKit.h>
 #import <MaterialKit/MTMaterialView.h>
 #import <NanoRegistry/NRDevice.h>
 #import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
@@ -23,9 +23,6 @@
 @interface CLKDevice (JSON)
 // %new
 - (NSDictionary*)JSONObjectRepresentation;
-@end
-
-@interface CLKVideoPlayerView : UIView
 @end
 
 @interface NTKFaceViewController (UIEffectView)

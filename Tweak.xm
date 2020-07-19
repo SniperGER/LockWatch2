@@ -120,6 +120,12 @@
 }
 
 - (void)turnOnScreenFullyWithBacklightSource:(NSInteger)arg1 {
+	if (arg1 == 20) {
+		[clockViewController.faceViewController handleWristRaiseScreenWake];
+	} else {
+		[clockViewController.faceViewController handleOrdinaryScreenWake];
+	}
+	
 	[clockViewController unfreezeCurrentFace];
 	
 	%orig;
@@ -132,6 +138,7 @@
 			[clockViewController dismissCustomizationViewControllers:NO];
 			
 			[clockViewController freezeCurrentFace];
+			[clockViewController.faceViewController handleScreenBlanked];
 		});
 	}
 	
@@ -148,6 +155,7 @@
 
 - (void)viewWillAppear:(BOOL)arg1 {
 	if ([[%c(SBBacklightController) sharedInstance] screenIsOn]) {
+		[clockViewController.faceViewController handleOrdinaryScreenWake];
 		[clockViewController unfreezeCurrentFace];
 	}
 	
@@ -157,6 +165,7 @@
 - (void)viewDidDisappear:(BOOL)arg1 {
 	[clockViewController dismissFaceLibraryAnimated:NO];
 	[clockViewController freezeCurrentFace];
+	[clockViewController.faceViewController handleScreenBlanked];
 	
 	%orig;
 }

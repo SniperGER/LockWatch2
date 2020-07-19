@@ -127,19 +127,6 @@ NSDate* demoDate() {
 }
 %end	/// %hook CLKDevice
 
-%hook CLKVideoPlayerView
-- (void)layoutSubviews {
-	%orig;
-	
-	[self.superview.subviews[2] setBackgroundColor:UIColor.clearColor];
-	[self.superview.subviews[3] setBackgroundColor:UIColor.clearColor];
-	
-	if (self.superview.subviews.count >= 6) {
-		[self.superview.subviews[5] setBackgroundColor:UIColor.clearColor];
-	}
-}
-%end	/// %hook CLKVideoPlayerView
-
 %hook NTKAlbumEmptyView
 - (void)setBackgroundColor:(UIColor*)arg1 {
 	%orig(UIColor.clearColor);
@@ -325,6 +312,48 @@ NSDate* demoDate() {
 	}
 }
 %end	/// %hook NTKVictoryAnalogBackgroundView
+
+%hook NTKVideoPlayerView
+- (void)_createVideoPlayerViewIfNeeded {
+	if (MSHookIvar<CLKVideoPlayerView*>(self, "_videoPlayerView") == nil) {
+		CLKVideoPlayerView* videoPlayerView = [[CLKVideoPlayerView alloc] initWithFrame:self.bounds];
+		[videoPlayerView setAutoresizingMask:0x12];
+		[videoPlayerView setDelegate:self];
+		[videoPlayerView setPausedViewEnabled:self.isPausedViewEnabled];
+		
+		MSHookIvar<CLKVideoPlayerView*>(self, "_videoPlayerView") = videoPlayerView;
+		
+	}
+}
+
+- (void)handleStyleDidChange {
+	NSLog(@"handleStyleDidChange (dataMode: %ld)", MSHookIvar<NSInteger>(self, "_currentDataMode"));
+	%orig;
+	[self _playNextVideoForEvent:5 animated:NO];
+}
+
+- (void)_updatePauseState {
+	if ([self _shouldPause] != MSHookIvar<BOOL>(self, "_paused")) {
+		if ([self _shouldPause]) {
+			[self _pause];
+		} else {
+			if ([MSHookIvar<UIView*>(self, "_posterContainerView") isHidden]) {
+				[self _hideCurtainView];
+			}
+			
+			[self _play];
+		}
+	}
+}
+%end	/// NTKVideoPlayerView
+
+%hook NTKAnalogVideoFaceView
+- (void)_setVideoPlayerDataSource:(id)arg1 {
+	%orig;
+	
+	[self.videoPlayerView handleStyleDidChange];
+}
+%end	/// NTKAnalogVideoFaceView
 
 %hook NTKUpNextCollectionView
 - (void)setBackgroundColor:(UIColor*)arg1 {
