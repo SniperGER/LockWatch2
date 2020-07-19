@@ -12,16 +12,8 @@
 
 #import "NWCConditionsTemplateFormatter+LWAdditions.h"
 
-#if __cplusplus
-extern "C" {
-#endif
-
-NSString* NWCLocalizedString(NSString* key, NSString* comment);
-NSArray* NWCPlaceholderHourlyConditionsStartingAtDate(NSDate* date, int count);
-
-#if __cplusplus
-}
-#endif
+extern NSString* NWCLocalizedString(NSString* key, NSString* comment);
+extern NSArray* NWCPlaceholderHourlyConditionsStartingAtDate(NSDate* date, int count);
 
 @implementation NWCConditionsTemplateFormatter (LWAdditions)
 

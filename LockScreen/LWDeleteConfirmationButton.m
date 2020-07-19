@@ -12,15 +12,7 @@
 #import "LWClockViewController.h"
 #import "LWDeleteConfirmationButton.h"
 
-#if __cplusplus
-extern "C" {
-#endif
-
-NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
-
-#if __cplusplus
-}
-#endif
+extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 
 @implementation LWDeleteConfirmationButton
 

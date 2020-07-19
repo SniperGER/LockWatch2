@@ -14,16 +14,8 @@
 
 #define SYSTEM_BLUE_COLOR [UIColor colorWithRed:0.039 green:0.518 blue:1.0 alpha:1.0]
 
-#if __cplusplus
-extern "C" {
-#endif
-
-NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
-UIImage* NTKImageNamed(NSString* imageName);
-
-#if __cplusplus
-}
-#endif
+extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
+extern UIImage* NTKImageNamed(NSString* imageName);
 
 extern CFStringRef kMRMediaRemoteNowPlayingInfoAlbum;
 extern CFStringRef kMRMediaRemoteNowPlayingInfoArtist;

@@ -11,16 +11,7 @@
 
 #import "NWCAirQualityTemplateFormatter+LWAdditions.h"
 
-#if __cplusplus
-extern "C" {
-#endif
-
-NSString* NWCLocalizedString(NSString* key, NSString* comment);
-
-#if __cplusplus
-}
-#endif
-
+extern NSString* NWCLocalizedString(NSString* key, NSString* comment);
 
 @implementation NWCAirQualityTemplateFormatter (LWAdditions)
 

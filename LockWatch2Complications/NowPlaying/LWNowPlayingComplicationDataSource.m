@@ -10,22 +10,14 @@
 
 #import "LWNowPlayingComplicationDataSource.h"
 
-#if __cplusplus
-extern "C" {
-#endif
-
 typedef void (^MRMediaRemoteGetNowPlayingApplicationDisplayNameCompletion)(CFStringRef displayName);
-void MRMediaRemoteGetNowPlayingApplicationDisplayName(id origin, dispatch_queue_t queue, MRMediaRemoteGetNowPlayingApplicationDisplayNameCompletion completion);
+extern void MRMediaRemoteGetNowPlayingApplicationDisplayName(id origin, dispatch_queue_t queue, MRMediaRemoteGetNowPlayingApplicationDisplayNameCompletion completion);
 
 extern CFStringRef kMRMediaRemoteNowPlayingApplicationDidChangeNotification;
 extern CFStringRef kMRMediaRemoteNowPlayingApplicationDisplayNameUserInfoKey;
 extern CFStringRef kMRMediaRemoteNowPlayingApplicationIsPlayingDidChangeNotification;
 extern CFStringRef kMRMediaRemoteNowPlayingInfoDidChangeNotification;
 extern CFStringRef kMRMediaRemoteNowPlayingInfoPlaybackRate;
-
-#if __cplusplus
-}
-#endif
 
 @implementation LWNowPlayingComplicationDataSource
 

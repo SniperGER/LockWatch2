@@ -25,15 +25,7 @@
 #import "Core/LWFaceLibraryViewControllerDelegate.h"
 #import "Core/LWPersistentFaceCollection.h"
 
-#if __cplusplus
-extern "C" {
-#endif
-
-NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
-
-#if __cplusplus
-}
-#endif
+extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 
 @interface NSDistributedNotificationCenter : NSNotificationCenter
 @end
