@@ -70,8 +70,9 @@
 - (void)viewDidLayoutSubviews {
 	%orig;
 	
-	CSCoverSheetViewController* coverSheetController = [[objc_getClass("SBLockScreenManager") sharedInstance] coverSheetViewController];
-	SBFLockScreenDateViewController* dateViewController = [coverSheetController dateViewController];
+	if (!clockViewController.view.superview) return;
+	
+	SBFLockScreenDateViewController* dateViewController = [self dateViewController];
 	
 	[clockViewController setDateViewInsets:(UIEdgeInsets){
 		0,
@@ -111,6 +112,17 @@
 	}
 }
 %end	/// %hook CSMainPageContentViewController
+
+%hook CSCombinedListViewController
+- (void)viewWillAppear:(BOOL)arg1 {
+	%orig;
+	
+	if (clockViewController.view.superview != self.view) {
+		[clockViewController.view removeFromSuperview];
+		[self.view addSubview:clockViewController.view];
+	}
+}
+%end	/// %hook CSCombinedListViewController
 
 %hook SBBacklightController
 - (void)_startFadeOutAnimationFromLockSource:(int)arg1 {
