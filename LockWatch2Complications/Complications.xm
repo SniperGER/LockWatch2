@@ -168,7 +168,9 @@
 		NSDate* sunriseTime = [calendar dateFromComponents:(NSDateComponents*)[self valueForComponent:@"WFWeatherSunriseTimeComponent"]];
 		NSDate* sunsetTime = [calendar dateFromComponents:(NSDateComponents*)[self valueForComponent:@"WFWeatherSunsetTimeComponent"]];
 		
-		return ([calendar isDateInToday:sunriseTime] && [forecastTime timeIntervalSinceReferenceDate] < [sunriseTime timeIntervalSinceReferenceDate]) || ([calendar isDateInToday:sunriseTime] && [forecastTime timeIntervalSinceReferenceDate] >= [sunsetTime timeIntervalSinceReferenceDate]);
+		return 
+			([calendar isDateInToday:sunriseTime] && [forecastTime timeIntervalSinceReferenceDate] < [sunriseTime timeIntervalSinceReferenceDate]) || 
+			([calendar isDateInToday:sunsetTime] && [forecastTime timeIntervalSinceReferenceDate] >= [sunsetTime timeIntervalSinceReferenceDate]);
 	}
 	
 	return r;
@@ -336,11 +338,13 @@ extern "C" UIImage* NWCLocalizedImageNamed(NSString* name);
 	
 	switch (conditionCode) {
         case 5:
-        case 20:
-        case 22:
         case 31:
         case 38:
         case 39:
+			if (isDay) [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
+			break;
+		case 20:
+		case 22:
             [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
             break;
         case 10:
@@ -349,17 +353,19 @@ extern "C" UIImage* NWCLocalizedImageNamed(NSString* name);
         case 13:
         case 19:
         case 26:
-        case 30:
         case 41:
         case 42:
             [imageProvider setTintColor:[%c(NWCColor) conditionsBlueTintColor]];
             break;
+		case 33:
+		case 35:
+			if (isDay) [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
         case 37:
             [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
             [imageProvider setForegroundAccentImageColor:UIColor.redColor];
             break;
         case 40:
-            [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
+			if (isDay) [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
             [imageProvider setForegroundAccentImageColor:[%c(NWCColor) conditionsBlueTintColor]];
             break;
         default: break;
