@@ -156,7 +156,36 @@
 	[MSHookIvar<HKHealthStore*>(self, "_healthStore") executeQuery:cacheQuery];
 }
 %end	/// %hook NTKWellnessTimelineModel
+%end	// %group SpringBoard
 
+
+
+%group healthd
+static HDActivityCacheManager* activityCacheManager;
+
+%hook HDPrimaryProfile
+- (id)activityCacheManager {
+	HDActivityCacheManager* r = %orig;
+	
+	if (!r) {
+		activityCacheManager = [[%c(HDActivityCacheManager) alloc] initWithProfile:self];
+		return activityCacheManager;
+	}
+	
+	return r;
+}
+%end
+
+%hook HDReadAuthorizationStatus
+- (long long)authorizationStatus {
+	return 1;
+}
+%end
+%end	// %group healthd
+
+
+
+%group WeatherComplications
 %hook WFWeatherConditions
 - (BOOL)isNightForecast {
 	BOOL r = %orig;
@@ -184,9 +213,15 @@
 	}
 }
 
-extern "C" UIImage* NWCLocalizedImageNamed(NSString* name);
-
 - (CLKImageProvider*)nwc_conditionImageProviderForComplicationFamily:(NSInteger)arg1 {
+	static NSBundle* localizationBundle = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		localizationBundle = [NSBundle bundleForClass:NSClassFromString(@"NWCCompanionBaseDataSource")];
+	});
+	
+	if (!localizationBundle) return nil;
+	
 	BOOL isDay = !self.isNightForecast;
 	NSInteger conditionCode = [self _nwc_code];
 	NSString* familyPrefix = [WFWeatherConditions _nwc_prefixForFamily:arg1];
@@ -325,14 +360,14 @@ extern "C" UIImage* NWCLocalizedImageNamed(NSString* name);
 	NSString* backgroundImageName = [prefixedImageName stringByAppendingString:@"_Background"];
 	NSString* foregroundImageName = [prefixedImageName stringByAppendingString:@"_Foreground"];
 	
-	UIImage* onePieceImage = NWCLocalizedImageNamed(prefixedImageName);
-	UIImage* backgroundImage = NWCLocalizedImageNamed(backgroundImageName);
-	UIImage* foregroundImage = NWCLocalizedImageNamed(foregroundImageName);
+	UIImage* onePieceImage = [UIImage imageNamed:prefixedImageName inBundle:localizationBundle compatibleWithTraitCollection:UIScreen.mainScreen.traitCollection];
+	UIImage* backgroundImage = [UIImage imageNamed:backgroundImageName inBundle:localizationBundle compatibleWithTraitCollection:UIScreen.mainScreen.traitCollection];
+	UIImage* foregroundImage = [UIImage imageNamed:foregroundImageName inBundle:localizationBundle compatibleWithTraitCollection:UIScreen.mainScreen.traitCollection];
 	
 	CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:onePieceImage twoPieceImageBackground:backgroundImage twoPieceImageForeground:foregroundImage];
 	
 	NSString* foregroundAccentImageName = [prefixedImageName stringByAppendingString:@"_Accent"];
-	UIImage* foregroundAccentImage = NWCLocalizedImageNamed(foregroundAccentImageName);
+	UIImage* foregroundAccentImage = [UIImage imageNamed:foregroundAccentImageName inBundle:localizationBundle compatibleWithTraitCollection:UIScreen.mainScreen.traitCollection];
 	
 	[imageProvider setForegroundAccentImage:foregroundAccentImage];
 	
@@ -388,34 +423,9 @@ extern "C" UIImage* NWCLocalizedImageNamed(NSString* name);
 	[MSHookIvar<UIImageView*>(self, "_foregroundAccentImageView") setTintColor:self.imageProvider.foregroundAccentImageColor];
 }
 %end	/// %hook NTKStackedImagesComplicationImageView
-%end	// %group SpringBoard
+%end	// %group WeatherComplications
 
-
-
-%group healthd
-static HDActivityCacheManager* activityCacheManager;
-
-%hook HDPrimaryProfile
-- (id)activityCacheManager {
-	HDActivityCacheManager* r = %orig;
 	
-	if (!r) {
-		activityCacheManager = [[%c(HDActivityCacheManager) alloc] initWithProfile:self];
-		return activityCacheManager;
-	}
-	
-	return r;
-}
-%end
-
-%hook HDReadAuthorizationStatus
-- (long long)authorizationStatus {
-	return 1;
-}
-%end
-%end	// %group healthd
-
-
 
 %ctor {
 	@autoreleasepool {
@@ -427,6 +437,11 @@ static HDActivityCacheManager* activityCacheManager;
 			
 			if ([bundleIdentifier isEqualToString:@"com.apple.springboard"]) {
 				dlopen("/System/Library/NanoTimeKit/ComplicationBundles/WeatherComplicationsCompanion.bundle/WeatherComplicationsCompanion", RTLD_NOW);
+				
+				void* weatherLib = dlopen("/usr/lib/LockWatch2Weather.dylib", RTLD_NOW);
+				if (weatherLib) {
+					%init(WeatherComplications);
+				}
 				
 				%init(SpringBoard);
 			}
