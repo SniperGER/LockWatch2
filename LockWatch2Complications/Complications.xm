@@ -204,6 +204,24 @@
 	return r;
 }
 %end	/// %hook NTKComplicationDisplayWrapperView
+
+%hook NTKRichComplicationView
+- (void)setHighlighted:(BOOL)arg1 {
+	if (MSHookIvar<BOOL>(self, "_highlighted") != arg1) {
+		MSHookIvar<BOOL>(self, "_highlighted") = arg1;
+		
+		[UIView animateWithDuration:(arg1 ? 0.05 : 0.2) animations:^{
+			if (arg1) {
+				[self setAlpha:0.3];
+				[self setTransform:CGAffineTransformMakeScale(0.9, 0.9)];
+			} else {
+				[self setAlpha:1];
+				[self setTransform:CGAffineTransformIdentity];
+			}
+		}];
+	}
+}
+%end	/// %hook NTKRichComplicationView
 %end	// %group SpringBoard
 
 
