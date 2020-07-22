@@ -10,6 +10,9 @@
 
 @protocol LWORBTapGestureRecognizerDelegate <NSObject>
 
+@required
+- (BOOL)isORBTapGestureAllowed;
+
 @optional
 - (void)ORBTapGestureRecognizerDidLatch:(LWORBTapGestureRecognizer*)orbRecognizer;
 

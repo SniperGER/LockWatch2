@@ -177,12 +177,6 @@ static _UILegibilitySettings* _legibilitySettings;
 }
 
 - (void)_beginOrbZoom {
-#ifndef DEMO_MODE
-	if ([[(SpringBoard*)[UIApplication sharedApplication] pluginUserAgent] deviceIsPasscodeLocked]) return;
-#endif
-
-	if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation)) return;
-
 	[_faceViewController prepareForOrb];
 	_libraryViewIsPresented = YES;
 	
@@ -222,12 +216,6 @@ static _UILegibilitySettings* _legibilitySettings;
 }
 
 - (void)_endOrbZoom:(BOOL)latched {
-#ifndef DEMO_MODE
-	if ([[(SpringBoard*)[UIApplication sharedApplication] pluginUserAgent] deviceIsPasscodeLocked]) return;
-#endif
-
-	if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation)) return;
-
 	[_libraryViewController endInteractiveLibraryPresentation];
 	
 	if (latched) {
@@ -305,12 +293,6 @@ static _UILegibilitySettings* _legibilitySettings;
 }
 
 - (void)_setOrbZoomProgress:(CGFloat)progress {
-#ifndef DEMO_MODE
-	if ([[(SpringBoard*)[UIApplication sharedApplication] pluginUserAgent] deviceIsPasscodeLocked]) return;
-#endif
-	
-	if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation)) return;
-
 	[_libraryViewController setInteractiveProgress:progress];
 }
 
@@ -422,6 +404,16 @@ static _UILegibilitySettings* _legibilitySettings;
 }
 
 #pragma mark - LWORBTapGestureRecoginzerDelegate
+
+- (BOOL)isORBTapGestureAllowed {
+#ifndef DEMO_MODE
+	if ([[(SpringBoard*)[UIApplication sharedApplication] pluginUserAgent] deviceIsPasscodeLocked]) return NO;
+#endif
+	
+	if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation)) return NO;
+	
+	return YES;
+}
 
 - (void)ORBTapGestureRecognizerDidLatch:(LWORBTapGestureRecognizer*)orbRecognizer {
 	if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation)) return;

@@ -41,6 +41,11 @@
 }
 
 - (void)touchesBegan:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {
+	if (!_orbDelegate.isORBTapGestureAllowed) {
+		[self setState:UIGestureRecognizerStateFailed];
+		return;
+	}
+	
 	[self setState:UIGestureRecognizerStatePossible];
 	
 	UITouch* touch = touches.anyObject;
@@ -68,6 +73,11 @@
 }
 
 - (void)touchesMoved:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {
+	if (!_orbDelegate.isORBTapGestureAllowed) {
+		[self setState:UIGestureRecognizerStateFailed];
+		return;
+	}
+	
 	if (!_shouldAllowTouchMove) {
 		if ([self _touchMovedTooFarFromStartPoint:touches.anyObject]) {
 			[self setState:UIGestureRecognizerStateFailed];
@@ -82,6 +92,11 @@
 }
 
 - (void)touchesEnded:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {
+	if (!_orbDelegate.isORBTapGestureAllowed) {
+		[self setState:UIGestureRecognizerStateFailed];
+		return;
+	}
+	
 	if (_usingLongPress) {
 		[self _updateLongPressForTouchesEnded:touches event:event];
 	}
