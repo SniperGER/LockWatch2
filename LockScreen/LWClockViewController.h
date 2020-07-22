@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 	BOOL _haveFinishedLoadingView;
 	NSTimer* _libraryTimeoutTimer;
 	CAShapeLayer* _contentViewMask;
+	NSInteger _effectiveInterfaceOrientation;
 }
 
 @property (class, nonatomic) _UILegibilitySettings* legibilitySettings;
@@ -63,6 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)faceLibraryIsPresented;
 - (void)freezeCurrentFace;
 - (BOOL)isIncrementallyZooming;
+- (void)layoutForDateViewController:(UIViewController*)dateViewController withEffectiveInterfaceOrientation:(NSInteger)interfaceOrientation;
 - (void)loadAddableFaceCollection;
 - (void)loadLibraryFaceCollection;
 - (void)setAlignmentPercent:(CGFloat)alignmentPercent;

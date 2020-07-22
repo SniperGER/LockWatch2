@@ -66,42 +66,6 @@
 }
 %end	/// %hook SBFLockScreenDateView
 
-%hook CSCoverSheetViewController
-- (void)viewDidLayoutSubviews {
-	%orig;
-	
-	if (!clockViewController.view.superview) return;
-	
-	SBFLockScreenDateViewController* dateViewController = [self dateViewController];
-	
-	[clockViewController setDateViewInsets:(UIEdgeInsets){
-		0,
-		(CGRectGetWidth(UIScreen.mainScreen.bounds) - CGRectGetWidth(dateViewController.view.bounds)) / 2,
-		0,
-		(CGRectGetWidth(UIScreen.mainScreen.bounds) - CGRectGetWidth(dateViewController.view.bounds)) / 2,
-	}];
-	
-	CGFloat dateViewControllerVerticalPosition = (dateViewController.view.layer.position.y - (CGRectGetHeight(dateViewController.view.bounds) / 2));
-	
-	[clockViewController.view setFrame:(CGRect){
-		{ 0, dateViewControllerVerticalPosition },
-		{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(clockViewController.view.bounds) }
-	}];
-		
-	[clockViewController.view setNeedsLayout];
-	[clockViewController.view layoutIfNeeded];
-	
-	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && [UIWindow isLandscapeOrientation];
-			
-	[clockViewController.view setCenter:(CGPoint) {
-		clockViewController.view.center.x,
-		(isiPhoneLandscape) ? (CGRectGetHeight(clockViewController.view.bounds) / 2) + 48 : dateViewControllerVerticalPosition + (CGRectGetHeight(clockViewController.view.bounds) / 2)
-	}];
-	
-	[clockViewController _updateMask];
-}
-%end	/// %hook CSCoverSheetViewController
-
 %hook CSMainPageContentViewController
 - (void)viewDidLayoutSubviews {
 	%orig;
@@ -124,7 +88,61 @@
 }
 %end	/// %hook CSCombinedListViewController
 
+%hook CSCoverSheetViewController
+- (void)viewWillAppear:(BOOL)arg1 {
+	if ([[%c(SBBacklightController) sharedInstance] screenIsOn]) {
+		[clockViewController.faceViewController handleOrdinaryScreenWake];
+		[clockViewController unfreezeCurrentFace];
+	}
+	
+	[clockViewController layoutForDateViewController:[self dateViewController] withEffectiveInterfaceOrientation:self.effectiveInterfaceOrientation];
+	
+	%orig;
+}
+
+- (void)viewDidDisappear:(BOOL)arg1 {
+	[clockViewController dismissFaceLibraryAnimated:NO];
+	[clockViewController freezeCurrentFace];
+	[clockViewController.faceViewController handleScreenBlanked];
+	
+	%orig;
+}
+
+- (void)viewDidLayoutSubviews {
+	%orig;
+	
+	if (!clockViewController.view.superview) return;
+	[clockViewController layoutForDateViewController:[self dateViewController] withEffectiveInterfaceOrientation:self.effectiveInterfaceOrientation];
+}
+
+- (void)_transitionChargingViewToVisible:(BOOL)arg1 showBattery:(BOOL)arg2 animated:(BOOL)arg3 {
+	if (preferences.batteryChargingViewHidden) return;
+
+	%orig;
+}
+
+- (void)finishUIUnlockFromSource:(int)arg1 {
+	%orig;
+	
+	[clockViewController dismissCustomizationViewControllers:YES];
+}
+%end	/// %hook CSCoverSheetViewController
+
 %hook SBBacklightController
+- (void)_animateBacklightToFactor:(float)arg1 duration:(double)arg2 source:(long long)arg3 silently:(BOOL)arg4 completion:(id /* block */)arg5 {
+	if (arg1 == 0.0 && self.screenIsOn) {
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(arg2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			[clockViewController dismissFaceLibraryAnimated:NO];
+			[clockViewController dismissCustomizationViewControllers:NO];
+			
+			[clockViewController freezeCurrentFace];
+			[clockViewController.faceViewController handleScreenBlanked];
+		});
+	}
+	
+	%orig;
+}
+
 - (void)_startFadeOutAnimationFromLockSource:(int)arg1 {
 #ifdef DEMO_MODE
 	return;
@@ -148,46 +166,7 @@
 	
 	%orig;
 }
-
-- (void)_animateBacklightToFactor:(float)arg1 duration:(double)arg2 source:(long long)arg3 silently:(BOOL)arg4 completion:(id /* block */)arg5 {
-	if (arg1 == 0.0 && self.screenIsOn) {
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(arg2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-			[clockViewController dismissFaceLibraryAnimated:NO];
-			[clockViewController dismissCustomizationViewControllers:NO];
-			
-			[clockViewController freezeCurrentFace];
-			[clockViewController.faceViewController handleScreenBlanked];
-		});
-	}
-	
-	%orig;
-}
 %end	/// %hook SBBacklightController
-
-%hook CSCoverSheetViewController
-- (void)finishUIUnlockFromSource:(int)arg1 {
-	%orig;
-	
-	[clockViewController dismissCustomizationViewControllers:YES];
-}
-
-- (void)viewWillAppear:(BOOL)arg1 {
-	if ([[%c(SBBacklightController) sharedInstance] screenIsOn]) {
-		[clockViewController.faceViewController handleOrdinaryScreenWake];
-		[clockViewController unfreezeCurrentFace];
-	}
-	
-	%orig;
-}
-
-- (void)viewDidDisappear:(BOOL)arg1 {
-	[clockViewController dismissFaceLibraryAnimated:NO];
-	[clockViewController freezeCurrentFace];
-	[clockViewController.faceViewController handleScreenBlanked];
-	
-	%orig;
-}
-%end	/// %hook CSCoverSheetViewController
 
 static CGFloat notificationOffset = 0;
 
@@ -293,13 +272,6 @@ static BOOL scrollEnabled = YES;
 }
 %end	/// %hook NTKCCLibraryListViewController
 
-%hook CSCoverSheetViewController
-- (void)_transitionChargingViewToVisible:(BOOL)arg1 showBattery:(BOOL)arg2 animated:(BOOL)arg3 {
-	if (preferences.batteryChargingViewHidden) return;
-
-	%orig;
-}
-%end	// %hook CSCoverSheetViewController
 
 %hook BSUICAPackageView
 - (id)initWithPackageName:(id)arg1 inBundle:(id)arg2 {

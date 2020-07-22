@@ -131,7 +131,7 @@ static _UILegibilitySettings* _legibilitySettings;
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
 	
-	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && [UIWindow isLandscapeOrientation];
+	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation);
 	CGFloat _centerX = 0;
 	
 	if (!isiPhoneLandscape) {
@@ -177,6 +177,12 @@ static _UILegibilitySettings* _legibilitySettings;
 }
 
 - (void)_beginOrbZoom {
+#ifndef DEMO_MODE
+	if ([[(SpringBoard*)[UIApplication sharedApplication] pluginUserAgent] deviceIsPasscodeLocked]) return;
+#endif
+
+	if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation)) return;
+
 	[_faceViewController prepareForOrb];
 	_libraryViewIsPresented = YES;
 	
@@ -216,6 +222,12 @@ static _UILegibilitySettings* _legibilitySettings;
 }
 
 - (void)_endOrbZoom:(BOOL)latched {
+#ifndef DEMO_MODE
+	if ([[(SpringBoard*)[UIApplication sharedApplication] pluginUserAgent] deviceIsPasscodeLocked]) return;
+#endif
+
+	if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation)) return;
+
 	[_libraryViewController endInteractiveLibraryPresentation];
 	
 	if (latched) {
@@ -293,6 +305,12 @@ static _UILegibilitySettings* _legibilitySettings;
 }
 
 - (void)_setOrbZoomProgress:(CGFloat)progress {
+#ifndef DEMO_MODE
+	if ([[(SpringBoard*)[UIApplication sharedApplication] pluginUserAgent] deviceIsPasscodeLocked]) return;
+#endif
+	
+	if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation)) return;
+
 	[_libraryViewController setInteractiveProgress:progress];
 }
 
@@ -328,6 +346,36 @@ static _UILegibilitySettings* _legibilitySettings;
 	return [_libraryViewController isIncrementallyZooming];
 }
 
+- (void)layoutForDateViewController:(UIViewController*)dateViewController withEffectiveInterfaceOrientation:(NSInteger)interfaceOrientation {
+	_effectiveInterfaceOrientation = interfaceOrientation;
+	
+	[self setDateViewInsets:(UIEdgeInsets) {
+		0,
+		(CGRectGetWidth(UIScreen.mainScreen.bounds) - CGRectGetWidth(dateViewController.view.bounds)) / 2,
+		0,
+		(CGRectGetWidth(UIScreen.mainScreen.bounds) - CGRectGetWidth(dateViewController.view.bounds)) / 2,
+	}];
+	
+	CGFloat dateViewControllerVerticalPosition = (dateViewController.view.layer.position.y - (CGRectGetHeight(dateViewController.view.bounds) / 2));
+	
+	[self.view setFrame:(CGRect){
+		{ 0, dateViewControllerVerticalPosition },
+		{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(self.view.bounds) }
+	}];
+		
+	[self.view setNeedsLayout];
+	[self.view layoutIfNeeded];
+	
+	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(interfaceOrientation);
+			
+	[self.view setCenter:(CGPoint) {
+		self.view.center.x,
+		(isiPhoneLandscape) ? (CGRectGetHeight(self.view.bounds) / 2) + 48 : dateViewControllerVerticalPosition + (CGRectGetHeight(self.view.bounds) / 2)
+	}];
+	
+	[self _updateMask];
+}
+
 - (void)loadAddableFaceCollection {
 	_addableFaceCollection = [LWPersistentFaceCollection defaultAddableFaceCollectionForDevice:_device];
 }
@@ -357,11 +405,6 @@ static _UILegibilitySettings* _legibilitySettings;
 #pragma mark - LWClockViewDelegate
 
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event {
-#ifndef DEMO_MODE
-	if ([[(SpringBoard*)[UIApplication sharedApplication] pluginUserAgent] deviceIsPasscodeLocked]) return nil;
-#endif
-	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone && [UIWindow isLandscapeOrientation]) return nil;
-	
 	if (!CGRectContainsPoint(self.view.bounds, point)) return nil;
 	
 	if (_libraryViewIsPresented) {
@@ -385,6 +428,8 @@ static _UILegibilitySettings* _legibilitySettings;
 #pragma mark - LWORBTapGestureRecoginzerDelegate
 
 - (void)ORBTapGestureRecognizerDidLatch:(LWORBTapGestureRecognizer*)orbRecognizer {
+	if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation)) return;
+	
 	AudioServicesPlaySystemSound(1520);
 	[_libraryViewController commitToLibraryPresentation];
 }

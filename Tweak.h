@@ -50,6 +50,7 @@ extern "C" CFNotificationCenterRef CFNotificationCenterGetDistributedCenter();
 @end
 
 @interface CSCoverSheetViewController : UIViewController
+- (NSInteger)effectiveInterfaceOrientation;
 - (CSMainPageContentViewController*)mainPageContentViewController;
 - (SBFLockScreenDateViewController*)dateViewController;
 @end
