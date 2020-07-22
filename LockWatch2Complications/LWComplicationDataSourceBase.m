@@ -18,11 +18,19 @@
 	return YES;
 }
 
+- (id)complicationApplicationIdentifier {
+	return nil;
+}
+
 - (CLKComplicationTemplate*)currentSwitcherTemplate {
 	return nil;
 }
 
 - (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler {
+	handler(nil);
+}
+
+- (void)getLaunchURLForTimelineEntryDate:(NSDate*)entryDate timeTravelDate:(NSDate*)timeTravelDate withHandler:(void (^)(NSURL* url))handler {
 	handler(nil);
 }
 

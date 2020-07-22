@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 	LWNowPlayingState _nowPlayingState;
 	NSDictionary* _nowPlayingInfo;
 	NSString* _applicationName;
+	NSString* _applicationBundleId;
     CLKComplicationTimelineEntry* _nowPlayingEntry;
     NSNumber* _activeOriginIdentifier;
     BOOL _isPaused;

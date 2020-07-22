@@ -180,6 +180,10 @@
 	[self _stopUpdateTimer];
 }
 
+- (id)complicationApplicationIdentifier {
+	return @"com.apple.weather";
+}
+
 - (CLKComplicationTemplate*)currentSwitcherTemplate {
 	if (!_switcherTemplate) {
 		[self getCurrentTimelineEntryWithHandler:^(CLKComplicationTimelineEntry* timelineEntry) {

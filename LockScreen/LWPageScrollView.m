@@ -33,6 +33,22 @@
 	return self;
 }
 
+- (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event {
+	UIView* view = [super hitTest:point withEvent:event];
+	
+	if (view) return view;
+	
+	for (UIView* subview in [self.subviews reverseObjectEnumerator]) {
+		CGPoint convertedPoint = [subview convertPoint:point fromView:self];
+		UIView* hitView = [subview hitTest:convertedPoint withEvent:event];
+		if (hitView) {
+			return hitView;
+		}
+	}
+	
+	return nil;
+}
+
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	

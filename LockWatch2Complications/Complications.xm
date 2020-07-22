@@ -107,6 +107,44 @@
 }
 %end	/// %hook NTKComplicationDataSource
 
+%hook NTKLocalTimelineComplicationController
+- (void)performTapAction {
+	CLKCComplicationDataSource* dataSource = MSHookIvar<CLKCComplicationDataSource*>(self, "_dataSource");
+	if (!dataSource) return;
+	
+	[dataSource getLaunchURLForTimelineEntryDate:nil timeTravelDate:nil withHandler:^(NSURL* url) {
+		SBApplication* destinationApplication = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:dataSource.complicationApplicationIdentifier];
+		
+		if (!destinationApplication) return;
+		NSLog(@"destinationApplication: %@", destinationApplication);
+		
+		SBLockScreenUnlockRequest* request = [%c(SBLockScreenUnlockRequest) new];
+		[request setSource:17];
+		[request setIntent:3];
+		[request setName:[NSString stringWithFormat:@"SBWorkspaceRequest: Open \"%@\"", dataSource.complicationApplicationIdentifier]];
+		[request setDestinationApplication:destinationApplication];
+		[request setWantsBiometricPresentation:YES];
+		[request setForceAlertAuthenticationUI:YES];
+		
+		FBSOpenApplicationService* appService = [%c(FBSOpenApplicationService) serviceWithDefaultShellEndpoint];
+		
+		[[%c(SBLockScreenManager) sharedInstance] unlockWithRequest:request completion:^(BOOL completed){
+			if (completed) {
+				if (url) {
+					FBSOpenApplicationOptions* openOptions = [%c(FBSOpenApplicationOptions) optionsWithDictionary:@{
+						@"__PayloadURL": url
+					}];
+					
+					[appService openApplication:[dataSource complicationApplicationIdentifier] withOptions:openOptions completion:nil];
+				} else {
+					[appService openApplication:[dataSource complicationApplicationIdentifier] withOptions:nil completion:nil];
+				}
+			}
+		}];
+	}];
+}
+%end	/// %hook NTKLocalTimelineComplicationController
+
 %hook NTKTimelineDataOperation
 - (void)start {
 	if ([MSHookIvar<NSObject*>(self, "_localDataSource") isKindOfClass:%c(LWComplicationDataSourceBase)]) {
@@ -156,6 +194,16 @@
 	[MSHookIvar<HKHealthStore*>(self, "_healthStore") executeQuery:cacheQuery];
 }
 %end	/// %hook NTKWellnessTimelineModel
+
+%hook NTKComplicationDisplayWrapperView
+- (id)init {
+	NTKComplicationDisplayWrapperView* r = %orig;
+	
+	[r addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:r action:@selector(_invokeTouchUpInsideHandler)]];
+	
+	return r;
+}
+%end	/// %hook NTKComplicationDisplayWrapperView
 %end	// %group SpringBoard
 
 

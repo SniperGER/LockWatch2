@@ -438,7 +438,6 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	
 	[self.delegate faceLibraryViewControllerDidCompleteSelection:self];
 	
-	[_switcherController.scrollView setUserInteractionEnabled:NO];
 	[_switcherController.scrollView setScrollEnabled:NO];
 	
 	[self _configureForSwitcherPageIndex:index];
@@ -492,8 +491,11 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	if (presented != _presented) {
 		_presented = presented;
 		
-		[_switcherController.scrollView setUserInteractionEnabled:presented];
 		[_switcherController.scrollView setScrollEnabled:presented];
+		
+		[_switcherController.scrollView enumeratePagesWithBlock:^(LWPageView* pageView, NSInteger index, BOOL* stop) {
+			[pageView setScrollEnabled:presented];
+		}];
 		
 		if (_presented) {
 			[self showAddPageIfAvailable];

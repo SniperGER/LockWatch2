@@ -57,4 +57,8 @@
 	return nil;
 }
 
+- (BOOL)supportsTapAction {
+	return NO;
+}
+
 @end

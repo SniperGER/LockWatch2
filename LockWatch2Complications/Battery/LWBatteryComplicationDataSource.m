@@ -10,6 +10,12 @@
 
 #import "LWBatteryComplicationDataSource.h"
 
+@interface _CDBatterySaver : NSObject
++ (instancetype)batterySaver;
+- (long long)getPowerMode;
+- (BOOL)setPowerMode:(long long)arg1 error:(id*)arg2;
+@end
+
 @implementation LWBatteryComplicationDataSource
 
 - (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device {
@@ -93,6 +99,15 @@
 
 - (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler {
 	handler([self _currentTimelineEntry]);
+}
+
+- (void)getLaunchURLForTimelineEntryDate:(NSDate*)entryDate timeTravelDate:(NSDate*)timeTravelDate withHandler:(void (^)(NSURL* url))handler {
+	/// TODO: Toggle LowPowerMode
+	
+	handler(nil);
+	
+	_CDBatterySaver* batterySaver = [NSClassFromString(@"_CDBatterySaver") batterySaver];
+	[batterySaver setPowerMode:([batterySaver getPowerMode] == 1 ? 0 : 1) error:nil];
 }
 
 @end

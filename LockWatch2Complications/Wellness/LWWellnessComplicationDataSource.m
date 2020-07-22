@@ -41,11 +41,19 @@
 	return [timelineEntry complicationTemplate];
 }
 
+- (id)complicationApplicationIdentifier {
+	return @"com.apple.Fitness";
+}
+
 - (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler {
 	NTKWellnessTimelineModel* timelineModel = [NTKWellnessTimelineModel sharedModel];
 	[timelineModel getCurrentWellnessEntryWithHandler:^(NTKWellnessEntryModel* entryModel) {
 		handler([self _timelineEntryFromModel:entryModel family:self.family]);
 	}];
+}
+
+- (void)getLaunchURLForTimelineEntryDate:(NSDate*)entryDate timeTravelDate:(NSDate*)timeTravelDate withHandler:(void (^)(NSURL* url))handler {
+	handler([NSURL URLWithString:@"activitytoday://"]);
 }
 
 - (CLKComplicationTemplate*)lockedTemplate {

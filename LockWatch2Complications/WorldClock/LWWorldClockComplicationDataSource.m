@@ -91,11 +91,19 @@
 	return YES;
 }
 
+- (id)complicationApplicationIdentifier {
+	return @"com.apple.mobiletimer";
+}
+
 - (CLKComplicationTemplate*)currentSwitcherTemplate {
 	NTKWorldClockTimelineEntryModel* entryModel = [self _currentEntryModel];
 	[entryModel setShowIdealizedTime:YES];
 	
 	return [[entryModel entryForComplicationFamily:self.family] complicationTemplate];
+}
+
+- (void)getLaunchURLForTimelineEntryDate:(NSDate*)entryDate timeTravelDate:(NSDate*)timeTravelDate withHandler:(void (^)(NSURL* url))handler {
+	handler([NSURL URLWithString:@"clock-worldclock://"]);
 }
 
 - (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler {

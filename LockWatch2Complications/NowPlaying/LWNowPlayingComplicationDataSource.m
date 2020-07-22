@@ -13,6 +13,9 @@
 typedef void (^MRMediaRemoteGetNowPlayingApplicationDisplayNameCompletion)(CFStringRef displayName);
 extern void MRMediaRemoteGetNowPlayingApplicationDisplayName(id origin, dispatch_queue_t queue, MRMediaRemoteGetNowPlayingApplicationDisplayNameCompletion completion);
 
+typedef void (^MRMediaRemoteGetNowPlayingApplicationDisplayIDCompletion)(CFStringRef displayID);
+extern void MRMediaRemoteGetNowPlayingApplicationDisplayID(dispatch_queue_t queue, MRMediaRemoteGetNowPlayingApplicationDisplayIDCompletion completion);
+
 extern CFStringRef kMRMediaRemoteNowPlayingApplicationDidChangeNotification;
 extern CFStringRef kMRMediaRemoteNowPlayingApplicationDisplayNameUserInfoKey;
 extern CFStringRef kMRMediaRemoteNowPlayingApplicationIsPlayingDidChangeNotification;
@@ -77,6 +80,10 @@ extern CFStringRef kMRMediaRemoteNowPlayingInfoPlaybackRate;
 		
 		[self _updateTimelineEntry];
 	});
+	
+	MRMediaRemoteGetNowPlayingApplicationDisplayID(dispatch_get_main_queue(), ^(CFStringRef displayID) {
+		_applicationBundleId = (__bridge NSString*)displayID;
+	});
 }
 
 - (void)mediaRemoteDidUpdateNowPlayingInfo:(NSNotification*)notification {
@@ -115,6 +122,10 @@ extern CFStringRef kMRMediaRemoteNowPlayingInfoPlaybackRate;
 
 #pragma mark - NTKComplicationDataSource
 
+- (id)complicationApplicationIdentifier {
+	return _applicationBundleId;
+}
+
 - (CLKComplicationTemplate*)currentSwitcherTemplate {
 	if (_nowPlayingEntry) {
 		return [_nowPlayingEntry complicationTemplate];
@@ -129,6 +140,10 @@ extern CFStringRef kMRMediaRemoteNowPlayingInfoPlaybackRate;
 	} else {
 		handler([self _defaultTimelineEntry]);
 	}
+}
+
+- (void)getLaunchURLForTimelineEntryDate:(NSDate*)entryDate timeTravelDate:(NSDate*)timeTravelDate withHandler:(void (^)(NSURL* url))handler {
+	handler(nil);
 }
 
 @end

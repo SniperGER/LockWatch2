@@ -50,12 +50,20 @@
 
 #pragma mark - NTKComplicationDataSource
 
+- (id)complicationApplicationIdentifier {
+	return @"com.apple.mobilecal";
+}
+
 - (CLKComplicationTemplate*)currentSwitcherTemplate {
 	return [[self _currentTimelineEntry] complicationTemplate];
 }
 
 - (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler {
 	handler([self _currentTimelineEntry]);
+}
+
+- (void)getLaunchURLForTimelineEntryDate:(NSDate*)entryDate timeTravelDate:(NSDate*)timeTravelDate withHandler:(void (^)(NSURL* url))handler {
+	handler([NSURL URLWithString:@"calshow://"]);
 }
 
 - (Class)richComplicationDisplayViewClassForDevice:(CLKDevice*)device {

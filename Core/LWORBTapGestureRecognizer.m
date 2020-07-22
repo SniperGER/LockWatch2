@@ -59,6 +59,8 @@
 		
 		if (touch.type == UITouchTypeStylus) {
 			force = MIN(MAX(CLAMP(force, 0.2, 0.45), 0), 1);
+		} else {
+			force = MIN(MAX(CLAMP(force, 0.2, 1), 0), 1);
 		}
 		
 		[self _updateWithProgress:force];
@@ -215,6 +217,8 @@
 	
 	if (touch.type == UITouchTypeStylus) {
 		force = MIN(MAX(CLAMP(force, 0.2, 0.45), 0), 1);
+	} else {
+		force = MIN(MAX(CLAMP(force, 0.2, 1), 0), 1);
 	}
 
 	force = force * _progressMax;

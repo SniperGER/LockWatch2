@@ -407,19 +407,15 @@ static _UILegibilitySettings* _legibilitySettings;
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event {
 	if (!CGRectContainsPoint(self.view.bounds, point)) return nil;
 	
-	if (_libraryViewIsPresented) {
-		CGPoint convertedPoint = [self.view convertPoint:point toView:_libraryViewController.view];
-		
-		UIView* view = [_libraryViewController.libraryOverlayView hitTest:convertedPoint withEvent:event];
-		
-		CGRect convertedRect = [_libraryViewController.view convertRect:_libraryViewController.switcherController.scrollView.frame toView:self.view];
-		if (!view && !CGRectContainsPoint(convertedRect, point)) view = _libraryViewController.switcherController.scrollView;
-		if (!view) view = [_libraryViewController.view hitTest:convertedPoint withEvent:event];
-		
+	CGPoint convertedPoint = [self.view convertPoint:point toView:_libraryViewController.view];
+	UIView* view = [_libraryViewController.libraryOverlayView hitTest:convertedPoint withEvent:event];
+	CGRect convertedRect = [_libraryViewController.view convertRect:_libraryViewController.switcherController.scrollView.frame toView:self.view];
+	
+	if (!view && !CGRectContainsPoint(convertedRect, point)) view = _libraryViewController.switcherController.scrollView;
+	if (!view) view = [_libraryViewController.view hitTest:convertedPoint withEvent:event];
+	
+	if ((!_libraryViewIsPresented && CGRectContainsPoint(convertedRect, point)) || _libraryViewIsPresented) {
 		return view;
-	} else {
-		CGRect convertedRect = [_libraryViewController.view convertRect:_libraryViewController.switcherController.scrollView.frame toView:self.view];
-		if (CGRectContainsPoint(convertedRect, point)) return _libraryViewController.switcherController.scrollView;
 	}
 	
 	return nil;
