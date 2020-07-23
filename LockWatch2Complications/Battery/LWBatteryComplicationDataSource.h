@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (CLKComplicationTimelineEntry*)_currentTimelineEntry;
 - (void)_handleLocaleChange;
 - (void)_levelDidChange:(NSNotification*)notification;
+- (void)_powerStateDidChange:(NSNotification*)notification;
 - (void)_startObserving;
 - (void)_stateDidChange:(NSNotification*)notification;
 - (void)_stopObserving;

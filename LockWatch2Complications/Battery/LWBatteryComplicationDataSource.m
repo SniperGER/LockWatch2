@@ -62,12 +62,20 @@
 	}
 }
 
+- (void)_powerStateDidChange:(NSNotification*)notification {
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.delegate invalidateSwitcherTemplate];
+		[self.delegate invalidateEntries];
+	});
+}
+
 - (void)_startObserving {
 	if (!_listeningForNotifications) {
 		_listeningForNotifications = YES;
 		
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_levelDidChange:) name:UIDeviceBatteryLevelDidChangeNotification object:nil];
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_stateDidChange:) name:UIDeviceBatteryStateDidChangeNotification object:nil];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_powerStateDidChange:) name:NSProcessInfoPowerStateDidChangeNotification object:nil];
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_handleLocaleChange) name:NSCurrentLocaleDidChangeNotification object:nil];
 		
 		[self.delegate invalidateEntries];
@@ -102,12 +110,10 @@
 }
 
 - (void)getLaunchURLForTimelineEntryDate:(NSDate*)entryDate timeTravelDate:(NSDate*)timeTravelDate withHandler:(void (^)(NSURL* url))handler {
-	/// TODO: Toggle LowPowerMode
-	
-	handler(nil);
-	
 	_CDBatterySaver* batterySaver = [NSClassFromString(@"_CDBatterySaver") batterySaver];
 	[batterySaver setPowerMode:([batterySaver getPowerMode] == 1 ? 0 : 1) error:nil];
+	
+	handler(nil);
 }
 
 @end

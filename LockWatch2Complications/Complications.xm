@@ -211,6 +211,14 @@
 	[MSHookIvar<HKHealthStore*>(self, "_healthStore") executeQuery:cacheQuery];
 }
 %end	/// %hook NTKWellnessTimelineModel
+
+%hook NTKBatteryUtilities
++ (UIColor*)colorForLevel:(CGFloat)arg1 andState:(NSInteger)arg2 {
+	if (NSProcessInfo.processInfo.isLowPowerModeEnabled && ![%c(NTKBatteryUtilities) chargingForState:arg2]) return UIColor.systemYellowColor;
+	
+	return %orig;
+}
+%end	/// %hook NTKBatteryUtilities
 %end	// %group SpringBoard
 
 
