@@ -431,7 +431,7 @@ static HDActivityCacheManager* activityCacheManager;
 		case 31:
 		case 38:
 		case 39:
-			if (isDay) [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
+			[imageProvider setTintColor:isDay ? [%c(NWCColor) conditionsYellowTintColor] : nil];
 			break;
 		case 20:
 		case 22:
@@ -449,13 +449,14 @@ static HDActivityCacheManager* activityCacheManager;
 			break;
 		case 33:
 		case 35:
-			if (isDay) [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
+			[imageProvider setTintColor:isDay ? [%c(NWCColor) conditionsYellowTintColor] : nil];
+			break;
 		case 37:
 			[imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
 			[imageProvider setForegroundAccentImageColor:UIColor.redColor];
 			break;
 		case 40:
-			if (isDay) [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
+			[imageProvider setTintColor:isDay ? [%c(NWCColor) conditionsYellowTintColor] : nil];
 			[imageProvider setForegroundAccentImageColor:[%c(NWCColor) conditionsBlueTintColor]];
 			break;
 		default: break;
