@@ -51,11 +51,7 @@
 	UITouch* touch = touches.anyObject;
 	_touchStartLocation = [touch locationInView:self.view];
 	
-#ifdef DEMO_MODE
-	_usingLongPress = YES;
-#else
 	_usingLongPress = (touch.type != UITouchTypeStylus && UIScreen.mainScreen.traitCollection.forceTouchCapability != UIForceTouchCapabilityAvailable);
-#endif
 	
 	if (_usingLongPress) {
 		[self _updateLongPressForTouchesBegan:touches event:event];
@@ -101,17 +97,11 @@
 		[self _updateLongPressForTouchesEnded:touches event:event];
 	}
 	
-#ifndef DEMO_MODE
 	if (self.state != UIGestureRecognizerStateBegan && self.state != UIGestureRecognizerStateChanged) {
 		[self setState:UIGestureRecognizerStateFailed];
 	} else {
-#endif
-
 		[self setState:UIGestureRecognizerStateEnded];
-		
-#ifndef DEMO_MODE
 	}
-#endif
 	
 	[self _cleanup];
 }
@@ -161,11 +151,6 @@
 			[self _scheduleLongPressProgressTimerWithDelay:60 / 1000];
 		} else {
 			[self _clearLongPressProgressTimer];
-#ifdef DEMO_MODE
-			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self touchesEnded:[NSSet set] withEvent:[UIEvent new]];
-            });
-#endif
 		}
 	}];
 }
@@ -183,11 +168,7 @@
 - (void)_updateLongPressForTouchesBegan:(NSSet<UITouch*>*)touches event:(UIEvent*)event {
 	_longPressStartTime = CACurrentMediaTime();
 	
-#ifdef DEMO_MODE
-	[self _scheduleLongPressProgressTimerWithDelay:60 / 1000];
-#else
 	[self _scheduleLongPressProgressTimerWithDelay:0.65];
-#endif
 	
 	_longPressTouches = touches;
 	_longPressTouchesBeganEvent = event;

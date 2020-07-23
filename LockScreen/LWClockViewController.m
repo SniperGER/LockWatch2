@@ -406,10 +406,7 @@ static _UILegibilitySettings* _legibilitySettings;
 #pragma mark - LWORBTapGestureRecoginzerDelegate
 
 - (BOOL)isORBTapGestureAllowed {
-#ifndef DEMO_MODE
 	if ([[(SpringBoard*)[UIApplication sharedApplication] pluginUserAgent] deviceIsPasscodeLocked]) return NO;
-#endif
-	
 	if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation)) return NO;
 	
 	return YES;

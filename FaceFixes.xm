@@ -9,49 +9,22 @@
 #import "FaceFixes.h"
 #import "Tweak.h"
 
-NSDate* demoDate() {
-	static NSDate* date = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-		NSString* dateString = @"2015-03-09T09:09:30Z";
-        date = [[NSISO8601DateFormatter new] dateFromString:dateString];
-    });
-
-    return date;
-}
-
 %group SpringBoard
 %hook CLKDate
 + (id)unmodifiedDate {
-#ifdef DEMO_MODE
-	return demoDate();
-#else
 	return [NSDate date];
-#endif
 }
 + (id)date {
-#ifdef DEMO_MODE
-	return demoDate();
-#else
 	return [NSDate date];
-#endif
 }
 + (id)complicationDate {
-#ifdef DEMO_MODE
-	return demoDate();
-#else
 	return [NSDate date];
-#endif
 }
 %end	/// %hook CLKDate
 
 %hook NTKDate
 + (id)faceDate {
-#ifdef DEMO_MODE
-	return demoDate();
-#else
 	return [NSDate date];
-#endif
 }
 %end	/// %hook NTKDate
 
@@ -202,22 +175,6 @@ NSDate* demoDate() {
 	if (!CGRectEqualToRect(self.view.bounds, self.backgroundView.bounds)) {
 		[self.backgroundView setFrame:self.view.bounds];
 	}
-}
-
-- (void)freeze {
-#ifdef DEMO_MODE
-	return;
-#else
-	%orig;
-#endif
-}
-
-- (void)unfreeze {
-#ifdef DEMO_MODE
-	return;
-#else
-	%orig;
-#endif
 }
 
 %new

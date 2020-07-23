@@ -273,13 +273,11 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 		[self.delegate faceLibraryViewControllerWillCompleteSelection:self];
 	
 		[_selectedFaceViewController configureWithDuration:0 block:^(NTKFaceViewController* faceViewController) {
-#ifndef DEMO_MODE
 			if ([faceViewController.face isKindOfClass:objc_getClass("NTKCharacterFace")]) {
 				[faceViewController _setDataMode:0 becomeLiveOnUnfreeze:YES];
 			} else {
 				[faceViewController _setDataMode:1 becomeLiveOnUnfreeze:YES];
 			}
-#endif
 		}];
 		
 		[_selectedFaceViewController unfreeze];
@@ -421,13 +419,11 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	
 	[self.delegate faceLibraryViewControllerWillCompleteSelection:self];
 	[_selectedFaceViewController configureWithDuration:0.0 block:^(NTKFaceViewController* faceViewController) {
-#ifndef DEMO_MODE
 		if ([faceViewController.face isKindOfClass:objc_getClass("NTKCharacterFace")]) {
 			[faceViewController _setDataMode:0 becomeLiveOnUnfreeze:YES];
 		} else {
 			[faceViewController _setDataMode:1 becomeLiveOnUnfreeze:YES];
 		}
-#endif
 	}];
 	
 	[_selectedFaceViewController unfreeze];
@@ -465,7 +461,6 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 }
 
 - (void)_setFaceAtIndex:(NSInteger)index toDataMode:(NSInteger)dataMode andFreeze:(BOOL)freeze {
-#ifndef DEMO_MODE
 	NTKFaceViewController* faceViewController = [_switcherController pageViewControllerAtIndex:index];
 	if ([faceViewController isKindOfClass:objc_getClass("NTKFaceViewController")]) {
 		if (freeze) {
@@ -480,7 +475,6 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 			[faceViewController unfreeze];
 		}
 	}
-#endif
 }
 
 - (void)_setSelectedFaceViewController:(NTKFaceViewController*)faceViewController {

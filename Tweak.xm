@@ -145,13 +145,9 @@
 }
 
 - (void)_startFadeOutAnimationFromLockSource:(int)arg1 {
-#ifdef DEMO_MODE
-	return;
-#else
 	if (clockViewController.isIncrementallyZooming || clockViewController.faceLibraryIsPresented) {
 		return;
 	}
-#endif
 	
 	%orig;
 }
@@ -273,62 +269,6 @@ static BOOL scrollEnabled = YES;
 	}
 }
 %end	/// %hook NTKCCLibraryListViewController
-
-
-%hook BSUICAPackageView
-- (id)initWithPackageName:(id)arg1 inBundle:(id)arg2 {
-#ifdef DEMO_MODE
-	return %orig(nil, nil);
-#else
-	return %orig;
-#endif	
-}
-%end	/// %hook BSUICAPackageView
-
-%hook CSTeachableMomentsContainerViewController
-- (void)_addHomeAffordanceAnimation {
-#ifdef DEMO_MODE
-	return;
-#else
-	%orig;
-#endif
-}
-
-- (void)_addHomeAffordanceResetAnimation {
-#ifdef DEMO_MODE
-	return;
-#else
-	%orig;
-#endif
-}
-
-- (void)_addTextAnimation {
-#ifdef DEMO_MODE
-	return;
-#else
-	%orig;
-#endif
-}
-
-- (void)_addTextResetAnimation {
-#ifdef DEMO_MODE
-	return;
-#else
-	%orig;
-#endif
-}
-%end
-
-%hook CSFixedFooterView
-- (void)layoutSubviews {
-#ifdef DEMO_MODE
-	[self setHidden:YES];
-	return;
-#else
-	%orig;
-#endif
-}
-%end
 %end	// %group SpringBoard
 
 
