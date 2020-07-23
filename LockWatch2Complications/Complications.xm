@@ -116,7 +116,6 @@
 		SBApplication* destinationApplication = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:dataSource.complicationApplicationIdentifier];
 		
 		if (!destinationApplication) return;
-		NSLog(@"destinationApplication: %@", destinationApplication);
 		
 		SBLockScreenUnlockRequest* request = [%c(SBLockScreenUnlockRequest) new];
 		[request setSource:17];
@@ -144,6 +143,24 @@
 	}];
 }
 %end	/// %hook NTKLocalTimelineComplicationController
+
+%hook NTKRichComplicationView
+- (void)setHighlighted:(BOOL)arg1 {
+	if (MSHookIvar<BOOL>(self, "_highlighted") != arg1) {
+		MSHookIvar<BOOL>(self, "_highlighted") = arg1;
+		
+		[UIView animateWithDuration:(arg1 ? 0.05 : 0.2) animations:^{
+			if (arg1) {
+				[self setAlpha:0.3];
+				[self setTransform:CGAffineTransformMakeScale(0.9, 0.9)];
+			} else {
+				[self setAlpha:1];
+				[self setTransform:CGAffineTransformIdentity];
+			}
+		}];
+	}
+}
+%end	/// %hook NTKRichComplicationView
 
 %hook NTKTimelineDataOperation
 - (void)start {
@@ -194,34 +211,6 @@
 	[MSHookIvar<HKHealthStore*>(self, "_healthStore") executeQuery:cacheQuery];
 }
 %end	/// %hook NTKWellnessTimelineModel
-
-%hook NTKComplicationDisplayWrapperView
-- (id)init {
-	NTKComplicationDisplayWrapperView* r = %orig;
-	
-	[r addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:r action:@selector(_invokeTouchUpInsideHandler)]];
-	
-	return r;
-}
-%end	/// %hook NTKComplicationDisplayWrapperView
-
-%hook NTKRichComplicationView
-- (void)setHighlighted:(BOOL)arg1 {
-	if (MSHookIvar<BOOL>(self, "_highlighted") != arg1) {
-		MSHookIvar<BOOL>(self, "_highlighted") = arg1;
-		
-		[UIView animateWithDuration:(arg1 ? 0.05 : 0.2) animations:^{
-			if (arg1) {
-				[self setAlpha:0.3];
-				[self setTransform:CGAffineTransformMakeScale(0.9, 0.9)];
-			} else {
-				[self setAlpha:1];
-				[self setTransform:CGAffineTransformIdentity];
-			}
-		}];
-	}
-}
-%end	/// %hook NTKRichComplicationView
 %end	// %group SpringBoard
 
 
@@ -438,39 +427,39 @@ static HDActivityCacheManager* activityCacheManager;
 	[imageProvider setForegroundAccentImage:foregroundAccentImage];
 	
 	switch (conditionCode) {
-        case 5:
-        case 31:
-        case 38:
-        case 39:
+		case 5:
+		case 31:
+		case 38:
+		case 39:
 			if (isDay) [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
 			break;
 		case 20:
 		case 22:
-            [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
-            break;
-        case 10:
-        case 11:
-        case 12:
-        case 13:
-        case 19:
-        case 26:
-        case 41:
-        case 42:
-            [imageProvider setTintColor:[%c(NWCColor) conditionsBlueTintColor]];
-            break;
+			[imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
+			break;
+		case 10:
+		case 11:
+		case 12:
+		case 13:
+		case 19:
+		case 26:
+		case 41:
+		case 42:
+			[imageProvider setTintColor:[%c(NWCColor) conditionsBlueTintColor]];
+			break;
 		case 33:
 		case 35:
 			if (isDay) [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
-        case 37:
-            [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
-            [imageProvider setForegroundAccentImageColor:UIColor.redColor];
-            break;
-        case 40:
+		case 37:
+			[imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
+			[imageProvider setForegroundAccentImageColor:UIColor.redColor];
+			break;
+		case 40:
 			if (isDay) [imageProvider setTintColor:[%c(NWCColor) conditionsYellowTintColor]];
-            [imageProvider setForegroundAccentImageColor:[%c(NWCColor) conditionsBlueTintColor]];
-            break;
-        default: break;
-    }
+			[imageProvider setForegroundAccentImageColor:[%c(NWCColor) conditionsBlueTintColor]];
+			break;
+		default: break;
+	}
 	
 	return imageProvider;
 }
@@ -491,7 +480,7 @@ static HDActivityCacheManager* activityCacheManager;
 %end	/// %hook NTKStackedImagesComplicationImageView
 %end	// %group WeatherComplications
 
-	
+
 
 %ctor {
 	@autoreleasepool {

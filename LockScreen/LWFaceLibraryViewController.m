@@ -494,7 +494,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 		[_switcherController.scrollView setScrollEnabled:presented];
 		
 		[_switcherController.scrollView enumeratePagesWithBlock:^(LWPageView* pageView, NSInteger index, BOOL* stop) {
-			[pageView setScrollEnabled:presented];
+			[pageView setAllowsSelect:presented];
 		}];
 		
 		if (_presented) {
@@ -770,8 +770,14 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 }
 
 - (BOOL)pageScrollViewController:(LWPageScrollViewController*)pageScrollViewController canSelectPageAtIndex:(NSInteger)index {
+	if (!_presented) return NO;
+	
 	if (_switcherController == pageScrollViewController) {
-		return [self _indexOfAddPage] != index;
+		if (_switcherController.currentPageIndex == index) {
+			return [self _indexOfAddPage] != index;
+		} else {
+			return NO;
+		}
 	}
 	
 	return YES;

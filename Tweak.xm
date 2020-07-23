@@ -50,7 +50,8 @@
 	CSCoverSheetViewController* coverSheetController = [manager coverSheetViewController];
 	
 	// TODO: Fix delayed layout
-	[coverSheetController viewDidLayoutSubviews];
+	// [coverSheetController viewDidLayoutSubviews];
+	[clockViewController layoutForDateViewController:[coverSheetController dateViewController] withEffectiveInterfaceOrientation:coverSheetController.effectiveInterfaceOrientation];
 }
 
 - (void)setAlignmentPercent:(CGFloat)arg1 {
@@ -214,6 +215,7 @@ static CGFloat notificationOffset = 0;
 %end	/// %hook _CSPaddingView
 
 static BOOL scrollEnabled = YES;
+
 %hook NTKCFaceDetailViewController
 - (BOOL)_canShowWhileLocked {
 	return YES;
