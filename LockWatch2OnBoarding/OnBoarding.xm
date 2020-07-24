@@ -174,7 +174,7 @@ void showLWUpgradeNotification() {
 
 %new
 - (void)showLWUpgradeNotificationIfNecessary {
-	if (preferences.onBoardingCompleted && ![preferences.upgradeLastVersion isEqualToString:[NSString stringWithUTF8String:__VERSION]] && didShowUpgradeNotification) {
+	if (preferences.onBoardingCompleted && (!preferences.upgradeLastVersion || ![preferences.upgradeLastVersion isEqualToString:[NSString stringWithUTF8String:__VERSION]]) && !didShowUpgradeNotification) {
 		showLWUpgradeNotification();
 		
 		didShowUpgradeNotification = YES;

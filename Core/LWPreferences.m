@@ -74,9 +74,9 @@
 	}
 	_onBoardingCompleted = [[_defaults objectForKey:@"onBoardingCompleted"] boolValue];
 	
-	if (![_defaults.allKeys containsObject:@"upgradeLastVersion"]) {
-		[_defaults setObject:[NSString stringWithUTF8String:__VERSION] forKey:@"upgradeLastVersion"];
-	}
+	// if (![_defaults.allKeys containsObject:@"upgradeLastVersion"]) {
+	// 	[_defaults setObject:[NSString stringWithUTF8String:__VERSION] forKey:@"upgradeLastVersion"];
+	// }
 	_upgradeLastVersion = [_defaults objectForKey:@"upgradeLastVersion"];
 }
 
