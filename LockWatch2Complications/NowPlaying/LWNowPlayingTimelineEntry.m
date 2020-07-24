@@ -12,7 +12,7 @@
 #import "LWNowPlayingTimelineEntry.h"
 #import "NTKComplicationFamily.h"
 
-#define SYSTEM_BLUE_COLOR [UIColor colorWithRed:0.039 green:0.518 blue:1.0 alpha:1.0]
+#define SYSTEM_BLUE_COLOR [UIColor colorWithRed:0 green:0.478 blue:1.0 alpha:1.0]
 
 extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 extern UIImage* NTKImageNamed(NSString* imageName);
@@ -196,15 +196,11 @@ extern CFStringRef kMRMediaRemoteNowPlayingInfoTitle;
 		[template setBody2TextProvider:body2TextProvider];
 	}
 	
-#if __clang_major__ >= 9
 	if (@available(iOS 13, *)) {
 		[template setTintColor:UIColor.systemBlueColor];
 	} else {
 		[template setTintColor:SYSTEM_BLUE_COLOR];
 	}
-#else
-	[template setTintColor:SYSTEM_BLUE_COLOR];
-#endif
 	
 	return template;
 }
