@@ -11,7 +11,7 @@
 	"GENERIC_CONFIRM" = "OK";
 	
 	"NO_DEVICE_TITLE" = "LockWatch 2 - Kein Gerät gefunden";
-	"NO_DEVICE_MESSAGE" = "LockWatch 2 konnte keine Apple Watch finden – weder physisch noch simuliert. Ohne Apple Watch funktioniert LockWatch 2 nicht.\n\nKoppele eine Apple Watch mit diesem Gerät oder wähle eine simulierte Apple Watch in den Einstellungen.";
+	"NO_DEVICE_MESSAGE" = "LockWatch 2 konnte keine gekoppelte oder simulierte Apple Watch finden. Ohne Apple Watch funktioniert LockWatch 2 nicht.\n\nKoppele eine Apple Watch mit diesem Gerät oder wähle eine simulierte Apple Watch in den Einstellungen.";
 	
 	"LIBRARY_WATCH_FACES" = "Zifferblätter";
 	"LIBRARY_MY_WATCH" = "Meine Uhr";
