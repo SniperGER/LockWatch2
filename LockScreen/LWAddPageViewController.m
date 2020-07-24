@@ -70,12 +70,10 @@
 	_navigationController = [[UINavigationController alloc] initWithRootViewController:containerViewController];
 	[_navigationController.navigationBar setTintColor:[UIColor colorWithRed:1.0 green:0.624 blue:0.039 alpha:1.0]];
 	
-#if __clang_major__ >= 9
 	if (@available(iOS 13, *)) {
 		[_navigationController setOverrideUserInterfaceStyle:UIUserInterfaceStyleDark];
 		[_navigationController setModalInPresentation:YES];
 	}
-#endif
 	
 	UIBarButtonItem* rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismiss)];
 	[containerViewController.navigationItem setRightBarButtonItem:rightButton];
@@ -191,7 +189,6 @@
 	if (indexPath.section == 0) {
 		NTKFace* face = [_addableFaceCollection faceAtIndex:indexPath.row];
 		[self.delegate addPageViewController:self didSelectFace:face faceViewController:[self _viewControllerForFace:face]];
-		// [_libraryFaceCollection appendFace:[_addableFaceCollection faceAtIndex:indexPath.row] suppressingCallbackToObserver:nil];
 	}
 	
 	[self dismiss];

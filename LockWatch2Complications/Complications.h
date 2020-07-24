@@ -25,7 +25,7 @@
 
 @interface FBSOpenApplicationService : NSObject
 + (instancetype)serviceWithDefaultShellEndpoint;
-- (void)openApplication:(id)arg1 withOptions:(id)arg2 completion:(id /* CDUnknownBlockType */)arg4;
+- (void)openApplication:(id)arg1 withOptions:(id)arg2 completion:(id /* block */)arg4;
 @end
 
 @interface _HKCurrentActivitySummaryQuery : HKQuery
@@ -55,7 +55,7 @@
 
 @interface SBLockScreenManager : NSObject
 + (id)sharedInstance;
-- (BOOL)unlockWithRequest:(id)arg1 completion:(id /* CDUnknownBlockType */)arg2;
+- (BOOL)unlockWithRequest:(id)arg1 completion:(id /* block */)arg2;
 @end
 
 @interface SBLockScreenUnlockRequest : NSObject

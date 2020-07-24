@@ -203,8 +203,6 @@ static _UILegibilitySettings* _legibilitySettings;
 	[_libraryViewController.view layoutIfNeeded];
 	
 	[NSLayoutConstraint activateConstraints:@[
-		// [_libraryViewController.view.topAnchor constraintEqualToAnchor:self.view.topAnchor],
-		// [_libraryViewController.view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
 		[_libraryViewController.view.widthAnchor constraintEqualToConstant:CGRectGetWidth(_device.actualScreenBounds)],
 		[_libraryViewController.view.heightAnchor constraintEqualToConstant:CGRectGetHeight(_device.actualScreenBounds)]
 	]];

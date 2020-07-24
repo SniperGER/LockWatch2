@@ -481,7 +481,6 @@
 			
 			NSInteger calculatedPageIndex = [self _pageIndexAtPoint:scrollView.contentOffset];
 			if (calculatedPageIndex >= _numberOfPages) {
-				NSLog(@"calculated pageIndex (%lu) is beyond number of pages (%lu). Setting to 0", calculatedPageIndex, _numberOfPages);
 				calculatedPageIndex = 0;
 			}
 			

@@ -145,11 +145,10 @@ extern BOOL UIColorIsLightColor(UIColor* color);
 	}
 	
 	[_outlineView.layer setCornerRadius:_outlineCornerRadius];
-#if __clang_major__ >= 9
+	
 	if (@available(iOS 13.0, *)) {
 		[_outlineView.layer setCornerCurve:kCACornerCurveContinuous];
 	}
-#endif
 
 	[_outlineView setAlpha:_outlineAlpha];
 	

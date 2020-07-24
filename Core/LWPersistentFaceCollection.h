@@ -13,17 +13,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#if __cplusplus
-extern "C" {
-#endif
-
-void *NTKAllAvailableFaceStyles(void *device);
-void *NTKDefaultLibraryFaceStyles(void *device);
-int NTKDefaultLibrarySelectedFace(void *device);
-
-#if __cplusplus
-}
-#endif
+extern void *NTKAllAvailableFaceStyles(void *device);
+extern void *NTKDefaultLibraryFaceStyles(void *device);
+extern int NTKDefaultLibrarySelectedFace(void *device);
 
 
 

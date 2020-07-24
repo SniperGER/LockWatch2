@@ -28,11 +28,9 @@ extern BOOL UIColorIsLightColor(UIColor* color);
 		[_visualEffectView setTranslatesAutoresizingMaskIntoConstraints:NO];
 		[_visualEffectView setClipsToBounds:YES];
 		
-#if __clang_major__ >= 9
 		if (@available(iOS 13, *)) {
 			[_visualEffectView.layer setCornerCurve:kCACornerCurveContinuous];
 		}
-#endif
 		
 		[self insertSubview:_visualEffectView atIndex:0];
 		

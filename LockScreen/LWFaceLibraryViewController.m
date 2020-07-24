@@ -523,14 +523,12 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 				UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(_stopFaceEditing)];
 				customizationViewController.navigationItem.rightBarButtonItem = doneButton;
 				
-#if __clang_major__ >= 9
 				if (@available(iOS 13.0, *)) {
 					[navigationController setOverrideUserInterfaceStyle:UIUserInterfaceStyleDark];
 					[navigationController setModalInPresentation:YES];
 					
 					[customizationViewController setOverrideUserInterfaceStyle:UIUserInterfaceStyleDark];
 				}
-#endif
 				
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -668,10 +666,6 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 }
 
 #pragma mark - NTKFaceCollectionObserver
-
-- (void)faceCollection:(NTKFaceCollection *)collection didAddFace:(NTKFace *)arg2 atIndex:(NSUInteger)arg3 {
-	NSLog(@"did add face");
-}
 
 - (void)faceCollection:(NTKFaceCollection *)collection didRemoveFace:(NTKFace *)face atIndex:(NSUInteger)index {
 	LWPageScrollViewController* pageScrollViewController = [self _pageScrollViewControllerForCollection:collection];

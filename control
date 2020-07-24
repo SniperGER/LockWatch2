@@ -4,6 +4,6 @@ Depends: mobilesubstrate, preferenceloader
 Version: 0.0.1
 Architecture: iphoneos-arm
 Description: The idea of having an Apple Watch on your lock screen – continued
-Maintainer: Sniper_GER <sniperger@festival.ml>
-Author: Sniper_GER <sniperger@festival.ml>
+Maintainer: Sniper_GER <sniperger@festival.tf>
+Author: Sniper_GER <sniperger@festival.tf>
 Section: Tweaks

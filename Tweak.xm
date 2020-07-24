@@ -49,8 +49,6 @@
 	SBLockScreenManager* manager = [%c(SBLockScreenManager) sharedInstance];
 	CSCoverSheetViewController* coverSheetController = [manager coverSheetViewController];
 	
-	// TODO: Fix delayed layout
-	// [coverSheetController viewDidLayoutSubviews];
 	[clockViewController layoutForDateViewController:[coverSheetController dateViewController] withEffectiveInterfaceOrientation:coverSheetController.effectiveInterfaceOrientation];
 }
 

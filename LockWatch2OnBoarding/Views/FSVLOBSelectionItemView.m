@@ -43,7 +43,6 @@
 		if (image) {
 			[NSLayoutConstraint activateConstraints:@[
 				[_imageView.heightAnchor constraintEqualToConstant:MIN(image.size.height, image.size.width * (image.size.height / image.size.width))]
-				// [_imageView.heightAnchor constraintEqualToAnchor:_imageView.widthAnchor multiplier:image.size.height / image.size.width]
 			]];
 		}
 		

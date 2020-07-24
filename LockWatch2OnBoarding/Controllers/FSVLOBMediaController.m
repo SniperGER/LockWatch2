@@ -75,7 +75,6 @@ extern NSBundle* LWOLocalizableBundle();
 		[_videoViewController.view.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
 		[_videoViewController.view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
 		[_videoViewController.view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-		// [_videoViewController.view.heightAnchor constraintEqualToAnchor:_videoViewController.view.widthAnchor multiplier:mediaSize.height / mediaSize.width]
 		[_videoViewController.view.heightAnchor constraintEqualToConstant:MIN(400, CGRectGetWidth(_videoViewController.view.bounds) * (mediaSize.height / mediaSize.width))]
 	]];
 }

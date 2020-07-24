@@ -146,7 +146,6 @@
 			NTKFace* face = [NTKFace faceWithJSONObjectRepresentation:faceJSON forDevice:device];
 			
 			if (face && ![self.class faceStyleIsRestricted:face.faceStyle forDevice:device]) {
-				// [self addFace:face atIndex:index suppressingCallbackToObserver:nil];
 				[self appendFace:face suppressingCallbackToObserver:nil];
 			}
 		}];
@@ -209,10 +208,6 @@
 	}];
 	[self setSelectedFaceIndex:selectedFaceIndex suppressingCallbackToObserver:nil];
 }
-
-- (void)resumeUpdatesFromDaemon {}
-
-- (void)suspendUpdatesFromDaemon {}
 
 - (BOOL)synchronize {
 	if ([self.collectionIdentifier isEqualToString:kLWAddableFacesCollectionIdentifier]) return NO;

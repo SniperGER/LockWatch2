@@ -54,13 +54,13 @@
 		case NTKComplicationTypeWeatherConditions:
 			dataSourceClass = %c(LWConditionsDataSource);
 			break;
-		case NTKComplicationTypeMessages: break;
-		case NTKComplicationTypePhone: break;
-		case NTKComplicationTypeMaps: break;
+		case NTKComplicationTypeMessages: break; // TODO
+		case NTKComplicationTypePhone: break; // TODO
+		case NTKComplicationTypeMaps: break; // TODO
 		case NTKComplicationTypeNews: break; // TODO
-		case NTKComplicationTypeMail: break;
-		case NTKComplicationTypeHomeKit: break;
-		case NTKComplicationTypeSiri: break;
+		case NTKComplicationTypeMail: break; // TODO
+		case NTKComplicationTypeHomeKit: break; // TODO
+		case NTKComplicationTypeSiri: break; // TODO
 		case NTKComplicationTypeRemote: break;
 		case NTKComplicationTypeConnectivity: break; // TODO
 		case NTKComplicationTypeTinCan: break;
@@ -71,12 +71,12 @@
 		case NTKComplicationTypeWeatherAirQuality: 
 			dataSourceClass = %c(LWAirQualityDataSource);
 			break;
-		case NTKComplicationTypePeople: break;
+		case NTKComplicationTypePeople: break; // TODO
 		case NTKComplicationTypeSolar: break; // TODO
 		case NTKComplicationTypeAstronomyEarth: break; // TODO
 		case NTKComplicationTypeAstronomyLuna: break; // TODO
 		case NTKComplicationTypeAstronomyOrrery: break; // TODO
-		case NTKComplicationTypePodcast: break;
+		case NTKComplicationTypePodcast: break; // TODO
 		case NTKComplicationTypeWeatherUVIndex:
 			dataSourceClass = %c(LWUltravioletIndexDataSource);
 			break;
@@ -237,13 +237,13 @@ static HDActivityCacheManager* activityCacheManager;
 	
 	return r;
 }
-%end
+%end	/// %hook HDPrimaryProfile
 
 %hook HDReadAuthorizationStatus
 - (long long)authorizationStatus {
 	return 1;
 }
-%end
+%end	/// %hook HDReadAuthorizationStatus
 %end	// %group healthd
 
 

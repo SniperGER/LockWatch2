@@ -23,7 +23,6 @@
 - (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device {
 	if (self = [super initWithComplication:complication family:family forDevice:device]) {
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_invalidate) name:UIApplicationSignificantTimeChangeNotification object:nil];
-		// [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_invalidate) name:CalendarPreferencesNotification_OverlayCalendarID object:nil];
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_invalidate) name:NSCurrentLocaleDidChangeNotification object:nil];
 	}
 	

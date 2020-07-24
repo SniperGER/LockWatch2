@@ -207,7 +207,6 @@
 
 - (void)_recyclePage:(LWPageView*)pageView {
 	[pageView prepareForReuse];
-	// [_recycledPages addObject:pageView];
 }
 
 - (BOOL)_shouldEnableScrolling {

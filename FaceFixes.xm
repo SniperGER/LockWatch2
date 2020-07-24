@@ -157,11 +157,9 @@
 	[self.faceView setClipsToBounds:YES];
 	[self.faceView.layer setCornerRadius:self.face.device.screenCornerRadius];
 
-#if __clang_major__ >= 9
 	if (@available(iOS 13, *)) {
 		[self.faceView.layer setCornerCurve:kCACornerCurveContinuous];
 	}
-#endif
 }
 
 - (void)viewDidLayoutSubviews {
@@ -215,7 +213,7 @@
 	[self insertSubview:_bandsView atIndex:1];
 #endif
 }
-%end
+%end	/// %hook NTKPrideDigitalFaceView
 
 %hook NTKRoundedCornerOverlayView
 - (void)layoutSubviews {
@@ -261,6 +259,7 @@
 
     return clippedImage;
 }
+
 - (void)setBackgroundColor:(UIColor*)arg1 {
 	if (CGColorEqualToColor(arg1.CGColor, UIColor.blackColor.CGColor)) {
 		%orig(UIColor.clearColor);

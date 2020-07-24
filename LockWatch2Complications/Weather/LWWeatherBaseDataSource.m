@@ -99,13 +99,6 @@
 	if (time(NULL) - _updateTimestamp >= [LWWeatherBaseDataSource updateInterval]) {
 		_isUpdating = YES;
 		
-		// _currentAirQualityConditions = nil;
-		// _currentConditions = nil;
-		// _currentDayForecasts = nil;
-		// _currentHourlyForecasts = nil;
-		
-		// [self _invalidate];
-		
 		WFServiceConnection* serviceConnection = [WFTask sharedServiceConnection];
 		dispatch_group_t dispatchGroup = dispatch_group_create();
 		
@@ -158,12 +151,6 @@
 				[self _invalidate];
 			});
 		});
-		// dispatch_group_wait(dispatchGroup, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(90 * NSEC_PER_SEC)));
-		// NSLog(@"update completed");
-		// _updateTimestamp = time(NULL);
-		// _isUpdating = NO;
-		
-		// [self _invalidate];
 	}
 }
 
