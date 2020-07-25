@@ -116,17 +116,42 @@
 }
 %end	/// %hook NTKAnalogFaceView
 
+// %hook NTKAnalogHandsView
+// - (void)setOverrideDate:(id)arg1 duration:(CGFloat)arg2 {
+// 	[UIView animateWithDuration:0.3 animations:^{
+// 		%orig;
+// 	}];
+// }
+// %end
+
 %hook NTKAnalogScene
 - (void)setBackgroundColor:(UIColor*)arg1 {
 	%orig(UIColor.clearColor);
 }
 %end	/// %hook NTKAnalogScene
 
+%hook NTKAnalogVideoFaceView
+- (void)_setVideoPlayerDataSource:(id)arg1 {
+	%orig;
+	
+	[self.videoPlayerView handleStyleDidChange];
+}
+%end	/// NTKAnalogVideoFaceView
+
 %hook NTKCircularAnalogDialView
 - (void)setBackgroundColor:(UIColor*)arg1 {
 	%orig(UIColor.clearColor);
 }
 %end	/// %hook NTKCircularAnalogDialView
+
+%hook NTKExplorerDialView
+- (void)layoutSubviews {
+	%orig;
+	
+	self.layer.cornerRadius = CGRectGetWidth(self.bounds) / 2;
+	self.clipsToBounds = YES;
+}
+%end	/// %hook NTKExplorerDialView
 
 %hook NTKFaceViewController
 %property (nonatomic, strong) UIView* backgroundView;
@@ -175,6 +200,10 @@
 	}
 }
 
+- (BOOL)_canShowWhileLocked {
+	return YES;
+}
+
 %new
 - (void)setBackgroundViewAlpha:(CGFloat)alpha animated:(BOOL)animated {
 	if (!animated) {
@@ -186,22 +215,7 @@
 		[self.backgroundView setAlpha:alpha];
 	} completion:nil];
 }
-%end	/// %hook NTKCompanionFaceViewController
-
-%hook NTKExplorerDialView
-- (void)layoutSubviews {
-	%orig;
-	
-	self.layer.cornerRadius = CGRectGetWidth(self.bounds) / 2;
-	self.clipsToBounds = YES;
-}
-%end	/// %hook NTKExplorerDialView
-
-%hook NTKFaceViewController
-- (BOOL)_canShowWhileLocked {
-	return YES;
-}
-%end	/// %hook NTKCompanionFaceViewController
+%end	/// %hook NTKFaceViewController
 
 %hook NTKPrideDigitalFaceView
 - (void)layoutSubviews {
@@ -302,14 +316,6 @@
 	}
 }
 %end	/// NTKVideoPlayerView
-
-%hook NTKAnalogVideoFaceView
-- (void)_setVideoPlayerDataSource:(id)arg1 {
-	%orig;
-	
-	[self.videoPlayerView handleStyleDidChange];
-}
-%end	/// NTKAnalogVideoFaceView
 
 %hook NTKUpNextCollectionView
 - (void)setBackgroundColor:(UIColor*)arg1 {
