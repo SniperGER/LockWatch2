@@ -50,9 +50,9 @@ extern "C" CFNotificationCenterRef CFNotificationCenterGetDistributedCenter();
 @end
 
 @interface CSCoverSheetViewController : UIViewController
-- (NSInteger)effectiveInterfaceOrientation;
 - (CSMainPageContentViewController*)mainPageContentViewController;
 - (SBFLockScreenDateViewController*)dateViewController;
+- (UIWindow*)_window;
 @end
 
 @interface CSFixedFooterView : UIView
@@ -85,6 +85,10 @@ extern "C" CFNotificationCenterRef CFNotificationCenterGetDistributedCenter();
 
 @interface NTKCCFacesViewController : UIViewController
 - (NTKFaceCollection*)library;
+@end
+
+@interface UIWindow (Private)
+- (UIInterfaceOrientation)interfaceOrientation;
 @end
 
 /**

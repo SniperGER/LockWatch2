@@ -21,6 +21,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL batteryChargingViewHidden;
 @property (nonatomic) NSInteger complicationContent;
 
+@property (nonatomic) CGFloat horizontalOffsetPortrait;
+@property (nonatomic) CGFloat verticalOffsetPortrait;
+@property (nonatomic) CGFloat scalePortrait;
+@property (nonatomic) CGFloat horizontalOffsetLandscape;
+@property (nonatomic) CGFloat verticalOffsetLandscape;
+@property (nonatomic) CGFloat scaleLandscape;
+@property (nonatomic) CGFloat verticalOffsetLandscapePhone;
+@property (nonatomic) CGFloat scaleLandscapePhone;
+
 @property (nonatomic) BOOL onBoardingCompleted;
 @property (nonatomic) NSString* upgradeLastVersion;
 

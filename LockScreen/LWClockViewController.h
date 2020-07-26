@@ -64,6 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)faceLibraryIsPresented;
 - (void)freezeCurrentFace;
 - (BOOL)isIncrementallyZooming;
+- (BOOL)isLandscapePhone;
 - (void)layoutForDateViewController:(UIViewController*)dateViewController withEffectiveInterfaceOrientation:(NSInteger)interfaceOrientation;
 - (void)loadAddableFaceCollection;
 - (void)loadLibraryFaceCollection;

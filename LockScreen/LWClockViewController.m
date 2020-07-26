@@ -131,16 +131,26 @@ static _UILegibilitySettings* _legibilitySettings;
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
 	
-	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation);
 	CGFloat _centerX = 0;
 	
-	if (!isiPhoneLandscape) {
-		_centerX = CGRectGetMidX(UIScreen.mainScreen.bounds);
-	} else {
-		_centerX = (CGRectGetMinX(CGRectInset(self.view.bounds, _dateViewInsets.left, 0)) + (CGRectGetWidth(_device.actualScreenBounds) / 2)) - ((CGRectGetWidth(_device.actualScreenBounds) + _dateViewInsets.left * 2) * CLAMP(_alignmentPercent + 1, 0, 2));
+	if ([self isLandscapePhone]) {
+		_centerX = (CGRectGetMinX(CGRectInset(self.view.bounds, _dateViewInsets.left, 0)) + (CGRectGetWidth(_device.actualScreenBounds) / 2)) + ((CGRectGetWidth(CGRectInset(self.view.bounds, _dateViewInsets.left, 0)) - CGRectGetWidth(_device.actualScreenBounds)) * CLAMP(_alignmentPercent + 1, 0, 2));
+		
+		CGFloat scale = [[LWPreferences sharedInstance] scaleLandscapePhone];
+		[_libraryViewController.view setTransform:CGAffineTransformMakeScale(scale, scale)];
+	} else if (UIInterfaceOrientationIsPortrait(_effectiveInterfaceOrientation)) {
+		_centerX = CGRectGetMidX(UIScreen.mainScreen.bounds) + [[LWPreferences sharedInstance] horizontalOffsetPortrait];
+		
+		CGFloat scale = [[LWPreferences sharedInstance] scalePortrait];
+		[_libraryViewController.view setTransform:CGAffineTransformMakeScale(scale, scale)];
+	} else if (UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation)) {
+		_centerX = CGRectGetMidX(UIScreen.mainScreen.bounds) + [[LWPreferences sharedInstance] horizontalOffsetLandscape];
+		
+		CGFloat scale = [[LWPreferences sharedInstance] scaleLandscape];
+		[_libraryViewController.view setTransform:CGAffineTransformMakeScale(scale, scale)];
 	}
 	
-	[_libraryViewController.view setCenter:(CGPoint){
+	[_libraryViewController.view setCenter:(CGPoint) {
 		_centerX,
 		_libraryViewController.view.center.y
 	}];
@@ -298,7 +308,7 @@ static _UILegibilitySettings* _legibilitySettings;
 	CGRect maskBounds = UIScreen.mainScreen.bounds;
 	
 	_contentViewMask = [CAShapeLayer layer];
-	[_contentViewMask setFrame:(CGRect){{ -CGRectGetWidth(maskBounds), -CGRectGetMinY(self.view.frame) }, { CGRectGetWidth(maskBounds) * 2, CGRectGetHeight(maskBounds) }}];
+	[_contentViewMask setFrame:(CGRect){{ 0, -CGRectGetMinY(self.view.frame) }, { CGRectGetWidth(maskBounds), CGRectGetHeight(maskBounds) }}];
 	[_contentViewMask setPath:[UIBezierPath bezierPathWithRect:_contentViewMask.bounds].CGPath];
 	[self.view.layer setMask:_contentViewMask];
 }
@@ -326,6 +336,10 @@ static _UILegibilitySettings* _legibilitySettings;
 	return [_libraryViewController isIncrementallyZooming];
 }
 
+- (BOOL)isLandscapePhone {
+	return UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation);
+}
+
 - (void)layoutForDateViewController:(UIViewController*)dateViewController withEffectiveInterfaceOrientation:(NSInteger)interfaceOrientation {
 	_effectiveInterfaceOrientation = interfaceOrientation;
 	
@@ -336,21 +350,36 @@ static _UILegibilitySettings* _legibilitySettings;
 		(CGRectGetWidth(UIScreen.mainScreen.bounds) - CGRectGetWidth(dateViewController.view.bounds)) / 2,
 	}];
 	
-	CGFloat dateViewControllerVerticalPosition = (dateViewController.view.layer.position.y - (CGRectGetHeight(dateViewController.view.bounds) / 2));
-	
-	[self.view setFrame:(CGRect){
-		{ 0, dateViewControllerVerticalPosition },
-		{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(self.view.bounds) }
-	}];
+	if (![self isLandscapePhone]) {
+		[self.view setFrame:(CGRect){
+			CGPointZero,
+			{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(self.view.bounds) }
+		}];
+	} else {
+		[self.view setFrame:(CGRect){
+			{ (CGRectGetWidth(UIScreen.mainScreen.bounds) * (CLAMP(_alignmentPercent + 1, 0, 2) * -1)), 0 },
+			{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(self.view.bounds) }
+		}];
+	}
 		
 	[self.view setNeedsLayout];
 	[self.view layoutIfNeeded];
 	
-	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(interfaceOrientation);
-			
+	CGFloat dateViewControllerVerticalPosition = (dateViewController.view.layer.position.y - (CGRectGetHeight(dateViewController.view.bounds) / 2));
+	
+	CGFloat _centerY = 0;
+	
+	if ([self isLandscapePhone]) {
+		_centerY = (CGRectGetHeight(self.view.bounds) / 2) + 48 + [[LWPreferences sharedInstance] verticalOffsetLandscapePhone];
+	} else if (UIInterfaceOrientationIsPortrait(_effectiveInterfaceOrientation)) {
+		_centerY = (dateViewControllerVerticalPosition + [[LWPreferences sharedInstance] verticalOffsetPortrait]) + (CGRectGetHeight(self.view.bounds) / 2);
+	} else if (UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation)) {
+		_centerY = (dateViewControllerVerticalPosition + [[LWPreferences sharedInstance] verticalOffsetLandscape]) + (CGRectGetHeight(self.view.bounds) / 2);
+	}
+	
 	[self.view setCenter:(CGPoint) {
 		self.view.center.x,
-		(isiPhoneLandscape) ? (CGRectGetHeight(self.view.bounds) / 2) + 48 : dateViewControllerVerticalPosition + (CGRectGetHeight(self.view.bounds) / 2)
+		_centerY
 	}];
 	
 	[self _updateMask];

@@ -9,12 +9,16 @@
 {
 	"ADVANCED_SETTINGS" = "Erweitert";
 	
+	"APPEARANCE" = "Erscheinungsbild";
+	
 	"BACKGROUND_TYPE" = "Zifferblatt-Hintergrund";
 	"BACKGROUND_TYPE_OFF" = "Aus";
 	"BACKGROUND_TYPE_TRANSLUCENT" = "Durchsichtig";
 	"BACKGROUND_TYPE_OPAQUE" = "Schwarz";
 	
 	"BATTERY_CHARGING_VIEW_HIDDEN" = "Sperrbildschirm-Batterie verstecken";
+	
+	"POSITIONING" = "Position";
 	
 	"COMPLICATION_CONTENT" = "🛠 Komplikations-Inhalt";
 	"COMPLICATION_CONTENT_NONE" = "Kein Inhalt";

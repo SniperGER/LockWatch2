@@ -69,6 +69,50 @@
 	}
 	_complicationContent = [[_defaults objectForKey:@"complicationContent"] integerValue];
 	
+	
+	
+	if (![_defaults.allKeys containsObject:@"horizontalOffsetPortrait"]) {
+		[_defaults setObject:@0.0 forKey:@"horizontalOffsetPortrait"];
+	}
+	_horizontalOffsetPortrait = [[_defaults objectForKey:@"horizontalOffsetPortrait"] floatValue];
+	
+	if (![_defaults.allKeys containsObject:@"verticalOffsetPortrait"]) {
+		[_defaults setObject:@0.0 forKey:@"verticalOffsetPortrait"];
+	}
+	_verticalOffsetPortrait = [[_defaults objectForKey:@"verticalOffsetPortrait"] floatValue];
+	
+	if (![_defaults.allKeys containsObject:@"scalePortrait"]) {
+		[_defaults setObject:@1.0 forKey:@"scalePortrait"];
+	}
+	_scalePortrait = [[_defaults objectForKey:@"scalePortrait"] floatValue];
+	
+	if (![_defaults.allKeys containsObject:@"horizontalOffsetLandscape"]) {
+		[_defaults setObject:@0.0 forKey:@"horizontalOffsetLandscape"];
+	}
+	_horizontalOffsetLandscape = [[_defaults objectForKey:@"horizontalOffsetLandscape"] floatValue];
+	
+	if (![_defaults.allKeys containsObject:@"verticalOffsetLandscape"]) {
+		[_defaults setObject:@0.0 forKey:@"verticalOffsetLandscape"];
+	}
+	_verticalOffsetLandscape = [[_defaults objectForKey:@"verticalOffsetLandscape"] floatValue];
+	
+	if (![_defaults.allKeys containsObject:@"scaleLandscape"]) {
+		[_defaults setObject:@1.0 forKey:@"scaleLandscape"];
+	}
+	_scaleLandscape = [[_defaults objectForKey:@"scaleLandscape"] floatValue];
+	
+	if (![_defaults.allKeys containsObject:@"verticalOffsetLandscapePhone"]) {
+		[_defaults setObject:@0.0 forKey:@"verticalOffsetLandscapePhone"];
+	}
+	_verticalOffsetLandscapePhone = [[_defaults objectForKey:@"verticalOffsetLandscapePhone"] floatValue];
+	
+	if (![_defaults.allKeys containsObject:@"scaleLandscapePhone"]) {
+		[_defaults setObject:@1.0 forKey:@"scaleLandscapePhone"];
+	}
+	_scaleLandscapePhone = [[_defaults objectForKey:@"scaleLandscapePhone"] floatValue];
+	
+	
+	
 	if (![_defaults.allKeys containsObject:@"onBoardingCompleted"]) {
 		[_defaults setObject:@NO forKey:@"onBoardingCompleted"];
 	}

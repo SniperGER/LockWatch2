@@ -10,6 +10,10 @@
 #import "Tweak.h"
 
 %group SpringBoard
+BOOL isLandscapePhone() {
+	return (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone) && [UIWindow isLandscapeOrientation];
+}
+
 %hook SpringBoard
 - (void)applicationDidFinishLaunching:(id)arg1 {
 	%orig;
@@ -49,11 +53,15 @@
 	SBLockScreenManager* manager = [%c(SBLockScreenManager) sharedInstance];
 	CSCoverSheetViewController* coverSheetController = [manager coverSheetViewController];
 	
-	[clockViewController layoutForDateViewController:[coverSheetController dateViewController] withEffectiveInterfaceOrientation:coverSheetController.effectiveInterfaceOrientation];
+	[clockViewController layoutForDateViewController:[coverSheetController dateViewController] withEffectiveInterfaceOrientation:coverSheetController._window.interfaceOrientation];
 }
 
 - (void)setAlignmentPercent:(CGFloat)arg1 {
+	SBLockScreenManager* manager = [%c(SBLockScreenManager) sharedInstance];
+	CSCoverSheetViewController* coverSheetController = [manager coverSheetViewController];
+	
 	[clockViewController setAlignmentPercent:arg1];
+	[clockViewController layoutForDateViewController:[coverSheetController dateViewController] withEffectiveInterfaceOrientation:coverSheetController._window.interfaceOrientation];
 	
 	return;
 }
@@ -94,7 +102,7 @@
 		[clockViewController unfreezeCurrentFace];
 	}
 	
-	[clockViewController layoutForDateViewController:[self dateViewController] withEffectiveInterfaceOrientation:self.effectiveInterfaceOrientation];
+	[clockViewController layoutForDateViewController:[self dateViewController] withEffectiveInterfaceOrientation:self._window.interfaceOrientation];
 	
 	%orig;
 }
@@ -111,7 +119,7 @@
 	%orig;
 	
 	if (!clockViewController.view.superview) return;
-	[clockViewController layoutForDateViewController:[self dateViewController] withEffectiveInterfaceOrientation:self.effectiveInterfaceOrientation];
+	[clockViewController layoutForDateViewController:[self dateViewController] withEffectiveInterfaceOrientation:self._window.interfaceOrientation];
 }
 
 - (void)_transitionChargingViewToVisible:(BOOL)arg1 showBattery:(BOOL)arg2 animated:(BOOL)arg3 {
@@ -169,8 +177,7 @@ static CGFloat notificationOffset = 0;
 - (UIEdgeInsets)_listViewDefaultContentInsets {
     UIEdgeInsets r = %orig;
     
-	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && [UIWindow isLandscapeOrientation];
-	if (isiPhoneLandscape) return r;
+	if (isLandscapePhone()) return r;
 	
 	SBFLockScreenDateViewController* dateViewController = [[[objc_getClass("SBLockScreenManager") sharedInstance] coverSheetViewController] dateViewController];
 	CLKDevice* device = [CLKDevice currentDevice];
@@ -179,7 +186,11 @@ static CGFloat notificationOffset = 0;
 		notificationOffset = (CGRectGetMinY([(SBFLockScreenDateView*)dateViewController.view restingFrame]) + CGRectGetHeight(device.actualScreenBounds) + 12) - r.top;
 	}
 	
-	r.top += notificationOffset;
+	if (UIInterfaceOrientationIsPortrait([[[[%c(SBLockScreenManager) sharedInstance] coverSheetViewController] _window] interfaceOrientation])) {
+		r.top += notificationOffset + [[LWPreferences sharedInstance] verticalOffsetPortrait];
+	} else {
+		r.top += notificationOffset + [[LWPreferences sharedInstance] verticalOffsetLandscape];
+	}
     
     return r;
 }
@@ -191,8 +202,7 @@ static CGFloat notificationOffset = 0;
 }
 
 - (CGFloat)_minInsetsToPushDateOffScreen {
-	BOOL isiPhoneLandscape = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone && [UIWindow isLandscapeOrientation];
-	if (isiPhoneLandscape) return %orig;
+	if (isLandscapePhone()) return %orig;
 	
 	return %orig + notificationOffset;
 }

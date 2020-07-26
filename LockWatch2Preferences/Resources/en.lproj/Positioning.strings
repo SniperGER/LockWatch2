@@ -1,0 +1,19 @@
+//
+// Positioning.strings
+// LockWatch2
+//
+// Created by janikschmidt on 7/25/2020
+// Copyright © 2020 Team FESTIVAL. All rights reserved
+//
+
+{
+	"POSITIONING" = "Positioning";
+	
+	"PORTAIT" = "Portrait";
+	"LANDSCAPE" = "Landscape";
+	"LANDSCAPE_IPHONE" = "Landscape (iPhone)";
+	
+	"HORIZONTAL_OFFSET" = "Horizontal Offset";
+	"VERTICAL_OFFSET" = "Vertical Offset";
+	"SCALE" = "Scale";
+}
