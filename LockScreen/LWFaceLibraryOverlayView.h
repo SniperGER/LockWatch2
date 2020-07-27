@@ -26,7 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) UIButton* cancelButton;
 @property (nonatomic, readonly) UIButton* editButton;
-@property (nonatomic, assign) CGFloat luxoButtonWidth;
 
 - (instancetype)initForDevice:(CLKDevice*)device;
 - (void)_legibilitySettingsChanged;

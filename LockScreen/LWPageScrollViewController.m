@@ -16,6 +16,7 @@
 #import "LWPageView.h"
 
 #import "Core/LWEmulatedCLKDevice.h"
+#import "Core/LWEmulatedNRDevice.h"
 #import "Core/LWPageScrollViewControllerDataSource.h"
 #import "Core/LWPageScrollViewControllerDelegate.h"
 
@@ -70,7 +71,12 @@
 			
 			if (_deleteConfirmationView) {
 				[_deleteConfirmationView sizeToFit];
-				[_deleteConfirmationView setCenter:(CGPoint){ CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) - 7 }];
+				
+				if ([[_device.nrDevice valueForProperty:@"mainScreenClass"] integerValue] == NRDeviceMainScreenClass44mm) {
+					[_deleteConfirmationView setCenter:(CGPoint){ CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) - 7 }];
+				} else {
+					[_deleteConfirmationView setCenter:(CGPoint){ CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) }];
+				}
 			}
 		}
 	}

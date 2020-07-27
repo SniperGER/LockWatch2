@@ -49,6 +49,8 @@ CGFloat SineEaseInOut(CGFloat p) {
 		}
 	}];
 	
+	[self.scrollView setCenter:(CGPoint){ CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) + (-7 * MIN(MAX(_zoomLevel, 0), 1)) }];
+	
 	[self.scrollView performSuppressingScrollCallbacks:^{
 		[self.scrollView _updateContentSize];
 		[self.scrollView setContentOffset:[self.scrollView _contentOffsetToCenterPageAtIndex:self.scrollView.currentPageIndex]];

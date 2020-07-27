@@ -9,6 +9,7 @@
 #import <SpringBoardUIServices/SBUILegibilityLabel.h>
 
 #import "Core/LWEmulatedCLKDevice.h"
+#import "Core/LWEmulatedNRDevice.h"
 
 #import "LWClockViewController.h"
 #import "LWFaceLibraryOverlayButton.h"
@@ -56,32 +57,61 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	
-	CGFloat mainScreenHeight = [[_device.nrDevice valueForProperty:@"mainScreenHeight"] floatValue];
-	CGFloat verticalOffset = 0;
+	NRDeviceMainScreenClass mainScreenClass = [[_device.nrDevice valueForProperty:@"mainScreenClass"] integerValue];
+	CGFloat _labelCenterY = 0;
 	
-	if (mainScreenHeight <= 340) {
-		verticalOffset = 1.5;
-	} else if (mainScreenHeight <= 390 || mainScreenHeight <= 394) {
-		verticalOffset = 3.5;
-	} else if (mainScreenHeight <= 448) {
-		verticalOffset = 6;
+	switch (mainScreenClass) {
+		case NRDeviceMainScreenClass38mm:
+			_labelCenterY = 8.75;
+			break;
+		case NRDeviceMainScreenClass40mm:
+		case NRDeviceMainScreenClass42mm:
+			_labelCenterY = 11.5;
+			break;
+		case NRDeviceMainScreenClass44mm:
+			_labelCenterY = 14.5;
+			break;
+		default: break;
 	}
 	
 	[_leftTitleLabel setCenter:(CGPoint){
 		CGRectGetMidX(self.bounds) + _leftTitleOffset,
-		CGRectGetMidY(_leftTitleLabel.bounds) + verticalOffset
+		_labelCenterY
 	}];
 	
 	[_rightTitleLabel setCenter:(CGPoint){
 		CGRectGetMidX(self.bounds) + _rightTitleOffset,
-		CGRectGetMidY(_rightTitleLabel.bounds) + verticalOffset
+		_labelCenterY
 	}];
 	
-	[_editButton setBounds:(CGRect){ CGPointZero, { [[CLKDevice currentDevice] isLuxo] ? _luxoButtonWidth : _editTitleLabelWidth + 24, CGRectGetHeight(_editButton.titleLabel.bounds) + 8 }}];
-	[_editButton setCenter:(CGPoint) { CGRectGetMidX(self.bounds), CGRectGetMaxY(self.bounds) - (CGRectGetHeight(_editButton.bounds) / 2) }];
+	CGRect _buttonBounds = CGRectZero;
+	CGPoint _buttonCenter = CGPointZero;
 	
-	[_cancelButton setBounds:(CGRect){ CGPointZero, { [[CLKDevice currentDevice] isLuxo] ? _luxoButtonWidth : _cancelTitleLabelWidth + 24, CGRectGetHeight(_cancelButton.titleLabel.bounds) + 8 }}];
-	[_cancelButton setCenter:(CGPoint) { CGRectGetMidX(self.bounds), CGRectGetMaxY(self.bounds) - (CGRectGetHeight(_cancelButton.bounds) / 2) }];
+	switch (mainScreenClass) {
+		case NRDeviceMainScreenClass38mm:
+			_buttonBounds = (CGRect){ CGPointZero, { 98, 25 }};
+			_buttonCenter = (CGPoint){ CGRectGetMidX(_device.actualScreenBounds), CGRectGetHeight(_device.actualScreenBounds) - CGRectGetMidY(_buttonBounds) };
+			break;
+		case NRDeviceMainScreenClass40mm:
+			_buttonBounds = (CGRect){ CGPointZero, { 113, 31 }};
+			_buttonCenter = (CGPoint){ CGRectGetMidX(_device.actualScreenBounds), CGRectGetHeight(_device.actualScreenBounds) - (CGRectGetMidY(_buttonBounds) + 2) };
+			break;
+		case NRDeviceMainScreenClass42mm:
+			_buttonBounds = (CGRect){ CGPointZero, { 102.5, 28 }};
+			_buttonCenter = (CGPoint){ CGRectGetMidX(_device.actualScreenBounds), CGRectGetHeight(_device.actualScreenBounds) - CGRectGetMidY(_buttonBounds) };
+			break;
+		case NRDeviceMainScreenClass44mm:
+			_buttonBounds = (CGRect){ CGPointZero, { 128, 31 }};
+			_buttonCenter = (CGPoint){ CGRectGetMidX(_device.actualScreenBounds), CGRectGetHeight(_device.actualScreenBounds) - (CGRectGetMidY(_buttonBounds) + 2) };
+			break;
+		default: break;
+	}
+	
+	[_editButton setBounds:_buttonBounds];
+	[_editButton setCenter:_buttonCenter];
+	
+	[_cancelButton setBounds:_buttonBounds];
+	[_cancelButton setCenter:_buttonCenter];
 }
 
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event {
@@ -104,13 +134,20 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 - (UIButton*)_newButton {
 	LWFaceLibraryOverlayButton* button = [LWFaceLibraryOverlayButton buttonWithType:UIButtonTypeCustom];
 	
-	CGFloat mainScreenHeight = [[_device.nrDevice valueForProperty:@"mainScreenHeight"] floatValue];
-	if (mainScreenHeight <= 340) {
-		[button.titleLabel setFont:[UIFont systemFontOfSize:15]];
-	} else if (mainScreenHeight <= 390 || mainScreenHeight <= 394) {
-		[button.titleLabel setFont:[UIFont systemFontOfSize:16]];
-	} else if (mainScreenHeight <= 448) {
-		[button.titleLabel setFont:[UIFont systemFontOfSize:17]];
+	NRDeviceMainScreenClass mainScreenClass = [[_device.nrDevice valueForProperty:@"mainScreenClass"] integerValue];
+	
+	switch (mainScreenClass) {
+		case NRDeviceMainScreenClass38mm:
+			[button.titleLabel setFont:[UIFont systemFontOfSize:15]];
+			break;
+		case NRDeviceMainScreenClass42mm:
+			[button.titleLabel setFont:[UIFont systemFontOfSize:16]];
+			break;
+		case NRDeviceMainScreenClass40mm:
+		case NRDeviceMainScreenClass44mm:
+			[button.titleLabel setFont:[UIFont systemFontOfSize:17]];
+			break;
+		default: break;
 	}
 	
 	return button;
@@ -119,13 +156,20 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 - (SBUILegibilityLabel*)_newTitleLabel {
 	SBUILegibilityLabel* label = [SBUILegibilityLabel new];
 	
-	CGFloat mainScreenHeight = [[_device.nrDevice valueForProperty:@"mainScreenHeight"] floatValue];
-	if (mainScreenHeight <= 340) {
-		[label setFont:[UIFont systemFontOfSize:12]];
-	} else if (mainScreenHeight <= 390 || mainScreenHeight <= 394) {
-		[label setFont:[UIFont systemFontOfSize:13]];
-	} else if (mainScreenHeight <= 448) {
-		[label setFont:[UIFont systemFontOfSize:14]];
+	NRDeviceMainScreenClass mainScreenClass = [[_device.nrDevice valueForProperty:@"mainScreenClass"] integerValue];
+	
+	switch (mainScreenClass) {
+		case NRDeviceMainScreenClass38mm:
+			[label setFont:[UIFont systemFontOfSize:12]];
+			break;
+		case NRDeviceMainScreenClass40mm:
+		case NRDeviceMainScreenClass42mm:
+			[label setFont:[UIFont systemFontOfSize:13]];
+			break;
+		case NRDeviceMainScreenClass44mm:
+			[label setFont:[UIFont systemFontOfSize:14]];
+			break;
+		default: break;
 	}
 	
 	[label setLegibilitySettings:[LWClockViewController legibilitySettings]];

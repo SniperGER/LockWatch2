@@ -10,6 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger, NRDeviceMainScreenClass) {
+	NRDeviceMainScreenClass42mm = 12,
+	NRDeviceMainScreenClass38mm = 13,
+	NRDeviceMainScreenClass40mm = 16,
+	NRDeviceMainScreenClass44mm = 17
+};
+
 @interface LWEmulatedNRDevice : NRDevice {
 	NSMutableDictionary* _deviceData;
 }

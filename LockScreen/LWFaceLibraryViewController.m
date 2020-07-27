@@ -22,6 +22,7 @@
 #import "LWSwitcherViewController.h"
 
 #import "Core/LWEmulatedCLKDevice.h"
+#import "Core/LWEmulatedNRDevice.h"
 #import "Core/LWFaceLibraryViewControllerDelegate.h"
 #import "Core/LWPersistentFaceCollection.h"
 
@@ -84,20 +85,28 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 
 	_switcherController = [LWSwitcherViewController new];
 	
-	CGFloat sizeClassFactor = 0;
-	switch (_device.sizeClass) {
-		case 1:
-			sizeClassFactor = 0.6;
+	NRDeviceMainScreenClass mainScreenClass = [[_device.nrDevice valueForProperty:@"mainScreenClass"] integerValue];
+	CGFloat _scaleFactor = 1;
+	
+	switch (mainScreenClass) {
+		case NRDeviceMainScreenClass38mm:
+			_scaleFactor = (82.0 / 136.0);
 			break;
-		case 2:
-			sizeClassFactor = 0.625;
+		case NRDeviceMainScreenClass40mm:
+			_scaleFactor = (100.0 / 162.0);
+			break;
+		case NRDeviceMainScreenClass42mm:
+			_scaleFactor = (94.0 / 156.0);
+			break;
+		case NRDeviceMainScreenClass44mm:
+			_scaleFactor = (115.0 / 184.0);
 			break;
 		default: break;
 	}
 	
 	[_switcherController setPageWidthWhenZoomedOut:ceilf(
 		(CGRectGetWidth(_device.actualScreenBounds) / CGRectGetHeight(_device.actualScreenBounds)) *
-		(CGRectGetHeight(_device.actualScreenBounds) * sizeClassFactor)
+		(CGRectGetHeight(_device.actualScreenBounds) * _scaleFactor)
 	)];
 	[_switcherController setPageScaleWhenZoomedOut:(_switcherController.pageWidthWhenZoomedOut / CGRectGetWidth(_device.actualScreenBounds))];
 	
@@ -117,7 +126,6 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	[_switcherController didMoveToParentViewController:self];
 
 	_libraryOverlayView = [[LWFaceLibraryOverlayView alloc] initForDevice:_device];
-	[_libraryOverlayView setLuxoButtonWidth:(CGRectGetWidth(_device.actualScreenBounds) + 16) * _switcherController.pageScaleWhenZoomedOut];
 	[self.view addSubview:_libraryOverlayView];
 	
 	[_libraryOverlayView.editButton addTarget:self action:@selector(_startFaceEditing) forControlEvents:UIControlEventTouchUpInside];
@@ -554,6 +562,11 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	
 	[_libraryOverlayView.cancelButton setHidden:YES];
 	[_libraryOverlayView.cancelButton setTransform:CGAffineTransformIdentity];
+	
+	[_switcherController.scrollView enumeratePagesWithBlock:^(LWPageView* pageView, NSInteger index, BOOL* stop) {
+		[pageView setContentOffset:CGPointZero];
+		[pageView setAlpha:1];
+	}];
 }
 
 - (NSString*)_titleForSwitcherPageAtIndex:(NSInteger)index {
