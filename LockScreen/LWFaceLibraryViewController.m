@@ -62,8 +62,8 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	]];
 	
 	[NSLayoutConstraint activateConstraints:@[
-		[_libraryOverlayView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
-		[_libraryOverlayView.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor],
+		// [_libraryOverlayView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+		// [_libraryOverlayView.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor],
 		[_libraryOverlayView.widthAnchor constraintEqualToAnchor:self.view.widthAnchor],
 		[_libraryOverlayView.heightAnchor constraintEqualToAnchor:self.view.heightAnchor]
 	]];
@@ -162,6 +162,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	CGFloat scale = baseScale - ((baseScale - 1) * _switcherController.zoomLevel);
 	
 	[_libraryOverlayView setTransform:CGAffineTransformMakeScale(scale, scale)];
+	[_libraryOverlayView setCenter:(CGPoint){ CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) + (7 * (1 - _switcherController.zoomLevel)) }];
 }
 
 - (void)_animateSwitcherPageDelete {
