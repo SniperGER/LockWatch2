@@ -383,6 +383,10 @@ BOOL _NTKShowHardwareSpecificFaces() {
 }
 #endif
 
+static void LWPreferencesChanged(CFNotificationCenterRef center, void* observer, CFStringRef name, const void* object, CFDictionaryRef userInfo) {
+	[preferences reloadPreferences];
+}
+
 static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* observer, CFStringRef name, const void* object, CFDictionaryRef userInfo) {
 	[preferences reloadPreferences];
 	
@@ -463,6 +467,7 @@ static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* obs
 					NSLog(@"Disabling complications.");
 				}
 				
+				CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, LWPreferencesChanged, CFSTR("ml.festival.lockwatch2/PreferencesChanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 				CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, LWEmulatedWatchTypeChanged, CFSTR("ml.festival.lockwatch2/WatchSelected"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 				LWEmulatedWatchTypeChanged(NULL, NULL, NULL, NULL, NULL);
 				

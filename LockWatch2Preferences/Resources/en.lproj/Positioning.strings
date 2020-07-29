@@ -10,7 +10,7 @@
 	"POSITIONING" = "Positioning";
 	
 	"PORTAIT" = "Portrait";
-	"LANDSCAPE" = "Landscape";
+	"LANDSCAPE" = "Landscape (iPad)";
 	"LANDSCAPE_IPHONE" = "Landscape (iPhone)";
 	
 	"HORIZONTAL_OFFSET" = "Horizontal Offset";

@@ -25,6 +25,8 @@
 			<string>0.0</string>
 			<key>keyboard</key>
 			<string>numbers</string>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/PreferencesChanged</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -41,6 +43,8 @@
 			<string>0.0</string>
 			<key>keyboard</key>
 			<string>numbers</string>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/PreferencesChanged</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -57,13 +61,15 @@
 			<string>1.0</string>
 			<key>keyboard</key>
 			<string>numbers</string>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/PreferencesChanged</string>
 		</dict>
 		
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>LANDSCAPE</string>
+			<string>LANDSCAPE_IPAD</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -80,6 +86,8 @@
 			<string>0.0</string>
 			<key>keyboard</key>
 			<string>numbers</string>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/PreferencesChanged</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -96,6 +104,8 @@
 			<string>0.0</string>
 			<key>keyboard</key>
 			<string>numbers</string>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/PreferencesChanged</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -112,6 +122,8 @@
 			<string>1.0</string>
 			<key>keyboard</key>
 			<string>numbers</string>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/PreferencesChanged</string>
 		</dict>
 		
 		<dict>
@@ -135,6 +147,8 @@
 			<string>0.0</string>
 			<key>keyboard</key>
 			<string>numbers</string>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/PreferencesChanged</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -151,6 +165,8 @@
 			<string>1.0</string>
 			<key>keyboard</key>
 			<string>numbers</string>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/PreferencesChanged</string>
 		</dict>
 	</array>
 	<key>title</key>

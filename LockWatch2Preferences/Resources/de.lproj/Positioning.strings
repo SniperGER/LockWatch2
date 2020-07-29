@@ -10,7 +10,7 @@
 	"POSITIONING" = "Position";
 	
 	"PORTAIT" = "Hochformat";
-	"LANDSCAPE" = "Querformat";
+	"LANDSCAPE_IPAD" = "Querformat (iPad)";
 	"LANDSCAPE_IPHONE" = "Querformat (iPhone)";
 	
 	"HORIZONTAL_OFFSET" = "Horizontaler Versatz";
