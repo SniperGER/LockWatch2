@@ -156,6 +156,8 @@ CGFloat SineEaseInOut(CGFloat p) {
 		animations();
 		block(YES);
 		
+		[self updatePageBehaviors];
+		
 		return;
 	}
 	
@@ -173,6 +175,8 @@ CGFloat SineEaseInOut(CGFloat p) {
 			}
 			
 			block(YES);
+			
+			[self updatePageBehaviors];
 			
 			[timer invalidate];
 			_zoomAnimationTimer = nil;

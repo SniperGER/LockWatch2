@@ -758,6 +758,8 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 #pragma mark - LWPageScrollViewControllerDelegate
 
 - (BOOL)pageScrollViewController:(LWPageScrollViewController*)pageScrollViewController canDeletePageAtIndex:(NSInteger)index {
+	if (!_presented) return NO;
+	
 	if (_switcherController == pageScrollViewController) {
 		if (_switcherController.currentPageIndex == index) {
 			if ([self _indexOfAddPage] == index) {
