@@ -218,7 +218,7 @@
 
 %hook NTKBatteryUtilities
 + (UIColor*)colorForLevel:(CGFloat)arg1 andState:(NSInteger)arg2 {
-	if (NSProcessInfo.processInfo.isLowPowerModeEnabled && ![%c(NTKBatteryUtilities) chargingForState:arg2]) return UIColor.systemYellowColor;
+	if (NSProcessInfo.processInfo.isLowPowerModeEnabled) return UIColor.systemYellowColor;
 	
 	return %orig;
 }
