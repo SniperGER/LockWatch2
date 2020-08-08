@@ -111,6 +111,19 @@
 }
 %end	/// %hook NTKComplicationDataSource
 
+%hook NTKLauncherComplicationDataSource
+- (NSString*)_complicationApplicationIdentifier {
+	switch ([(NTKComplication*)self.complication complicationType]) {
+		case NTKComplicationTypeMessages: return @"com.apple.MobileSMS";
+		case NTKComplicationTypePhone: return @"com.apple.mobilephone";
+		case NTKComplicationTypeMaps: return @"com.apple.Maps";
+		case NTKComplicationTypeMail: return @"com.apple.mobilemail";
+		case NTKComplicationTypeHomeKit: return @"com.apple.Home";
+		default: return %orig;
+	}
+}
+%end
+
 %hook NTKLocalTimelineComplicationController
 - (void)performTapAction {
 	CLKCComplicationDataSource* dataSource = MSHookIvar<CLKCComplicationDataSource*>(self, "_dataSource");
