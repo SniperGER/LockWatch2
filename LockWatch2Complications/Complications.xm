@@ -104,12 +104,41 @@
 	if (complicationContent == 2) {
 		if (dataSourceClass && acceptsComplicationFamily) return dataSourceClass;
 		return %orig;
-	}
+	} else if (!acceptsComplicationFamily) return nil;
 	
-	if (!acceptsComplicationFamily) return nil;
 	return dataSourceClass;
 }
 %end	/// %hook NTKComplicationDataSource
+
+%hook NTKBundleComplicationManager
+- (Class)dataSourceClassForBundleComplication:(NTKBundleComplication*)bundleComplication {
+	if (![bundleComplication isKindOfClass:%c(NTKBundleComplication)]) return %orig;
+	
+	NSInteger complicationContent = [[%c(LWPreferences) sharedInstance] complicationContent];
+	if (complicationContent == 0) {
+		return nil;
+	} else if (complicationContent == 1) {
+		return %orig;
+	}
+	
+	Class dataSourceClass;
+	
+	/// TODO
+	NSString* bundleIdentifier = bundleComplication.complication.bundleIdentifier;
+#define IsEqual(string) [bundleIdentifier isEqualToString:string]
+
+	if (IsEqual(@"com.apple.NanoTimeKit.NTKCellularConnectivityComplicationDataSource")) {
+		
+	}
+	
+	if (complicationContent == 2) {
+		if (dataSourceClass) return dataSourceClass;
+		return %orig;
+	}
+	
+	return dataSourceClass;
+}
+%end	/// %hook NTKBundleComplicationManager
 
 %hook NTKLauncherComplicationDataSource
 - (NSString*)_complicationApplicationIdentifier {
