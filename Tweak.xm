@@ -356,6 +356,8 @@ static BOOL scrollEnabled = YES;
 	} else {
 		[clockViewController.faceViewController setBackgroundViewAlpha:arg1 ? 0 : 1 animated:YES];
 	}
+	
+	[clockViewController dismissFaceLibraryAnimated:YES];
 }
 %end	/// %hook PhotonScreenManager
 %end	// %group PhotonFixes
