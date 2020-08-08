@@ -23,11 +23,6 @@
 	return template;
 }
 
-- (void)resume {
-	[self.delegate invalidateSwitcherTemplate];
-	[self.delegate invalidateEntries];
-}
-
 #pragma mark - NTKComplicationDataSource
 
 - (BOOL)alwaysShowIdealizedTemplateInSwitcher {
@@ -43,6 +38,11 @@
 	CLKComplicationTimelineEntry* timelineEntry = [CLKComplicationTimelineEntry entryWithDate:[NSDate date] complicationTemplate:template];
 	
 	handler(timelineEntry);
+}
+
+- (void)resume {
+	[self.delegate invalidateSwitcherTemplate];
+	[self.delegate invalidateEntries];
 }
 
 - (Class)richComplicationDisplayViewClassForDevice:(CLKDevice*)device {

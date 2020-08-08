@@ -43,10 +43,11 @@
 		case NTKComplicationTypeBattery: 
 			dataSourceClass = %c(LWBatteryComplicationDataSource);
 			break;
-		case NTKComplicationTypeMonogram: break; // TODO
 		case NTKComplicationTypeHeartrate: break;
 		case NTKComplicationTypeLunarDate: break; // TODO
-		case NTKComplicationTypeMusic: break; // TODO
+		case NTKComplicationTypeMusic:
+			dataSourceClass = %c(LWMusicComplicationDataSource);
+			break;
 		case NTKComplicationTypeWorkout: break;
 		case NTKComplicationTypeBreathing: break;
 		case NTKComplicationTypeReminder: break; // TODO
@@ -62,12 +63,13 @@
 		case NTKComplicationTypeHomeKit: break; // TODO
 		case NTKComplicationTypeSiri: break; // TODO
 		case NTKComplicationTypeRemote: break;
-		case NTKComplicationTypeConnectivity: break; // TODO
 		case NTKComplicationTypeTinCan: break;
 		case NTKComplicationTypeNowPlaying: 
 			dataSourceClass = %c(LWNowPlayingComplicationDataSource);
 			break;
-		case NTKComplicationTypeRadio: break; // TODO
+		case NTKComplicationTypeRadio:
+			dataSourceClass = %c(LWRadioComplicationDataSource);
+			break;
 		case NTKComplicationTypeWeatherAirQuality: 
 			dataSourceClass = %c(LWAirQualityDataSource);
 			break;
@@ -76,7 +78,9 @@
 		case NTKComplicationTypeAstronomyEarth: break; // TODO
 		case NTKComplicationTypeAstronomyLuna: break; // TODO
 		case NTKComplicationTypeAstronomyOrrery: break; // TODO
-		case NTKComplicationTypePodcast: break; // TODO
+		case NTKComplicationTypePodcast:
+			dataSourceClass = %c(LWPodcastComplicationDataSource);
+			break;
 		case NTKComplicationTypeWeatherUVIndex:
 			dataSourceClass = %c(LWUltravioletIndexDataSource);
 			break;

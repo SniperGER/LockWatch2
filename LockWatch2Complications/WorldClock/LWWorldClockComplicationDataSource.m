@@ -77,14 +77,6 @@
 	[NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
-- (void)pause {
-	[self _stopObserving];
-}
-
-- (void)resume {
-	[self _startObserving];
-}
-
 #pragma mark - NTKComplicationDataSource
 
 - (BOOL)alwaysShowIdealizedTemplateInSwitcher {
@@ -108,6 +100,14 @@
 
 - (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler {
 	handler([self _currentTimelineEntry]);
+}
+
+- (void)pause {
+	[self _stopObserving];
+}
+
+- (void)resume {
+	[self _startObserving];
 }
 
 - (Class)richComplicationDisplayViewClassForDevice:(CLKDevice*)device {

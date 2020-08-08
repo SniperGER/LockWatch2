@@ -24,3 +24,6 @@ SUBPROJECTS += LockWatch2Preferences
 SUBPROJECTS += LockWatch2OnBoarding
 include $(THEOS_MAKE_PATH)/aggregate.mk
 endif
+
+before-stage::
+	find . -name ".DS_Store" -delete

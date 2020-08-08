@@ -1,28 +1,12 @@
 --- !tapi-tbd-v2
 archs:                 [ arm64, arm64e ]
 platform:              ios
-flags:                 [ flat_namespace, not_app_extension_safe ]
+flags:                 [ flat_namespace ]
 install-name:          /Library/MobileSubstrate/DynamicLibraries/LockWatch2Complications.dylib
 current-version:       0
 compatibility-version: 0
 objc-constraint:       retain_release
 exports:
   - archs:              [ arm64, arm64e ]
-    objc-classes:       [ _LWBatteryComplicationDataSource, _LWComplicationDataSourceBase, _LWDateComplicationDataSource,
-                          _LWDigitalTimeComplicationDataSource, _LWNowPlayingComplicationDataSource, _LWNowPlayingTimelineEntry,
-                          _LWSunriseComplicationDataSource, _LWWellnessComplicationDataSource, _LWWorldClockComplicationDataSource ]
-    objc-ivars:         [ _LWBatteryComplicationDataSource._level, _LWBatteryComplicationDataSource._listeningForNotifications,
-                          _LWBatteryComplicationDataSource._state, _LWNowPlayingComplicationDataSource._activeOriginIdentifier,
-                          _LWNowPlayingComplicationDataSource._applicationName, _LWNowPlayingComplicationDataSource._isPaused,
-                          _LWNowPlayingComplicationDataSource._needsInvalidation,
-                          _LWNowPlayingComplicationDataSource._nowPlayingEntry, _LWNowPlayingComplicationDataSource._nowPlayingInfo,
-                          _LWNowPlayingComplicationDataSource._nowPlayingState, _LWNowPlayingTimelineEntry._album,
-                          _LWNowPlayingTimelineEntry._applicationName, _LWNowPlayingTimelineEntry._artist,
-                          _LWNowPlayingTimelineEntry._state, _LWNowPlayingTimelineEntry._title,
-                          _LWSunriseComplicationDataSource._delayedLocation, _LWSunriseComplicationDataSource._displayedLocation,
-                          _LWSunriseComplicationDataSource._entryModelCache,
-                          _LWSunriseComplicationDataSource._geocodeRequestDelayTimer,
-                          _LWSunriseComplicationDataSource._isWaitingForGeocodeRequest,
-                          _LWSunriseComplicationDataSource._locationName, _LWSunriseComplicationDataSource._token,
-                          _LWWorldClockComplicationDataSource._listeningForNotifications ]
+    objc-classes:       [ _LWComplicationDataSourceBase ]
 ...

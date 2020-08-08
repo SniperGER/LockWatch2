@@ -2,30 +2,35 @@
 // LWNowPlayingTimelineEntry.m
 // LockWatch
 //
-// Created by janikschmidt on 4/4/2020
+// Created by janikschmidt on 8/5/2020
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
 #import <ClockKit/ClockKit.h>
+#import <MediaPlayerUI/MediaPlayerUI.h>
 #import <NanoTimeKitCompanion/NTKOverrideTextProvider.h>
 
 #import "LWNowPlayingTimelineEntry.h"
 #import "NTKComplicationFamily.h"
 
+#define PODCAST_TINT_COLOR [UIColor colorWithRed:0.612 green:0.353 blue:0.95 alpha:1]
 #define SYSTEM_BLUE_COLOR [UIColor colorWithRed:0 green:0.478 blue:1.0 alpha:1.0]
-
-extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
-extern UIImage* NTKImageNamed(NSString* imageName);
+#define SYSTEM_PINK_COLOR [UIColor colorWithRed:1 green:0.176 blue:0.333 alpha:1.0]
 
 extern CFStringRef kMRMediaRemoteNowPlayingInfoAlbum;
 extern CFStringRef kMRMediaRemoteNowPlayingInfoArtist;
 extern CFStringRef kMRMediaRemoteNowPlayingInfoTitle;
 
+extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
+extern UIImage* NTKImageNamed(NSString* imageName);
+
+
+
 @implementation LWNowPlayingTimelineEntry
 
 - (instancetype)initAsSwitcherTemplate {
 	if (self = [super init]) {
-		_state = 0;
+		_state = LWNowPlayingStateNotPlaying;
 		
 		[self setEntryDate:[NSDate date]];
 	}
@@ -33,15 +38,15 @@ extern CFStringRef kMRMediaRemoteNowPlayingInfoTitle;
 	return self;
 }
 
-- (instancetype)initWithState:(LWNowPlayingState)state nowPlayingInfo:(NSDictionary*)nowPlayingInfo applicationName:(NSString*)applicationName {
+- (instancetype)initWithState:(LWNowPlayingState)state nowPlayingController:(MPUNowPlayingController*)nowPlayingController applicationDisplayName:(id)applicationDisplayName {
 	if (self = [super init]) {
 		_state = state;
 		
 		if (state != LWNowPlayingStateNotPlaying) {
-			_title = nowPlayingInfo[(__bridge NSString*)kMRMediaRemoteNowPlayingInfoTitle];
-			_album = nowPlayingInfo[(__bridge NSString*)kMRMediaRemoteNowPlayingInfoAlbum];
-			_artist = nowPlayingInfo[(__bridge NSString*)kMRMediaRemoteNowPlayingInfoArtist];
-			_applicationName = applicationName;
+			_title = nowPlayingController.currentNowPlayingInfo[(__bridge NSString*)kMRMediaRemoteNowPlayingInfoTitle];
+			_album = nowPlayingController.currentNowPlayingInfo[(__bridge NSString*)kMRMediaRemoteNowPlayingInfoAlbum];
+			_artist = nowPlayingController.currentNowPlayingInfo[(__bridge NSString*)kMRMediaRemoteNowPlayingInfoArtist];
+			_applicationName = applicationDisplayName;
 		}
 		
 		[self setEntryDate:[NSDate date]];
@@ -51,73 +56,6 @@ extern CFStringRef kMRMediaRemoteNowPlayingInfoTitle;
 }
 
 #pragma mark - Instance Methods
-
-- (CLKComplicationTemplateGraphicRectangularStandardBody*)_graphicRectangular {
-	CLKComplicationTemplateGraphicRectangularStandardBody* template = [CLKComplicationTemplateGraphicRectangularStandardBody new];
-	
-	CLKSimpleTextProvider* headerTextProvider;
-	CLKSimpleTextProvider* body1TextProvider;
-	CLKSimpleTextProvider* body2TextProvider;
-	
-	if (_state != LWNowPlayingStatePlaying) {
-		if (_state != LWNowPlayingStatePaused) {
-			if (_state == LWNowPlayingStateNotPlaying) {
-				headerTextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"NOW_PLAYING_STOPPED_HEADER_LARGE_MODULAR", @"Now Playing")];
-				[headerTextProvider setTintColor:SYSTEM_BLUE_COLOR];
-				
-				body1TextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"NOW_PLAYING_STOPPED_LARGE_MODULAR", @"Tap to open")];
-			}
-		} else {
-			headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
-			[headerTextProvider setTintColor:SYSTEM_BLUE_COLOR];
-			
-			NSMutableArray* titleArray = [NSMutableArray array];
-			if (_artist.length > 0) {
-				[titleArray addObject:_artist];
-			}
-			
-			if (_album.length > 0) {
-				[titleArray addObject:_album];
-			}
-			
-			NSString* titleString = [titleArray componentsJoinedByString:@" - "];
-			
-			body1TextProvider = [CLKSimpleTextProvider textProviderWithText:titleString];
-			body2TextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"NOW_PLAYING_PAUSED_LARGE_MODULAR", @"Paused")];
-		}
-	} else {
-		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
-		[headerTextProvider setTintColor:SYSTEM_BLUE_COLOR];
-		
-		NSMutableArray* titleArray = [NSMutableArray array];
-		if (_artist.length > 0) {
-			[titleArray addObject:_artist];
-		}
-		
-		if (_album.length > 0) {
-			[titleArray addObject:_album];
-		}
-		
-		NSString* titleString = [titleArray componentsJoinedByString:@" - "];
-		
-		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:titleString];
-		body2TextProvider = [CLKSimpleTextProvider textProviderWithText:_applicationName];
-		
-		// [template setHeaderImageProvider:[CLKImageProvider imageProviderWithOnePieceImage:[NTKImageNamed(@"modularLargeMusicEqualizer") imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]]];
-		[template setHeaderImageProvider:[CLKFullColorImageProvider providerWithFullColorImage:[NTKImageNamed(@"modularLargeMusicEqualizer") imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] monochromeFilterType:1 applyScalingAndCircularMasking:NO]];
-	}
-	
-	[template setHeaderTextProvider:headerTextProvider];
-	[template setBody1TextProvider:body1TextProvider];
-	
-	if (body2TextProvider) {
-		[template setBody2TextProvider:body2TextProvider];
-	}
-	
-	[template setTintColor:SYSTEM_BLUE_COLOR];
-	
-	return template;
-}
 
 - (NTKOverrideTextProvider*)_italicTextProviderForText:(NSString*)text {
 	return [NTKOverrideTextProvider textProviderWithText:text overrideBlock:^(NSString* text, unsigned long long arg2, CLKTextProviderStyle* style) {
@@ -139,37 +77,118 @@ extern CFStringRef kMRMediaRemoteNowPlayingInfoTitle;
 	}];
 }
 
-- (CLKComplicationTemplateModularLargeStandardBody*)_largeModular {
+- (CLKComplicationTemplate*)musicTemplateForComplicationFamily:(NSInteger)family {
+	switch (family) {
+		case NTKComplicationFamilyModularLarge: return [self _music_largeModular];
+	}
+	
+	return nil;
+}
+
+- (CLKComplicationTemplate*)nowPlayingTemplateForComplicationFamily:(NSInteger)family {
+	switch (family) {
+		case NTKComplicationFamilyModularLarge: return [self _nowPlaying_largeModular];
+		// case NTKComplicationFamilyUtilitarianLarge: return [self _largeUtility];
+		// case NTKComplicationFamilyGraphicRectangular: return [self _graphicRectangular];
+	}
+	
+	return nil;
+}
+
+- (CLKComplicationTemplate*)podcastTemplateForComplicationFamily:(NSInteger)family {
+	switch (family) {
+		case NTKComplicationFamilyModularLarge: return [self _podcast_largeModular];
+	}
+	
+	return nil;
+}
+
+- (CLKComplicationTemplate*)radioTemplateForComplicationFamily:(NSInteger)family {
+	switch (family) {
+		case NTKComplicationFamilyModularLarge: return [self _radio_largeModular];
+	}
+	
+	return nil;
+}
+
+#pragma mark - Music
+
+- (CLKComplicationTemplateModularLargeStandardBody*)_music_largeModular {
 	CLKComplicationTemplateModularLargeStandardBody* template = [CLKComplicationTemplateModularLargeStandardBody new];
 	
 	CLKSimpleTextProvider* headerTextProvider;
 	CLKSimpleTextProvider* body1TextProvider;
 	NTKOverrideTextProvider* body2TextProvider;
 	
-	if (_state != LWNowPlayingStatePlaying) {
-		if (_state != LWNowPlayingStatePaused) {
-			if (_state == LWNowPlayingStateNotPlaying) {
-				headerTextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"NOW_PLAYING_STOPPED_HEADER_LARGE_MODULAR", @"Now Playing")];
-				body1TextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"NOW_PLAYING_STOPPED_LARGE_MODULAR", @"Tap to open")];
-			}
-		} else {
-			headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
-			
-			NSMutableArray* titleArray = [NSMutableArray array];
-			if (_artist.length > 0) {
-				[titleArray addObject:_artist];
-			}
-			
-			if (_album.length > 0) {
-				[titleArray addObject:_album];
-			}
-			
-			NSString* titleString = [titleArray componentsJoinedByString:@" - "];
-			body1TextProvider = [CLKSimpleTextProvider textProviderWithText:titleString];
-			
-			body2TextProvider = [self _italicTextProviderForText:NTKClockFaceLocalizedString(@"NOW_PLAYING_PAUSED_LARGE_MODULAR", @"Paused")];
-		}
+	if (_state == LWNowPlayingStateNotPlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"MUSIC_STOPPED_HEADER_LARGE_MODULAR", @"Music")];
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"MUSIC_STOPPED_LARGE_MODULAR", @"Tap to play music")];
+	} else if (_state == LWNowPlayingStatePaused) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
+		body2TextProvider = [self _italicTextProviderForText:NTKClockFaceLocalizedString(@"MUSIC_PAUSED_LARGE_MODULAR", @"Paused")];
+	} else if (_state == LWNowPlayingStatePlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
+		body2TextProvider = [self _italicTextProviderForText:_album];
+		
+		// LWNowPlayingIndicatorImageProvider* imageProvider;
+		// if (@available(iOS 13, *)) {
+		// 	imageProvider = [self _nowPlayingProviderForFamily:1 tintColor:UIColor.systemPinkColor];
+		// } else {
+		// 	imageProvider = [self _nowPlayingProviderForFamily:1 tintColor:SYSTEM_PINK_COLOR];
+		// }
+		
+		// if (imageProvider) {
+		// 	[template setHeaderImageProvider:imageProvider];
+		// }
+	}
+	
+	[template setHeaderTextProvider:headerTextProvider];
+	[template setBody1TextProvider:body1TextProvider];
+	
+	if (body2TextProvider) {
+		[template setBody2TextProvider:body2TextProvider];
+	}
+	
+	if (@available(iOS 13, *)) {
+		[template setTintColor:UIColor.systemPinkColor];
 	} else {
+		[template setTintColor:SYSTEM_PINK_COLOR];
+	}
+	
+	return template;
+}
+
+#pragma mark - Now Playing
+
+- (CLKComplicationTemplateModularLargeStandardBody*)_nowPlaying_largeModular {
+	CLKComplicationTemplateModularLargeStandardBody* template = [CLKComplicationTemplateModularLargeStandardBody new];
+	
+	CLKSimpleTextProvider* headerTextProvider;
+	CLKSimpleTextProvider* body1TextProvider;
+	NTKOverrideTextProvider* body2TextProvider;
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"NOW_PLAYING_STOPPED_HEADER_LARGE_MODULAR", @"Now Playing")];
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"NOW_PLAYING_STOPPED_LARGE_MODULAR", @"Tap to open")];
+	} else if (_state == LWNowPlayingStatePaused) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		
+		NSMutableArray* titleArray = [NSMutableArray array];
+		if (_artist.length > 0) {
+			[titleArray addObject:_artist];
+		}
+		
+		if (_album.length > 0) {
+			[titleArray addObject:_album];
+		}
+		
+		NSString* titleString = [titleArray componentsJoinedByString:@" - "];
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:titleString];
+		
+		body2TextProvider = [self _italicTextProviderForText:NTKClockFaceLocalizedString(@"NOW_PLAYING_PAUSED_LARGE_MODULAR", @"Paused")];
+	} else if (_state == LWNowPlayingStatePlaying) {
 		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
 		
 		NSMutableArray* titleArray = [NSMutableArray array];
@@ -186,7 +205,16 @@ extern CFStringRef kMRMediaRemoteNowPlayingInfoTitle;
 		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:titleString];
 		body2TextProvider = [self _italicTextProviderForText:_applicationName];
 		
-		[template setHeaderImageProvider:[CLKImageProvider imageProviderWithOnePieceImage:[NTKImageNamed(@"modularLargeMusicEqualizer") imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]]];
+		// LWNowPlayingIndicatorImageProvider* imageProvider;
+		// if (@available(iOS 13, *)) {
+		// 	imageProvider = [self _nowPlayingProviderForFamily:1 tintColor:UIColor.systemBlueColor];
+		// } else {
+		// 	imageProvider = [self _nowPlayingProviderForFamily:1 tintColor:SYSTEM_BLUE_COLOR];
+		// }
+		
+		// if (imageProvider) {
+		// 	[template setHeaderImageProvider:imageProvider];
+		// }
 	}
 	
 	[template setHeaderTextProvider:headerTextProvider];
@@ -205,27 +233,83 @@ extern CFStringRef kMRMediaRemoteNowPlayingInfoTitle;
 	return template;
 }
 
-- (CLKComplicationTemplateUtilitarianLargeFlat*)_largeUtility {
-	CLKComplicationTemplateUtilitarianLargeFlat* template = [CLKComplicationTemplateUtilitarianLargeFlat new];
+#pragma mark - Radio
+
+- (CLKComplicationTemplateModularLargeStandardBody*)_radio_largeModular {
+	CLKComplicationTemplateModularLargeStandardBody* template = [CLKComplicationTemplateModularLargeStandardBody new];
 	
-	if (_state > LWNowPlayingStateNotPlaying) {
-		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:_title]];
-		[template setImageProvider:[CLKImageProvider imageProviderWithOnePieceImage:[NTKImageNamed(@"utilityLongMusicEqualizer") imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]]];
+	CLKSimpleTextProvider* headerTextProvider;
+	CLKSimpleTextProvider* body1TextProvider;
+	NTKOverrideTextProvider* body2TextProvider;
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"RADIO_STOPPED_HEADER_LARGE_MODULAR", @"Radio")];
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"RADIO_LARGE_MODULAR", @"Tap to play radio")];
+	} else if (_state == LWNowPlayingStatePaused) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
+		body2TextProvider = [self _italicTextProviderForText:NTKClockFaceLocalizedString(@"RADIO_PAUSED_LARGE_MODULAR", @"Paused")];
+	} else if (_state == LWNowPlayingStatePlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
+		body2TextProvider = [self _italicTextProviderForText:_album];
+	
+		[template setHeaderImageProvider:[CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"ModularLargeRadio")]];
+	}
+	
+	[template setHeaderTextProvider:headerTextProvider];
+	[template setBody1TextProvider:body1TextProvider];
+	
+	if (body2TextProvider) {
+		[template setBody2TextProvider:body2TextProvider];
+	}
+	
+	if (@available(iOS 13, *)) {
+		[template setTintColor:UIColor.systemPinkColor];
 	} else {
-		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"NOW_PLAYING_STOPPED_LARGE_UTILITY", @"TAP TO OPEN")]];
+		[template setTintColor:SYSTEM_PINK_COLOR];
 	}
 	
 	return template;
 }
 
-- (CLKComplicationTemplate*)templateForComplicationFamily:(long long)family {
-	switch (family) {
-		case NTKComplicationFamilyModularLarge: return [self _largeModular];
-		case NTKComplicationFamilyUtilitarianLarge: return [self _largeUtility];
-		case NTKComplicationFamilyGraphicRectangular: return [self _graphicRectangular];
+#pragma mark - Podcasts
+
+- (CLKComplicationTemplateModularLargeStandardBody*)_podcast_largeModular {
+	CLKComplicationTemplateModularLargeStandardBody* template = [CLKComplicationTemplateModularLargeStandardBody new];
+	
+	CLKSimpleTextProvider* headerTextProvider;
+	CLKSimpleTextProvider* body1TextProvider;
+	NTKOverrideTextProvider* body2TextProvider;
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"PODCAST_STOPPED_HEADER_LARGE_MODULAR", @"Podcasts")];
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"PODCAST_LARGE_MODULAR", @"Tap to play podcasts")];
+	} else if (_state == LWNowPlayingStatePaused) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		body2TextProvider = [self _italicTextProviderForText:NTKClockFaceLocalizedString(@"PODCAST_PAUSED_LARGE_MODULAR", @"Paused")];
+	} else if (_state == LWNowPlayingStatePlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		
+		// LWNowPlayingIndicatorImageProvider* imageProvider = [self _nowPlayingProviderForFamily:1 tintColor:PODCAST_TINT_COLOR];
+		
+		// if (imageProvider) {
+		// 	[template setHeaderImageProvider:imageProvider];
+		// }
 	}
 	
-	return nil;
+	[template setHeaderTextProvider:headerTextProvider];
+	[template setBody1TextProvider:body1TextProvider];
+	
+	if (body2TextProvider) {
+		[template setBody2TextProvider:body2TextProvider];
+	}
+	
+	[template setTintColor:PODCAST_TINT_COLOR];
+	
+	return template;
 }
 
 @end

@@ -2,7 +2,7 @@
 // LWNowPlayingTimelineEntry.h
 // LockWatch
 //
-// Created by janikschmidt on 4/4/2020
+// Created by janikschmidt on 8/5/2020
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
@@ -16,10 +16,10 @@ typedef NS_ENUM(NSInteger, LWNowPlayingState) {
 /*  2 */	LWNowPlayingStatePlaying
 };
 
-@class CLKComplicationTemplate, CLKComplicationTemplateGraphicRectangularStandardBody, CLKComplicationTemplateModularLargeStandardBody, CLKComplicationTemplateUtilitarianLargeFlat, NTKOverrideTextProvider;
+@class MPUNowPlayingController;
 
 @interface LWNowPlayingTimelineEntry : NTKTimelineEntryModel {
-	NSInteger _state;
+	LWNowPlayingState _state;
 	NSString* _title;
 	NSString* _album;
 	NSString* _artist;
@@ -27,13 +27,12 @@ typedef NS_ENUM(NSInteger, LWNowPlayingState) {
 }
 
 - (instancetype)initAsSwitcherTemplate;
-- (instancetype)initWithState:(LWNowPlayingState)state nowPlayingInfo:(NSDictionary*)nowPlayingInfo applicationName:(NSString*)applicationName;
-- (CLKComplicationTemplateGraphicRectangularStandardBody*)_graphicRectangular;
+- (instancetype)initWithState:(LWNowPlayingState)state nowPlayingController:(MPUNowPlayingController*)nowPlayingController applicationDisplayName:(_Nullable id)applicationDisplayName;
 - (NTKOverrideTextProvider*)_italicTextProviderForText:(NSString*)text;
-- (CLKComplicationTemplateModularLargeStandardBody*)_largeModular;
-- (CLKComplicationTemplateUtilitarianLargeFlat*)_largeUtility;
-- (CLKComplicationTemplate*)templateForComplicationFamily:(long long)family;
-
+- (CLKComplicationTemplate*)musicTemplateForComplicationFamily:(NSInteger)family;
+- (CLKComplicationTemplate*)nowPlayingTemplateForComplicationFamily:(NSInteger)family;
+- (CLKComplicationTemplate*)podcastTemplateForComplicationFamily:(NSInteger)family;
+- (CLKComplicationTemplate*)radioTemplateForComplicationFamily:(NSInteger)family;
 @end
 
 NS_ASSUME_NONNULL_END
