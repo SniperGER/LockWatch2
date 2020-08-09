@@ -21,8 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 	NSString* _activeOriginIdentifier;
 	NSString* _activeOriginDisplayName;
 	BOOL _needsInvalidation;
+	BOOL _isPaused;
 	NSObject<OS_dispatch_queue>* _queue;
-	id _timelineEntry;
 }
 
 - (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device;

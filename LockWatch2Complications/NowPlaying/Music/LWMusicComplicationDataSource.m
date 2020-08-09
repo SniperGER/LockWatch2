@@ -17,6 +17,7 @@ extern NSString* CLKStringForComplicationFamily(long long family);
 		_queue = dispatch_queue_create("com.apple.NanoTimeKit.NTKMusicComplicationDataSource", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_DEFAULT, 0));
 		
 		_needsInvalidation = NO;
+		_isPaused = YES;
 		
 		_nowPlayingController = [MPUNowPlayingController new];
 		[_nowPlayingController setDelegate:self];
@@ -61,9 +62,6 @@ extern NSString* CLKStringForComplicationFamily(long long family);
 	dispatch_async(_queue, ^{
 		_activeOriginIdentifier = origin;
 		
-		NSLog(@"updated origin %@", origin);
-		NSLog(@"state %ld", [self _nowPlayingState]);
-		
 		CLKComplicationTimelineEntry* defaultTimelineEntry = [CLKComplicationTimelineEntry new];
 		LWNowPlayingTimelineEntry* timelineEntry = [[LWNowPlayingTimelineEntry alloc] initWithState:[self _nowPlayingState] nowPlayingController:_nowPlayingController applicationDisplayName:nil];
 		
@@ -74,7 +72,10 @@ extern NSString* CLKStringForComplicationFamily(long long family);
 			_nowPlayingEntry = defaultTimelineEntry;
 			
 			_needsInvalidation = YES;
-			[self _invalidateIfNeeded];
+			
+			if (!_isPaused) {
+				[self _invalidateIfNeeded];
+			}
 		});
 	});
 }
@@ -125,6 +126,16 @@ extern NSString* CLKStringForComplicationFamily(long long family);
 	} else {
 		handler(nil);
 	}
+}
+
+- (void)pause {
+	_isPaused = YES;
+}
+
+- (void)resume {
+	_isPaused = NO;
+	
+	[self _invalidateIfNeeded];
 }
 
 @end
