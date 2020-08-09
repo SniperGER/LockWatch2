@@ -149,6 +149,8 @@ CGFloat SineEaseInOut(CGFloat p) {
 }
 
 - (void)zoomInPageAtIndex:(NSInteger)index animated:(BOOL)animated withAnimations:(void (^_Nullable)())animations completion:(void (^_Nullable)(BOOL finished))block {
+	[self.scrollView scrollToPageAtIndex:index animated:NO];
+	
 	if (animated) {
 		[self _setAnimatingZoom:YES];
 	} else {
