@@ -128,7 +128,7 @@
 #define IsEqual(string) [bundleIdentifier isEqualToString:string]
 
 	if (IsEqual(@"com.apple.NanoTimeKit.NTKCellularConnectivityComplicationDataSource")) {
-		
+		return %c(LWCellularConnectivityComplicationDataSource);
 	}
 	
 	if (complicationContent == 2) {
@@ -265,6 +265,14 @@
 	return %orig;
 }
 %end	/// %hook NTKBatteryUtilities
+
+%hook STTelephonyStateProvider
+- (void)_setSignalStrengthBars:(NSUInteger)arg1 maxBars:(NSUInteger)arg2 inSubscriptionContext:(id)arg3 {
+	%orig;
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"SBCellularSignalStrengthChangedNotification" object:nil userInfo:nil];
+}
+%end
 %end	// %group SpringBoard
 
 
@@ -547,6 +555,7 @@ static HDActivityCacheManager* activityCacheManager;
 			
 			if ([bundleIdentifier isEqualToString:@"com.apple.springboard"]) {
 				dlopen("/System/Library/NanoTimeKit/ComplicationBundles/WeatherComplicationsCompanion.bundle/WeatherComplicationsCompanion", RTLD_NOW);
+				dlopen("/System/Library/NanoTimeKit/ComplicationBundles/NTKCellularConnectivityCompanionComplicationBundle.bundle/NTKCellularConnectivityCompanionComplicationBundle", RTLD_NOW);
 				
 				void* weatherLib = dlopen("/usr/lib/LockWatch2Weather.dylib", RTLD_NOW);
 				if (weatherLib) {

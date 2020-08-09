@@ -45,10 +45,6 @@
 - (id)initWithProfile:(id)arg1;
 @end
 
-@interface UIApplication (Private)
-- (BOOL)launchApplicationWithIdentifier:(id)arg1 suspended:(BOOL)arg2;
-@end
-
 @interface SBApplicationController : NSObject
 + (id)sharedInstance;
 - (id)applicationWithBundleIdentifier:(id)arg1;
@@ -66,4 +62,8 @@
 @property(nonatomic) int intent;
 @property(nonatomic) int source;
 @property(copy, nonatomic) NSString *name;
+@end
+
+@interface UIApplication (Private)
+- (BOOL)launchApplicationWithIdentifier:(id)arg1 suspended:(BOOL)arg2;
 @end
