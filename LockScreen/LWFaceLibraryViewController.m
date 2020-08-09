@@ -538,11 +538,13 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 					
 					[customizationViewController setOverrideUserInterfaceStyle:UIUserInterfaceStyleDark];
 				}
-				
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-				[UIApplication.sharedApplication.keyWindow.rootViewController presentViewController:navigationController animated:YES completion:nil];
-#pragma GCC diagnostic pop
+
+				[UIApplication.sharedApplication.windows enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(UIWindow* window, NSUInteger index, BOOL* stop) {
+					if ([window isKindOfClass:NSClassFromString(@"SBCoverSheetWindow")]) {
+						[window.rootViewController presentViewController:navigationController animated:YES completion:nil];
+						*stop = YES;
+					}
+				}];
 			}
 		}
 	}

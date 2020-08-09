@@ -106,10 +106,12 @@
 	[containerViewController addChildViewController:_libraryFacesViewController];
 	[containerViewController.view addSubview:_libraryFacesViewController.view];
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-	[UIApplication.sharedApplication.keyWindow.rootViewController presentViewController:_navigationController animated:YES completion:nil];
-#pragma GCC diagnostic pop
+	[UIApplication.sharedApplication.windows enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(UIWindow* window, NSUInteger index, BOOL* stop) {
+		if ([window isKindOfClass:NSClassFromString(@"SBCoverSheetWindow")]) {
+			[window.rootViewController presentViewController:_navigationController animated:YES completion:nil];
+			*stop = YES;
+		}
+	}];
 	
 	[_addableFacesViewController.tableView setContentOffset:(CGPoint){ 0, -_addableFacesViewController.tableView.adjustedContentInset.top }];
 	[_libraryFacesViewController.tableView setContentOffset:(CGPoint){ 0, -_libraryFacesViewController.tableView.adjustedContentInset.top }];
