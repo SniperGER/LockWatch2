@@ -119,8 +119,8 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 - (CLKComplicationTemplate*)nowPlayingTemplateForComplicationFamily:(NSInteger)family {
 	switch (family) {
 		case NTKComplicationFamilyModularLarge: return [self _nowPlaying_largeModular];
-		// case NTKComplicationFamilyUtilitarianLarge: return [self _largeUtility];
-		// case NTKComplicationFamilyGraphicRectangular: return [self _graphicRectangular];
+		case NTKComplicationFamilyUtilitarianLarge: return [self _nowPlaying_largeUtility];
+		case NTKComplicationFamilyGraphicRectangular: return [self _nowPlaying_signatureRectangular];
 	}
 	
 	return nil;
@@ -483,7 +483,7 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 
 #pragma mark - Now Playing
 
-- (CLKComplicationTemplateModularLargeStandardBody*)_nowPlaying_largeModular {
+- (CLKComplicationTemplate*)_nowPlaying_largeModular {
 	CLKComplicationTemplateModularLargeStandardBody* template = [CLKComplicationTemplateModularLargeStandardBody new];
 	
 	CLKSimpleTextProvider* headerTextProvider;
@@ -526,16 +526,11 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:titleString];
 		body2TextProvider = [self _italicTextProviderForText:_applicationName];
 		
-		// LWNowPlayingIndicatorImageProvider* imageProvider;
-		// if (@available(iOS 13, *)) {
-		// 	imageProvider = [self _nowPlayingProviderForFamily:1 tintColor:UIColor.systemBlueColor];
-		// } else {
-		// 	imageProvider = [self _nowPlayingProviderForFamily:1 tintColor:SYSTEM_BLUE_COLOR];
-		// }
+		LWNowPlayingIndicatorProvider* imageProvider = [LWNowPlayingIndicatorProvider nowPlayingIndicatorProviderWithTintColor:[self nowPlayingTintColor] state:_state];
 		
-		// if (imageProvider) {
-		// 	[template setHeaderImageProvider:imageProvider];
-		// }
+		if (imageProvider) {
+			[template setHeaderImageProvider:imageProvider];
+		}
 	}
 	
 	[template setHeaderTextProvider:headerTextProvider];
@@ -545,37 +540,76 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 		[template setBody2TextProvider:body2TextProvider];
 	}
 	
-	if (@available(iOS 13, *)) {
-		[template setTintColor:UIColor.systemBlueColor];
+	[template setTintColor:[self nowPlayingTintColor]];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_nowPlaying_largeUtility {
+	CLKComplicationTemplateUtilitarianLargeFlat* template = [CLKComplicationTemplateUtilitarianLargeFlat new];
+	
+	if (_state > LWNowPlayingStateNotPlaying) {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:_title]];
+		[template setImageProvider:[LWNowPlayingIndicatorProvider nowPlayingIndicatorProviderWithTintColor:[self nowPlayingTintColor] state:_state]];
 	} else {
-		[template setTintColor:SYSTEM_BLUE_COLOR];
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"NOW_PLAYING_STOPPED_LARGE_UTILITY", @"TAP TO OPEN")]];
 	}
 	
 	return template;
 }
 
-#pragma mark - Radio
-
-- (CLKComplicationTemplateModularLargeStandardBody*)_radio_largeModular {
-	CLKComplicationTemplateModularLargeStandardBody* template = [CLKComplicationTemplateModularLargeStandardBody new];
+- (CLKComplicationTemplate*)_nowPlaying_signatureRectangular {
+	CLKComplicationTemplateGraphicRectangularStandardBody* template = [CLKComplicationTemplateGraphicRectangularStandardBody new];
 	
 	CLKSimpleTextProvider* headerTextProvider;
 	CLKSimpleTextProvider* body1TextProvider;
-	NTKOverrideTextProvider* body2TextProvider;
+	CLKSimpleTextProvider* body2TextProvider;
 	
-	if (_state == LWNowPlayingStateNotPlaying) {
-		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"RADIO_STOPPED_HEADER_LARGE_MODULAR", @"Radio")];
-		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"RADIO_LARGE_MODULAR", @"Tap to play radio")];
-	} else if (_state == LWNowPlayingStatePaused) {
+	if (_state != LWNowPlayingStatePlaying) {
+		if (_state != LWNowPlayingStatePaused) {
+			if (_state == LWNowPlayingStateNotPlaying) {
+				headerTextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"NOW_PLAYING_STOPPED_HEADER_LARGE_MODULAR", @"Now Playing")];
+				[headerTextProvider setTintColor:[self nowPlayingTintColor]];
+				
+				body1TextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"NOW_PLAYING_STOPPED_LARGE_MODULAR", @"Tap to open")];
+			}
+		} else {
+			headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+			[headerTextProvider setTintColor:[self nowPlayingTintColor]];
+			
+			NSMutableArray* titleArray = [NSMutableArray array];
+			if (_artist.length > 0) {
+				[titleArray addObject:_artist];
+			}
+			
+			if (_album.length > 0) {
+				[titleArray addObject:_album];
+			}
+			
+			NSString* titleString = [titleArray componentsJoinedByString:@" - "];
+			
+			body1TextProvider = [CLKSimpleTextProvider textProviderWithText:titleString];
+			body2TextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"NOW_PLAYING_PAUSED_LARGE_MODULAR", @"Paused")];
+		}
+	} else {
 		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
-		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
-		body2TextProvider = [self _italicTextProviderForText:NTKClockFaceLocalizedString(@"RADIO_PAUSED_LARGE_MODULAR", @"Paused")];
-	} else if (_state == LWNowPlayingStatePlaying) {
-		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
-		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
-		body2TextProvider = [self _italicTextProviderForText:_album];
-	
-		[template setHeaderImageProvider:[CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"ModularLargeRadio")]];
+		[headerTextProvider setTintColor:[self nowPlayingTintColor]];
+		
+		NSMutableArray* titleArray = [NSMutableArray array];
+		if (_artist.length > 0) {
+			[titleArray addObject:_artist];
+		}
+		
+		if (_album.length > 0) {
+			[titleArray addObject:_album];
+		}
+		
+		NSString* titleString = [titleArray componentsJoinedByString:@" - "];
+		
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:titleString];
+		body2TextProvider = [CLKSimpleTextProvider textProviderWithText:_applicationName];
+		
+		[template setHeaderImageProvider:[LWNowPlayingIndicatorFullColorProvider nowPlayingIndicatorFullColorProviderWithTintColor:[self nowPlayingTintColor] state:_state]];
 	}
 	
 	[template setHeaderTextProvider:headerTextProvider];
@@ -585,11 +619,7 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 		[template setBody2TextProvider:body2TextProvider];
 	}
 	
-	if (@available(iOS 13, *)) {
-		[template setTintColor:UIColor.systemPinkColor];
-	} else {
-		[template setTintColor:SYSTEM_PINK_COLOR];
-	}
+	[template setTintColor:[self nowPlayingTintColor]];
 	
 	return template;
 }

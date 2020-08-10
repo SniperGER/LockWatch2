@@ -54,6 +54,10 @@ typedef NS_ENUM(NSInteger, LWNowPlayingState) {
 - (CLKComplicationTemplate*)_music_smallModular;
 - (CLKComplicationTemplate*)_music_smallUtility;
 
+- (CLKComplicationTemplate*)_nowPlaying_largeModular;
+- (CLKComplicationTemplate*)_nowPlaying_largeUtility;
+- (CLKComplicationTemplate*)_nowPlaying_signatureRectangular;
+
 @end
 
 NS_ASSUME_NONNULL_END
