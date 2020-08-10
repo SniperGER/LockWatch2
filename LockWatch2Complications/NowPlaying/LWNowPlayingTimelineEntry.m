@@ -12,6 +12,8 @@
 
 #import "LWNowPlayingTimelineEntry.h"
 #import "NTKComplicationFamily.h"
+#import "NowPlayingIndicator/LWNowPlayingIndicatorFullColorProvider.h"
+#import "NowPlayingIndicator/LWNowPlayingIndicatorImageProvider.h"
 
 #define PODCAST_TINT_COLOR [UIColor colorWithRed:0.612 green:0.353 blue:0.95 alpha:1]
 #define SYSTEM_BLUE_COLOR [UIColor colorWithRed:0 green:0.478 blue:1.0 alpha:1.0]
@@ -20,6 +22,8 @@
 extern CFStringRef kMRMediaRemoteNowPlayingInfoAlbum;
 extern CFStringRef kMRMediaRemoteNowPlayingInfoArtist;
 extern CFStringRef kMRMediaRemoteNowPlayingInfoTitle;
+extern CFStringRef kMRMediaRemoteNowPlayingInfoDuration;
+extern CFStringRef kMRMediaRemoteNowPlayingInfoElapsedTime;
 
 extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 extern UIImage* NTKImageNamed(NSString* imageName);
@@ -38,7 +42,7 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 	return self;
 }
 
-- (instancetype)initWithState:(LWNowPlayingState)state nowPlayingController:(MPUNowPlayingController*)nowPlayingController applicationDisplayName:(id)applicationDisplayName {
+- (instancetype)initWithState:(LWNowPlayingState)state nowPlayingController:(MPUNowPlayingController*)nowPlayingController applicationDisplayName:(_Nullable id)applicationDisplayName {
 	if (self = [super init]) {
 		_state = state;
 		
@@ -46,6 +50,8 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 			_title = nowPlayingController.currentNowPlayingInfo[(__bridge NSString*)kMRMediaRemoteNowPlayingInfoTitle];
 			_album = nowPlayingController.currentNowPlayingInfo[(__bridge NSString*)kMRMediaRemoteNowPlayingInfoAlbum];
 			_artist = nowPlayingController.currentNowPlayingInfo[(__bridge NSString*)kMRMediaRemoteNowPlayingInfoArtist];
+			_duration = [nowPlayingController.currentNowPlayingInfo[(__bridge NSString*)kMRMediaRemoteNowPlayingInfoDuration] floatValue];
+			_elapsedTime = [nowPlayingController.currentNowPlayingInfo[(__bridge NSString*)kMRMediaRemoteNowPlayingInfoElapsedTime] floatValue];
 			_applicationName = applicationDisplayName;
 		}
 		
@@ -77,12 +83,37 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 	}];
 }
 
+- (NSDate*)_projectedEndDate {
+	return [[self entryDate] dateByAddingTimeInterval:-_elapsedTime + _duration];
+}
+
+- (NSDate*)_projectedStartDate {
+	return [[self entryDate] dateByAddingTimeInterval:-_elapsedTime];
+}
+
 - (CLKComplicationTemplate*)musicTemplateForComplicationFamily:(NSInteger)family {
 	switch (family) {
+		case NTKComplicationFamilyModularSmall: return [self _music_smallModular];
 		case NTKComplicationFamilyModularLarge: return [self _music_largeModular];
+		case NTKComplicationFamilyUtilitarianSmall: return [self _music_smallUtility];
+		case NTKComplicationFamilyUtilitarianLarge: return [self _music_largeUtility];
+		case NTKComplicationFamilyExtraLarge: return [self _music_extraLarge];
+		case NTKComplicationFamilyGraphicCorner: return [self _music_signatureCorner];
+		case NTKComplicationFamilyGraphicBezel: return [self _music_signatureBezel];
+		case NTKComplicationFamilyGraphicCircular: return [self _music_signatureCircular];
+		case NTKComplicationFamilyGraphicRectangular: return [self _music_signatureRectangular];
+		case NTKComplicationFamilyCircularMedium: return [self _music_mediumCircular];
 	}
 	
 	return nil;
+}
+
+- (UIColor*)musicTintColor {
+	if (@available(iOS 13, *)) {
+		return UIColor.systemPinkColor;
+	} else {
+		return SYSTEM_PINK_COLOR;
+	}
 }
 
 - (CLKComplicationTemplate*)nowPlayingTemplateForComplicationFamily:(NSInteger)family {
@@ -95,12 +126,24 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 	return nil;
 }
 
+- (UIColor*)nowPlayingTintColor {
+	if (@available(iOS 13, *)) {
+		return UIColor.systemBlueColor;
+	} else {
+		return SYSTEM_BLUE_COLOR;
+	}
+}
+
 - (CLKComplicationTemplate*)podcastTemplateForComplicationFamily:(NSInteger)family {
 	switch (family) {
 		case NTKComplicationFamilyModularLarge: return [self _podcast_largeModular];
 	}
 	
 	return nil;
+}
+
+- (UIColor*)podcastTintColor {
+	return PODCAST_TINT_COLOR;
 }
 
 - (CLKComplicationTemplate*)radioTemplateForComplicationFamily:(NSInteger)family {
@@ -111,9 +154,50 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 	return nil;
 }
 
+- (UIColor*)radioTintColor {
+	if (@available(iOS 13, *)) {
+		return UIColor.systemPinkColor;
+	} else {
+		return SYSTEM_PINK_COLOR;
+	}
+}
+
 #pragma mark - Music
 
-- (CLKComplicationTemplateModularLargeStandardBody*)_music_largeModular {
+- (CLKComplicationTemplate*)_music_extraLarge {
+	if (_state != LWNowPlayingStatePlaying) {
+		CLKComplicationTemplateExtraLargeSimpleImage* template = [CLKComplicationTemplateExtraLargeSimpleImage new];
+		
+		CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"XLmodularMusicPaused")];
+		[imageProvider setTintColor:[self musicTintColor]];
+		
+		[template setImageProvider:imageProvider];
+		
+		return template;
+	} else {
+		CLKComplicationTemplateExtraLargeProgressRingImage* template = [CLKComplicationTemplateExtraLargeProgressRingImage new];
+		
+		CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"XLmodularMusic")];
+		[template setImageProvider:imageProvider];
+		
+		[imageProvider setTintColor:UIColor.whiteColor];
+		
+		NSDate* startDate = [self _projectedStartDate];
+		NSDate* endDate = [startDate dateByAddingTimeInterval:_duration];
+		
+		CLKRelativeDateProgressProvider* progressProvider = [CLKRelativeDateProgressProvider relativeDateProgressProviderWithStartDate:startDate endDate:endDate];
+		[progressProvider setTintColor:[self musicTintColor]];
+		
+		[template setProgressProvider:progressProvider];
+		[template setRingStyle:0];
+		
+		return template;
+	}
+	
+	return nil;
+}
+
+- (CLKComplicationTemplate*)_music_largeModular {
 	CLKComplicationTemplateModularLargeStandardBody* template = [CLKComplicationTemplateModularLargeStandardBody new];
 	
 	CLKSimpleTextProvider* headerTextProvider;
@@ -132,16 +216,11 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
 		body2TextProvider = [self _italicTextProviderForText:_album];
 		
-		// LWNowPlayingIndicatorImageProvider* imageProvider;
-		// if (@available(iOS 13, *)) {
-		// 	imageProvider = [self _nowPlayingProviderForFamily:1 tintColor:UIColor.systemPinkColor];
-		// } else {
-		// 	imageProvider = [self _nowPlayingProviderForFamily:1 tintColor:SYSTEM_PINK_COLOR];
-		// }
+		LWNowPlayingIndicatorImageProvider* imageProvider = [LWNowPlayingIndicatorImageProvider nowPlayingIndicatorProviderWithTintColor:[self musicTintColor] state:_state];
 		
-		// if (imageProvider) {
-		// 	[template setHeaderImageProvider:imageProvider];
-		// }
+		if (imageProvider) {
+			[template setHeaderImageProvider:imageProvider];
+		}
 	}
 	
 	[template setHeaderTextProvider:headerTextProvider];
@@ -151,13 +230,255 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 		[template setBody2TextProvider:body2TextProvider];
 	}
 	
-	if (@available(iOS 13, *)) {
-		[template setTintColor:UIColor.systemPinkColor];
+	[template setTintColor:[self musicTintColor]];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_music_largeUtility {
+	CLKComplicationTemplateUtilitarianLargeFlat* template = [CLKComplicationTemplateUtilitarianLargeFlat new];
+	
+	CLKSimpleTextProvider* textProvider;
+	LWNowPlayingIndicatorImageProvider* imageProvider;
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		textProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"MUSIC_STOPPED_LARGE_UTILITY", @"MUSIC")];
+	} else if (_state == LWNowPlayingStatePaused) {
+		textProvider = [CLKSimpleTextProvider textProviderWithText:[NSString stringWithFormat:NTKClockFaceLocalizedString(@"MUSIC_PAUSED_LARGE_UTILITY", @"(PAUSED) %@"), _title]];
+	} else if (_state == LWNowPlayingStatePlaying) {
+		textProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		imageProvider = [LWNowPlayingIndicatorImageProvider nowPlayingIndicatorProviderWithTintColor:nil state:_state];
+	}
+	
+	[template setTextProvider:textProvider];
+	[template setImageProvider:imageProvider];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_music_mediumCircular {
+	if (_state != LWNowPlayingStatePlaying) {
+		CLKComplicationTemplateCircularMediumSimpleImage* template = [CLKComplicationTemplateCircularMediumSimpleImage new];
+		
+		CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"victoryNTKMusicPaused")];
+		[imageProvider setTintColor:[self musicTintColor]];
+		
+		[template setImageProvider:imageProvider];
+		
+		return template;
 	} else {
-		[template setTintColor:SYSTEM_PINK_COLOR];
+		CLKComplicationTemplateCircularMediumProgressRingImage* template = [CLKComplicationTemplateCircularMediumProgressRingImage new];
+		
+		CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"victoryNTKMusic")];
+		[template setImageProvider:imageProvider];
+		
+		[imageProvider setTintColor:UIColor.whiteColor];
+		
+		NSDate* startDate = [self _projectedStartDate];
+		NSDate* endDate = [startDate dateByAddingTimeInterval:_duration];
+		
+		CLKRelativeDateProgressProvider* progressProvider = [CLKRelativeDateProgressProvider relativeDateProgressProviderWithStartDate:startDate endDate:endDate];
+		[progressProvider setTintColor:[self musicTintColor]];
+		[progressProvider setBackgroundRingAlpha:0.25];
+		
+		[template setProgressProvider:progressProvider];
+		[template setRingStyle:0];
+		
+		return template;
+	}
+	
+	return nil;
+}
+
+- (CLKComplicationTemplate*)_music_signatureBezel {
+	CLKComplicationTemplateGraphicBezelCircularText* template = [CLKComplicationTemplateGraphicBezelCircularText new];
+	[template setCircularTemplate:(CLKComplicationTemplateGraphicCircular*)[self _music_signatureCircular]];
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"MUSIC_STOPPED_LARGE_UTILITY", @"Music")]];
+	} else if (_state == LWNowPlayingStatePaused) {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:[NSString stringWithFormat:NTKClockFaceLocalizedString(@"MUSIC_PAUSED_LARGE_UTILITY", @"(Paused) %@"), _title]]];
+	} else if (_state == LWNowPlayingStatePlaying) {
+		if (_artist.length) {
+			[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:[NSString stringWithFormat:NTKClockFaceLocalizedString(@"MUSIC_COMPLICATION_SIGNATURE_NOW_PLAYING_TITLE", @"%1$@ - %2$@"), _title, _artist]]];
+		} else {
+			[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:_title]];
+		}
 	}
 	
 	return template;
+}
+
+- (CLKComplicationTemplate*)_music_signatureCircular {
+	if (_state == LWNowPlayingStateNotPlaying) {
+		CLKComplicationTemplateGraphicCircularImage* template = [CLKComplicationTemplateGraphicCircularImage new];
+		
+		CLKFullColorImageProvider* imageProvider = [CLKFullColorImageProvider providerWithFullColorImage:[NTKImageNamed(@"victoryNTKMusicPaused") imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] monochromeFilterType:1 applyScalingAndCircularMasking:NO];
+		[imageProvider setTintColor:[self musicTintColor]];
+		
+		[template setImageProvider:imageProvider];
+		[template setMetadata:@{
+			@"NTKRichComplicationViewBackgroundColorKey": [imageProvider.tintColor colorWithAlphaComponent:0.2]
+		}];
+		
+		return template;
+	} else if (_state == LWNowPlayingStatePaused) {
+		CLKComplicationTemplateGraphicCircularClosedGaugeImage* template = [CLKComplicationTemplateGraphicCircularClosedGaugeImage new];
+		
+		CLKFullColorImageProvider* imageProvider = [CLKFullColorImageProvider providerWithFullColorImage:NTKImageNamed(@"victoryNTKMusic") monochromeFilterType:1 applyScalingAndCircularMasking:NO];
+		[template setImageProvider:imageProvider];
+		
+		[template setGaugeProvider:[CLKSimpleGaugeProvider gaugeProviderWithStyle:1 gaugeColor:[self musicTintColor] fillFraction:(_elapsedTime / _duration)]];
+		
+		return template;
+	} else if (_state == LWNowPlayingStatePlaying) {
+		CLKComplicationTemplateGraphicCircularClosedGaugeImage* template = [CLKComplicationTemplateGraphicCircularClosedGaugeImage new];
+		
+		CLKFullColorImageProvider* imageProvider = [CLKFullColorImageProvider providerWithFullColorImage:NTKImageNamed(@"victoryNTKMusic") monochromeFilterType:1 applyScalingAndCircularMasking:NO];
+		[template setImageProvider:imageProvider];
+		
+		NSDate* startDate = [self _projectedStartDate];
+		NSDate* endDate = [startDate dateByAddingTimeInterval:_duration];
+		
+		[template setGaugeProvider:[CLKTimeIntervalGaugeProvider gaugeProviderWithStyle:1 gaugeColors:@[ [self musicTintColor] ] gaugeColorLocations:nil startDate:startDate endDate:endDate]];
+		
+		return template;
+	}
+	
+	return nil;
+}
+
+- (CLKComplicationTemplate*)_music_signatureCorner {
+	CLKComplicationTemplateGraphicCornerTextImage* template = [CLKComplicationTemplateGraphicCornerTextImage new];
+	
+	CLKFullColorImageProvider* imageProvider = [CLKFullColorImageProvider providerWithFullColorImage:NTKImageNamed(@"music_signature_corner") monochromeFilterType:1 applyScalingAndCircularMasking:NO];
+	[imageProvider setTintColor:[self musicTintColor]];
+	[template setImageProvider:imageProvider];
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"MUSIC_STOPPED_LARGE_UTILITY", @"Music")]];
+	} else if (_state == LWNowPlayingStatePaused) {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:[NSString stringWithFormat:NTKClockFaceLocalizedString(@"MUSIC_PAUSED_LARGE_UTILITY", @"(Paused) %@"), _title]]];
+	} else if (_state == LWNowPlayingStatePlaying) {
+		if (_artist.length) {
+			[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:[NSString stringWithFormat:NTKClockFaceLocalizedString(@"MUSIC_COMPLICATION_SIGNATURE_NOW_PLAYING_TITLE", @"%1$@ - %2$@"), _title, _artist]]];
+		} else {
+			[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:_title]];
+		}
+	}
+	
+	[template setTintColor:[self musicTintColor]];
+	[template.textProvider setTintColor:[self musicTintColor]];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_music_signatureRectangular {
+	CLKComplicationTemplateGraphicRectangularStandardBody* template = [CLKComplicationTemplateGraphicRectangularStandardBody new];
+	
+	CLKSimpleTextProvider* headerTextProvider;
+	CLKSimpleTextProvider* body1TextProvider;
+	NTKOverrideTextProvider* body2TextProvider;
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"MUSIC_STOPPED_HEADER_LARGE_MODULAR", @"Music")];
+		[headerTextProvider setTintColor:[self musicTintColor]];
+		
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"MUSIC_STOPPED_LARGE_MODULAR", @"Tap to play music")];
+	} else if (_state == LWNowPlayingStatePaused) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		[headerTextProvider setTintColor:[self musicTintColor]];
+		
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
+		body2TextProvider = [self _italicTextProviderForText:NTKClockFaceLocalizedString(@"MUSIC_PAUSED_LARGE_MODULAR", @"Paused")];
+	} else if (_state == LWNowPlayingStatePlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		[headerTextProvider setTintColor:[self musicTintColor]];
+		
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
+		body2TextProvider = [CLKSimpleTextProvider textProviderWithText:_album];
+		
+		LWNowPlayingIndicatorFullColorProvider* imageProvider = [LWNowPlayingIndicatorFullColorProvider nowPlayingIndicatorFullColorProviderWithTintColor:[self musicTintColor] state:_state];
+		
+		if (imageProvider) {
+			[template setHeaderImageProvider:imageProvider];
+		}
+	}
+	
+	[template setHeaderTextProvider:headerTextProvider];
+	[template setBody1TextProvider:body1TextProvider];
+	
+	if (body2TextProvider) {
+		[template setBody2TextProvider:body2TextProvider];
+	}
+	
+	[template setTintColor:[self musicTintColor]];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_music_smallModular {
+	if (_state != LWNowPlayingStatePlaying) {
+		CLKComplicationTemplateModularSmallSimpleImage* template = [CLKComplicationTemplateModularSmallSimpleImage new];
+		
+		CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"modularSmallMusicPaused")];
+		[imageProvider setTintColor:[self musicTintColor]];
+		[template setImageProvider:imageProvider];
+		
+		return template;
+	} else {
+		CLKComplicationTemplateModularSmallProgressRingImage* template = [CLKComplicationTemplateModularSmallProgressRingImage new];
+		
+		CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"modularSmallMusic")];
+		[imageProvider setTintColor:UIColor.whiteColor];
+		[template setImageProvider:imageProvider];
+		
+		NSDate* startDate = [self _projectedStartDate];
+		NSDate* endDate = [startDate dateByAddingTimeInterval:_duration];
+		
+		CLKRelativeDateProgressProvider* progressProvider = [CLKRelativeDateProgressProvider relativeDateProgressProviderWithStartDate:startDate endDate:endDate];
+		[progressProvider setTintColor:[self musicTintColor]];
+		[progressProvider setBackgroundRingAlpha:0.25];
+		
+		[template setProgressProvider:progressProvider];
+		[template setRingStyle:0];
+		
+		return template;
+	}
+	
+	return nil;
+}
+
+- (CLKComplicationTemplate*)_music_smallUtility {
+	if (_state != LWNowPlayingStatePlaying) {
+		CLKComplicationTemplateUtilitarianSmallSquare* template = [CLKComplicationTemplateUtilitarianSmallSquare new];
+		
+		CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"utilityCornerMusicPaused")];
+		[imageProvider setTintColor:[self musicTintColor]];
+		[template setImageProvider:imageProvider];
+		
+		return template;
+	} else {
+		CLKComplicationTemplateUtilitarianSmallProgressRingImage* template = [CLKComplicationTemplateUtilitarianSmallProgressRingImage new];
+		
+		CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"utilityCornerMusic")];
+		[imageProvider setTintColor:UIColor.whiteColor];
+		[template setImageProvider:imageProvider];
+		
+		NSDate* startDate = [self _projectedStartDate];
+		NSDate* endDate = [startDate dateByAddingTimeInterval:_duration];
+		
+		CLKRelativeDateProgressProvider* progressProvider = [CLKRelativeDateProgressProvider relativeDateProgressProviderWithStartDate:startDate endDate:endDate];
+		[progressProvider setTintColor:[self musicTintColor]];
+		[progressProvider setBackgroundRingAlpha:0.25];
+		
+		[template setProgressProvider:progressProvider];
+		[template setRingStyle:0];
+		
+		return template;
+	}
+	
+	return nil;
 }
 
 #pragma mark - Now Playing
