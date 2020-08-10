@@ -520,6 +520,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 - (void)_startFaceEditing {
 	if (_presented && !_isIncrementallyZooming) {
 		if (_switcherController.currentPageIndex < _libraryFaceCollection.numberOfFaces) {
+			[_libraryFaceCollection setSelectedFaceIndex:_switcherController.currentPageIndex suppressingCallbackToObserver:self];
 			NTKFace* face = [_libraryFaceCollection faceAtIndex:_switcherController.currentPageIndex];
 			
 			if ([face isEditable]) {
