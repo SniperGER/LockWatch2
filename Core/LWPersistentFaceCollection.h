@@ -38,6 +38,8 @@ extern int NTKDefaultLibrarySelectedFace(void *device);
 - (BOOL)hasLoaded;
 - (void)notifyLoaded;
 - (void)reset;
+- (void)resumeUpdatesFromDaemon;
+- (void)suspendUpdatesFromDaemon;
 - (BOOL)synchronize;
 - (BOOL)writeToFile:(NSString*)path;
 

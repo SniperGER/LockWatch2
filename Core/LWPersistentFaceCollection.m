@@ -209,6 +209,11 @@
 	[self setSelectedFaceIndex:selectedFaceIndex suppressingCallbackToObserver:nil];
 }
 
+- (void)resumeUpdatesFromDaemon {}
+
+- (void)suspendUpdatesFromDaemon {}
+
+
 - (BOOL)synchronize {
 	if ([self.collectionIdentifier isEqualToString:kLWAddableFacesCollectionIdentifier]) return NO;
 	
