@@ -13,7 +13,7 @@
 #import "LWNowPlayingTimelineEntry.h"
 #import "NTKComplicationFamily.h"
 #import "NowPlayingIndicator/LWNowPlayingIndicatorFullColorProvider.h"
-#import "NowPlayingIndicator/LWNowPlayingIndicatorImageProvider.h"
+#import "NowPlayingIndicator/LWNowPlayingIndicatorProvider.h"
 
 #define PODCAST_TINT_COLOR [UIColor colorWithRed:0.612 green:0.353 blue:0.95 alpha:1]
 #define SYSTEM_BLUE_COLOR [UIColor colorWithRed:0 green:0.478 blue:1.0 alpha:1.0]
@@ -216,7 +216,7 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
 		body2TextProvider = [self _italicTextProviderForText:_album];
 		
-		LWNowPlayingIndicatorImageProvider* imageProvider = [LWNowPlayingIndicatorImageProvider nowPlayingIndicatorProviderWithTintColor:[self musicTintColor] state:_state];
+		LWNowPlayingIndicatorProvider* imageProvider = [LWNowPlayingIndicatorProvider nowPlayingIndicatorProviderWithTintColor:[self musicTintColor] state:_state];
 		
 		if (imageProvider) {
 			[template setHeaderImageProvider:imageProvider];
@@ -239,7 +239,7 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 	CLKComplicationTemplateUtilitarianLargeFlat* template = [CLKComplicationTemplateUtilitarianLargeFlat new];
 	
 	CLKSimpleTextProvider* textProvider;
-	LWNowPlayingIndicatorImageProvider* imageProvider;
+	LWNowPlayingIndicatorProvider* imageProvider;
 	
 	if (_state == LWNowPlayingStateNotPlaying) {
 		textProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"MUSIC_STOPPED_LARGE_UTILITY", @"MUSIC")];
@@ -247,7 +247,7 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 		textProvider = [CLKSimpleTextProvider textProviderWithText:[NSString stringWithFormat:NTKClockFaceLocalizedString(@"MUSIC_PAUSED_LARGE_UTILITY", @"(PAUSED) %@"), _title]];
 	} else if (_state == LWNowPlayingStatePlaying) {
 		textProvider = [CLKSimpleTextProvider textProviderWithText:_title];
-		imageProvider = [LWNowPlayingIndicatorImageProvider nowPlayingIndicatorProviderWithTintColor:nil state:_state];
+		imageProvider = [LWNowPlayingIndicatorProvider nowPlayingIndicatorProviderWithTintColor:nil state:_state];
 	}
 	
 	[template setTextProvider:textProvider];

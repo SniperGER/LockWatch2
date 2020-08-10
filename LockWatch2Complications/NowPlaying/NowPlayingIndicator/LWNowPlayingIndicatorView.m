@@ -10,7 +10,7 @@
 #import <MPUFoundation/MPUNowPlayingIndicatorView.h>
 
 #import "LWNowPlayingIndicatorFullColorProvider.h"
-#import "LWNowPlayingIndicatorImageProvider.h"
+#import "LWNowPlayingIndicatorProvider.h"
 #import "LWNowPlayingIndicatorView.h"
 
 @implementation LWNowPlayingIndicatorView
@@ -77,6 +77,21 @@
 	
 	[_indicatorView setTintColor:color];
 	[_indicatorView _reloadLevelViews];
+}
+
+- (void)setImageProvider:(LWNowPlayingIndicatorProvider*)imageProvider {
+	if (![imageProvider isKindOfClass:NSClassFromString(@"LWNowPlayingIndicatorProvider")]) return;
+	_imageProvider = imageProvider;
+	
+	if ([NSThread isMainThread]) {
+		[self setNeedsLayout];
+		[self layoutIfNeeded];
+	} else {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self setNeedsLayout];
+			[self layoutIfNeeded];
+		});
+	}
 }
 
 @end

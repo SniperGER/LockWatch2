@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class LWNowPlayingIndicatorImageProvider, MPUNowPlayingIndicatorView;
+@class LWNowPlayingIndicatorProvider, MPUNowPlayingIndicatorView;
 
 @interface LWNowPlayingIndicatorView : UIView {
 	MPUNowPlayingIndicatorView* _indicatorView;
@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) UIColor* color;
 @property (nonatomic) UIColor* overrideColor;
-@property (nonatomic) LWNowPlayingIndicatorImageProvider* imageProvider;
+@property (nonatomic) LWNowPlayingIndicatorProvider* imageProvider;
 @property (nonatomic) BOOL usesLegibility;
 
 @end

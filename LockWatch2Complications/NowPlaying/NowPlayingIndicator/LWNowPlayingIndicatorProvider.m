@@ -1,18 +1,18 @@
 //
-// LWNowPlayingIndicatorImageProvider.m
+// LWNowPlayingIndicatorProvider.m
 // LockWatch
 //
 // Created by janikschmidt on 8/8/2020
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#import "LWNowPlayingIndicatorImageProvider.h"
+#import "LWNowPlayingIndicatorProvider.h"
 #import "LWNowPlayingIndicatorView.h"
 
-@implementation LWNowPlayingIndicatorImageProvider
+@implementation LWNowPlayingIndicatorProvider
 
 + (instancetype)nowPlayingIndicatorProviderWithTintColor:(UIColor*)tintColor state:(NSInteger)state {
-	LWNowPlayingIndicatorImageProvider* provider = [LWNowPlayingIndicatorImageProvider imageProviderWithImageViewCreationHandler:^UIView* () {
+	LWNowPlayingIndicatorProvider* provider = [LWNowPlayingIndicatorProvider imageProviderWithImageViewCreationHandler:^UIView* () {
 		return [[LWNowPlayingIndicatorView alloc] initWithFrame:CGRectZero];
 	}];
 	

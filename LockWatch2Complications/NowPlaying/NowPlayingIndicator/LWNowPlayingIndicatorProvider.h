@@ -1,5 +1,5 @@
 //
-// LWNowPlayingIndicatorImageProvider.h
+// LWNowPlayingIndicatorProvider.h
 // LockWatch
 //
 // Created by janikschmidt on 8/8/2020
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LWNowPlayingIndicatorImageProvider : CLKImageProvider
+@interface LWNowPlayingIndicatorProvider : CLKImageProvider
 
 @property (nonatomic) BOOL paused;
 
