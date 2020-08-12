@@ -35,6 +35,8 @@
 				<real>1</real>
 				<real>2</real>
 			</array>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/WatchSelected</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -47,6 +49,8 @@
 			<string>batteryChargingViewHidden</string>
 			<key>label</key>
 			<string>BATTERY_CHARGING_VIEW_HIDDEN</string>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/PreferencesChanged</string>
 		</dict>
 		
 		<dict>
@@ -95,6 +99,8 @@
 				<real>2</real>
 				<real>3</real>
 			</array>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/WatchSelected</string>
 		</dict>
 	</array>
 	<key>title</key>
