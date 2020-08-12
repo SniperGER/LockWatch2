@@ -7,6 +7,15 @@
 
 @implementation LWRootListController
 
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	
+	_emulatedDeviceSelectionSpecifier = [self specifierForID:@"EMULATED_DEVICE"];
+	[self removeContiguousSpecifiers:@[ _emulatedDeviceSelectionSpecifier ] animated:NO];
+	
+	[self _updateEmulatedWatchAvailability];
+}
+
 - (NSArray *)specifiers {
 	if (!_specifiers) {
 		_specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
@@ -16,6 +25,12 @@
 	localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
 
 	return _specifiers;
+}
+
+- (void)reloadSpecifiers {
+	[super reloadSpecifiers];
+	
+	[self _updateEmulatedWatchAvailability];
 }
 
 - (id)readPreferenceValue:(PSSpecifier*)specifier {
@@ -35,9 +50,25 @@
 	if (notificationName) {
 		CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), notificationName, NULL, NULL, YES);
 	}
+	
+	if ([[specifier propertyForKey:@"key"] isEqualToString:@"isEmulatingDevice"]) {
+		[self _updateEmulatedWatchAvailability];
+	}
 }
 
+#pragma mark - Instance Methods
 
+- (void)_updateEmulatedWatchAvailability {
+	PSSpecifier* useEmulatedDeviceSpecifier = [self specifierForID:@"USE_EMULATED_DEVICE"];
+
+	BOOL isEmulatingDevice = [[self readPreferenceValue:useEmulatedDeviceSpecifier] boolValue];
+
+	if (isEmulatingDevice) {
+		[self insertContiguousSpecifiers:@[ _emulatedDeviceSelectionSpecifier ] afterSpecifier:useEmulatedDeviceSpecifier animated:YES];
+	} else {
+		[self removeContiguousSpecifiers:@[ _emulatedDeviceSelectionSpecifier ] animated:YES];
+	}
+}
 
 - (void)resetLibrary {
 	BOOL isiPad = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad;

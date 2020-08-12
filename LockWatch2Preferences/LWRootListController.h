@@ -4,6 +4,8 @@
 @interface LWRootListController : PSListController {
 	NSBundle* prefBundle;
 	NSBundle* localizableBundle;
+	
+	PSSpecifier* _emulatedDeviceSelectionSpecifier;
 }
 
 @end
