@@ -1,1 +1,1 @@
-{ Filter = { Bundles = ( "com.apple.springboard", "com.apple.Bridge" ); }; }
+{ Filter = { Executables = ( "healthd" ); Bundles = ( "com.apple.springboard", "com.apple.Bridge" ); }; }

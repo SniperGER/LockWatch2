@@ -82,7 +82,9 @@
 #pragma mark - NTKWellnessTimelineModelSubscriber
 
 - (void)wellnessTimeLineModelCurrentEntryModelUpdated:(NTKWellnessEntryModel*)entryModel {
-	[self.delegate invalidateEntries];
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.delegate appendEntries:@[ [self _timelineEntryFromModel:entryModel family:self.family] ]];
+	});
 }
 
 @end

@@ -232,7 +232,7 @@
 - (void)_queue_startQueries {
 	MSHookIvar<NSDate*>(self, "_currentDate") = [NSDate date];
 	
-	_HKCurrentActivitySummaryQuery* summaryQuery = [[objc_getClass("_HKCurrentActivitySummaryQuery") alloc] initWithUpdateHandler:^(_HKCurrentActivitySummaryQuery* query, HKActivitySummary* activitySummary, NSError* error) {
+	_HKCurrentActivitySummaryQuery* summaryQuery = [[%c(_HKCurrentActivitySummaryQuery) alloc] initWithUpdateHandler:^(_HKCurrentActivitySummaryQuery* query, HKActivitySummary* activitySummary, NSError* error) {
 		if (!error) {
 			dispatch_async(dispatch_get_main_queue(), ^{
 				[self _queue_updateCurrentActivitySummaryWithSummary:activitySummary];
@@ -246,7 +246,7 @@
 	NSDateComponents* dateComponents = [NSDateComponents new];
 	[dateComponents setSecond:1800];
 	
-	HKCurrentActivityCacheQuery* cacheQuery = [[objc_getClass("HKCurrentActivityCacheQuery") alloc] initWithStatisticsIntervalComponents:dateComponents updateHandler:^(HKCurrentActivityCacheQuery* query, id result, NSError* error) {
+	HKCurrentActivityCacheQuery* cacheQuery = [[%c(HKCurrentActivityCacheQuery) alloc] initWithStatisticsIntervalComponents:dateComponents updateHandler:^(HKCurrentActivityCacheQuery* query, HKCurrentActivityCacheQueryResult* result, NSError* error) {
 		if (!error) {
 			dispatch_async(dispatch_get_main_queue(), ^{
 				[self _queue_updateChartStatisticsWithStatisticsQueryResult:result];
