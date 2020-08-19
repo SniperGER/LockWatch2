@@ -140,7 +140,19 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 
 - (CLKComplicationTemplate*)podcastTemplateForComplicationFamily:(NSInteger)family {
 	switch (family) {
+		case CLKComplicationFamilyModularSmall: return [self _podcast_smallModular];
 		case CLKComplicationFamilyModularLarge: return [self _podcast_largeModular];
+		case CLKComplicationFamilyUtilitarianSmall: return [self _podcast_smallUtility];
+		case CLKComplicationFamilyUtilitarianLarge:
+		case CLKComplicationFamilyUtilLargeNarrow:
+			return [self _podcast_largeUtility];
+		case CLKComplicationFamilyCircularSmall: return [self _podcast_smallCircular];
+		case CLKComplicationFamilyExtraLarge: return [self _podcast_extraLarge];
+		case CLKComplicationFamilyGraphicCorner: return [self _podcast_signatureCorner];
+		case CLKComplicationFamilyGraphicBezel: return [self _podcast_signatureBezel];
+		case CLKComplicationFamilyGraphicCircular: return [self _podcast_signatureCircular];
+		case CLKComplicationFamilyGraphicRectangular: return [self _podcast_signatureRectangular];
+		case CLKComplicationFamilyCircularMedium: return [self _podcast_mediumCircular];
 	}
 	
 	return nil;
@@ -152,7 +164,19 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 
 - (CLKComplicationTemplate*)radioTemplateForComplicationFamily:(NSInteger)family {
 	switch (family) {
+		case CLKComplicationFamilyModularSmall: return [self _radio_smallModular];
 		case CLKComplicationFamilyModularLarge: return [self _radio_largeModular];
+		case CLKComplicationFamilyUtilitarianSmall: return [self _radio_smallUtility];
+		case CLKComplicationFamilyUtilitarianLarge:
+		case CLKComplicationFamilyUtilLargeNarrow:
+			return [self _radio_largeUtility];
+		case CLKComplicationFamilyCircularSmall: return [self _radio_smallCircular];
+		case CLKComplicationFamilyExtraLarge: return [self _radio_extraLarge];
+		case CLKComplicationFamilyGraphicCorner: return [self _radio_signatureCorner];
+		case CLKComplicationFamilyGraphicBezel: return [self _radio_signatureBezel];
+		case CLKComplicationFamilyGraphicCircular: return [self _radio_signatureCircular];
+		case CLKComplicationFamilyGraphicRectangular: return [self _radio_signatureRectangular];
+		case CLKComplicationFamilyCircularMedium: return [self _radio_mediumCircular];
 	}
 	
 	return nil;
@@ -630,6 +654,16 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 
 #pragma mark - Podcasts
 
+- (CLKComplicationTemplate*)_podcast_extraLarge {
+	CLKComplicationTemplateExtraLargeSimpleImage* template = [CLKComplicationTemplateExtraLargeSimpleImage new];
+	
+	CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"XLPodcast")];
+	[imageProvider setTintColor:[self podcastTintColor]];
+	[template setImageProvider:imageProvider];
+	
+	return template;
+}
+
 - (CLKComplicationTemplate*)_podcast_largeModular {
 	CLKComplicationTemplateModularLargeStandardBody* template = [CLKComplicationTemplateModularLargeStandardBody new];
 	
@@ -663,6 +697,356 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 	}
 	
 	[template setTintColor:[self podcastTintColor]];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_podcast_largeUtility {
+	CLKComplicationTemplateUtilitarianLargeFlat* template = [CLKComplicationTemplateUtilitarianLargeFlat new];
+	
+	CLKSimpleTextProvider* textProvider;
+	LWNowPlayingIndicatorProvider* imageProvider;
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		textProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"PODCAST_STOPPED_LARGE_UTILITY", @"PODCASTS")];
+	} else if (_state == LWNowPlayingStatePaused) {
+		textProvider = [CLKSimpleTextProvider textProviderWithText:[NSString stringWithFormat:NTKClockFaceLocalizedString(@"PODCAST_PAUSED_LARGE_UTILITY", @"(PAUSED) %@"), _title]];
+	} else if (_state == LWNowPlayingStatePlaying) {
+		textProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		imageProvider = [LWNowPlayingIndicatorProvider nowPlayingIndicatorProviderWithTintColor:nil state:_state];
+	}
+	
+	[template setTextProvider:textProvider];
+	[template setImageProvider:imageProvider];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_podcast_mediumCircular {
+	CLKComplicationTemplateCircularMediumSimpleImage* template = [CLKComplicationTemplateCircularMediumSimpleImage new];
+	
+	CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"VictoryDigitalPodcast")];
+	[imageProvider setTintColor:[self podcastTintColor]];
+	[template setImageProvider:imageProvider];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_podcast_signatureBezel {
+	CLKComplicationTemplateGraphicBezelCircularText* template = [CLKComplicationTemplateGraphicBezelCircularText new];
+	[template setCircularTemplate:(CLKComplicationTemplateGraphicCircular*)[self _podcast_signatureCircular]];
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"PODCAST_STOPPED_LARGE_UTILITY", @"PODCAST")]];
+	} else if (_state == LWNowPlayingStatePaused) {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:[NSString stringWithFormat:NTKClockFaceLocalizedString(@"MUSIC_PAUSED_LARGE_UTILITY", @"(Paused) %@"), _title]]];
+	} else if (_state == LWNowPlayingStatePlaying) {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:_title]];
+	}
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_podcast_signatureCircular {
+	CLKComplicationTemplateGraphicCircularImage* template = [CLKComplicationTemplateGraphicCircularImage new];
+	
+	CLKFullColorImageProvider* imageProvider = [CLKFullColorImageProvider providerWithFullColorImage:[NTKImageNamed(@"VictoryDigitalPodcast") imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] monochromeFilterType:1 applyScalingAndCircularMasking:NO];
+	[imageProvider setTintColor:[self podcastTintColor]];
+	
+	[template setImageProvider:imageProvider];
+	[template setMetadata:@{
+		@"NTKRichComplicationViewBackgroundColorKey": [imageProvider.tintColor colorWithAlphaComponent:0.2]
+	}];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_podcast_signatureCorner {
+	CLKComplicationTemplateGraphicCornerTextImage* template = [CLKComplicationTemplateGraphicCornerTextImage new];
+	
+	CLKFullColorImageProvider* imageProvider = [CLKFullColorImageProvider providerWithFullColorImage:NTKImageNamed(@"GraphicCornerPodcast") monochromeFilterType:1 applyScalingAndCircularMasking:NO];
+	[imageProvider setTintColor:[self podcastTintColor]];
+	[template setImageProvider:imageProvider];
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"PODCAST_STOPPED_LARGE_UTILITY", @"PODCASTS")]];
+	} else  {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:_title]];
+	}
+	
+	[template setTintColor:[self podcastTintColor]];
+	[template.textProvider setTintColor:[self podcastTintColor]];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_podcast_signatureRectangular {
+	CLKComplicationTemplateGraphicRectangularStandardBody* template = [CLKComplicationTemplateGraphicRectangularStandardBody new];
+	
+	CLKSimpleTextProvider* headerTextProvider;
+	CLKSimpleTextProvider* body1TextProvider;
+	NTKOverrideTextProvider* body2TextProvider;
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"PODCAST_STOPPED_HEADER_LARGE_MODULAR", @"Podcasts")];
+		[headerTextProvider setTintColor:[self podcastTintColor]];
+		
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"PODCAST_LARGE_MODULAR", @"Tap to play podcasts")];
+	} else if (_state == LWNowPlayingStatePaused) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
+		[headerTextProvider setTintColor:[self podcastTintColor]];
+		
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		body2TextProvider = [self _italicTextProviderForText:NTKClockFaceLocalizedString(@"PODCAST_PAUSED_LARGE_MODULAR", @"Paused")];
+	} else if (_state == LWNowPlayingStatePlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
+		[headerTextProvider setTintColor:[self podcastTintColor]];
+		
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		
+		LWNowPlayingIndicatorFullColorProvider* imageProvider = [LWNowPlayingIndicatorFullColorProvider nowPlayingIndicatorFullColorProviderWithTintColor:[self podcastTintColor] state:_state];
+		
+		if (imageProvider) {
+			[template setHeaderImageProvider:imageProvider];
+		}
+	}
+	
+	[template setHeaderTextProvider:headerTextProvider];
+	[template setBody1TextProvider:body1TextProvider];
+	
+	if (body2TextProvider) {
+		[template setBody2TextProvider:body2TextProvider];
+	}
+	
+	[template setTintColor:[self podcastTintColor]];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_podcast_smallCircular {
+	CLKComplicationTemplateCircularSmallSimpleImage* template = [CLKComplicationTemplateCircularSmallSimpleImage new];
+	
+	CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"ColorPodcast")];
+	[imageProvider setTintColor:[self podcastTintColor]];
+	[template setImageProvider:imageProvider];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_podcast_smallModular {
+	CLKComplicationTemplateModularSmallSimpleImage* template = [CLKComplicationTemplateModularSmallSimpleImage new];
+	
+	CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"ModularSmallPodcast")];
+	[imageProvider setTintColor:[self podcastTintColor]];
+	[template setImageProvider:imageProvider];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_podcast_smallUtility {
+	CLKComplicationTemplateUtilitarianSmallSquare* template = [CLKComplicationTemplateUtilitarianSmallSquare new];
+	
+	CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"UtilityCornerPodcast")];
+	[imageProvider setTintColor:[self podcastTintColor]];
+	[template setImageProvider:imageProvider];
+	
+	return template;
+}
+
+#pragma mark - Radio
+
+- (CLKComplicationTemplate*)_radio_extraLarge {
+	CLKComplicationTemplateExtraLargeSimpleImage* template = [CLKComplicationTemplateExtraLargeSimpleImage new];
+	
+	CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"XLRadio")];
+	[imageProvider setTintColor:[self radioTintColor]];
+	[template setImageProvider:imageProvider];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_radio_largeModular {
+	CLKComplicationTemplateModularLargeStandardBody* template = [CLKComplicationTemplateModularLargeStandardBody new];
+	
+	CLKSimpleTextProvider* headerTextProvider;
+	CLKSimpleTextProvider* body1TextProvider;
+	NTKOverrideTextProvider* body2TextProvider;
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"RADIO_STOPPED_HEADER_LARGE_MODULAR", @"Radio")];
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"RADIO_LARGE_MODULAR", @"Tap to play radio")];
+	} else if (_state == LWNowPlayingStatePaused) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
+		body2TextProvider = [self _italicTextProviderForText:NTKClockFaceLocalizedString(@"RADIO_PAUSED_LARGE_MODULAR", @"Paused")];
+	} else if (_state == LWNowPlayingStatePlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
+		body2TextProvider = [self _italicTextProviderForText:_album];
+	
+		[template setHeaderImageProvider:[CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"ModularLargeRadio")]];
+	}
+	
+	[template setHeaderTextProvider:headerTextProvider];
+	[template setBody1TextProvider:body1TextProvider];
+	
+	if (body2TextProvider) {
+		[template setBody2TextProvider:body2TextProvider];
+	}
+	
+	[template setTintColor:[self radioTintColor]];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_radio_largeUtility {
+	CLKComplicationTemplateUtilitarianLargeFlat* template = [CLKComplicationTemplateUtilitarianLargeFlat new];
+	
+	CLKSimpleTextProvider* textProvider;
+	LWNowPlayingIndicatorProvider* imageProvider;
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		textProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"RADIO_STOPPED_LARGE_UTILITY", @"RADIO")];
+	} else if (_state == LWNowPlayingStatePaused) {
+		textProvider = [CLKSimpleTextProvider textProviderWithText:[NSString stringWithFormat:NTKClockFaceLocalizedString(@"RADIO_PAUSED_LARGE_UTILITY", @"(PAUSED) %@"), _title]];
+	} else if (_state == LWNowPlayingStatePlaying) {
+		textProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+	}
+	
+	[template setTextProvider:textProvider];
+	[template setImageProvider:imageProvider];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_radio_mediumCircular {
+	CLKComplicationTemplateCircularMediumSimpleImage* template = [CLKComplicationTemplateCircularMediumSimpleImage new];
+	
+	CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"VictoryDigitalRadio")];
+	[imageProvider setTintColor:[self radioTintColor]];
+	[template setImageProvider:imageProvider];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_radio_signatureBezel {
+	CLKComplicationTemplateGraphicBezelCircularText* template = [CLKComplicationTemplateGraphicBezelCircularText new];
+	[template setCircularTemplate:(CLKComplicationTemplateGraphicCircular*)[self _radio_signatureCircular]];
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"RADIO_STOPPED_LARGE_UTILITY", @"RADIO")]];
+	} else if (_state == LWNowPlayingStatePaused) {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:[NSString stringWithFormat:NTKClockFaceLocalizedString(@"RADIO_PAUSED_LARGE_UTILITY", @"(Paused) %@"), _title]]];
+	} else if (_state == LWNowPlayingStatePlaying) {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:_title]];
+	}
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_radio_signatureCircular {
+	CLKComplicationTemplateGraphicCircularImage* template = [CLKComplicationTemplateGraphicCircularImage new];
+	
+	CLKFullColorImageProvider* imageProvider = [CLKFullColorImageProvider providerWithFullColorImage:[NTKImageNamed(@"GraphicCircularRadio") imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] monochromeFilterType:1 applyScalingAndCircularMasking:NO];
+	[imageProvider setTintColor:[self radioTintColor]];
+	
+	[template setImageProvider:imageProvider];
+	[template setMetadata:@{
+		@"NTKRichComplicationViewBackgroundColorKey": [imageProvider.tintColor colorWithAlphaComponent:0.2]
+	}];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_radio_signatureCorner {
+	CLKComplicationTemplateGraphicCornerTextImage* template = [CLKComplicationTemplateGraphicCornerTextImage new];
+	
+	CLKFullColorImageProvider* imageProvider = [CLKFullColorImageProvider providerWithFullColorImage:NTKImageNamed(@"GraphicCornerRadio") monochromeFilterType:1 applyScalingAndCircularMasking:NO];
+	[imageProvider setTintColor:[self radioTintColor]];
+	[template setImageProvider:imageProvider];
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"RADIO_STOPPED_LARGE_UTILITY", @"RADIO")]];
+	} else  {
+		[template setTextProvider:[CLKSimpleTextProvider textProviderWithText:_title]];
+	}
+	
+	[template setTintColor:[self radioTintColor]];
+	[template.textProvider setTintColor:[self radioTintColor]];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_radio_signatureRectangular {
+	CLKComplicationTemplateGraphicRectangularStandardBody* template = [CLKComplicationTemplateGraphicRectangularStandardBody new];
+	
+	CLKSimpleTextProvider* headerTextProvider;
+	CLKSimpleTextProvider* body1TextProvider;
+	NTKOverrideTextProvider* body2TextProvider;
+	
+	if (_state == LWNowPlayingStateNotPlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"RADIO_STOPPED_HEADER_LARGE_MODULAR", @"Radio")];
+		[headerTextProvider setTintColor:[self radioTintColor]];
+		
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:NTKClockFaceLocalizedString(@"RADIO_LARGE_MODULAR", @"Tap to play radio")];
+	} else if (_state == LWNowPlayingStatePaused) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		[headerTextProvider setTintColor:[self radioTintColor]];
+		
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
+		body2TextProvider = [self _italicTextProviderForText:NTKClockFaceLocalizedString(@"RADIO_PAUSED_LARGE_MODULAR", @"Paused")];
+	} else if (_state == LWNowPlayingStatePlaying) {
+		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
+		[headerTextProvider setTintColor:[self radioTintColor]];
+		
+		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
+		body2TextProvider = [CLKSimpleTextProvider textProviderWithText:_album];
+		
+		LWNowPlayingIndicatorFullColorProvider* imageProvider = [LWNowPlayingIndicatorFullColorProvider nowPlayingIndicatorFullColorProviderWithTintColor:[self radioTintColor] state:_state];
+		
+		if (imageProvider) {
+			[template setHeaderImageProvider:imageProvider];
+		}
+	}
+	
+	[template setHeaderTextProvider:headerTextProvider];
+	[template setBody1TextProvider:body1TextProvider];
+	
+	if (body2TextProvider) {
+		[template setBody2TextProvider:body2TextProvider];
+	}
+	
+	[template setTintColor:[self radioTintColor]];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_radio_smallCircular {
+	CLKComplicationTemplateCircularSmallSimpleImage* template = [CLKComplicationTemplateCircularSmallSimpleImage new];
+	
+	CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"ColorRadio")];
+	[imageProvider setTintColor:[self radioTintColor]];
+	[template setImageProvider:imageProvider];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_radio_smallModular {
+	CLKComplicationTemplateModularSmallSimpleImage* template = [CLKComplicationTemplateModularSmallSimpleImage new];
+	
+	CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"ModularSmallRadio")];
+	[imageProvider setTintColor:[self radioTintColor]];
+	[template setImageProvider:imageProvider];
+	
+	return template;
+}
+
+- (CLKComplicationTemplate*)_radio_smallUtility {
+	CLKComplicationTemplateUtilitarianSmallSquare* template = [CLKComplicationTemplateUtilitarianSmallSquare new];
+	
+	CLKImageProvider* imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:NTKImageNamed(@"UtilityCornerRadio")];
+	[imageProvider setTintColor:[self radioTintColor]];
+	[template setImageProvider:imageProvider];
 	
 	return template;
 }

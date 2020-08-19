@@ -58,6 +58,30 @@ typedef NS_ENUM(NSInteger, LWNowPlayingState) {
 - (CLKComplicationTemplate*)_nowPlaying_largeUtility;
 - (CLKComplicationTemplate*)_nowPlaying_signatureRectangular;
 
+- (CLKComplicationTemplate*)_podcast_extraLarge;
+- (CLKComplicationTemplate*)_podcast_largeModular;
+- (CLKComplicationTemplate*)_podcast_largeUtility;
+- (CLKComplicationTemplate*)_podcast_mediumCircular;
+- (CLKComplicationTemplate*)_podcast_signatureBezel;
+- (CLKComplicationTemplate*)_podcast_signatureCircular;
+- (CLKComplicationTemplate*)_podcast_signatureCorner;
+- (CLKComplicationTemplate*)_podcast_signatureRectangular;
+- (CLKComplicationTemplate*)_podcast_smallCircular;
+- (CLKComplicationTemplate*)_podcast_smallModular;
+- (CLKComplicationTemplate*)_podcast_smallUtility;
+
+- (CLKComplicationTemplate*)_radio_extraLarge;
+- (CLKComplicationTemplate*)_radio_largeModular;
+- (CLKComplicationTemplate*)_radio_largeUtility;
+- (CLKComplicationTemplate*)_radio_mediumCircular;
+- (CLKComplicationTemplate*)_radio_signatureBezel;
+- (CLKComplicationTemplate*)_radio_signatureCircular;
+- (CLKComplicationTemplate*)_radio_signatureCorner;
+- (CLKComplicationTemplate*)_radio_signatureRectangular;
+- (CLKComplicationTemplate*)_radio_smallCircular;
+- (CLKComplicationTemplate*)_radio_smallModular;
+- (CLKComplicationTemplate*)_radio_smallUtility;
+
 @end
 
 NS_ASSUME_NONNULL_END
