@@ -87,6 +87,7 @@ VOLUME_PATH=$(hdiutil attach -noverify "${TEMPDIR}/${RESTORE_IMAGE}" | grep Volu
 echo "Extracting required files to intermediate directory..."
 mkdir -p "${TEMPDIR}/copy"
 FILELIST=(
+	"/System/Library/LocationBundles/AppleWatchFaces.bundle/"
 	"/System/Library/NanoTimeKit/ComplicationBundles/"
 	"/System/Library/NanoPreferenceBundles/Customization/"
 	"/System/Library/PrivateFrameworks/NanoTimeKitCompanion.framework/"	# Folder exists on iPadOS
@@ -103,7 +104,7 @@ echo "This step will copy the files to your device, which is potentially dangero
 read -e -p "Are you sure you want to continue? [y/N] " CONFIRM
 if [[ $CONFIRM == [Yy]* ]]; then
 	echo "Copying extracted files to device..."
-	ls $TEMPDIR/copy
+	find . -name ".DS_Store" -delete
 	scp -q -r $TEMPDIR/copy/* root@$DEVICE_IP:/ > /dev/null 2>&1
 else
 	echo "Then why'd you put me through all this?"
