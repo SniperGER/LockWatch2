@@ -23,6 +23,6 @@
 	"COMPLICATION_CONTENT" = "🛠 Complication Content";
 	"COMPLICATION_CONTENT_NONE" = "None";
 	"COMPLICATION_CONTENT_DEFAULT" = "Default Templates";
-	"COMPLICATION_CONTENT_MIXED" = "Mixed (Default & Finished)";
+	"COMPLICATION_CONTENT_MIXED" = "Mixed (Templates & Finished)";
 	"COMPLICATION_CONTENT_FINISHED" = "Finished Only";
 }
