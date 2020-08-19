@@ -153,6 +153,27 @@
 }
 %end	/// %hook NTKExplorerDialView
 
+%hook NTKFaceView
+%new
+- (void)_notifyActiveStatusFromOldDataMode:(NSInteger)arg1 newMode:(NSInteger)arg2 {
+	if (arg2 <= 1) {
+		[self _becameActiveFace];
+	} else {
+		[self _becameInactiveFace];
+	}
+}
+
+- (void)setDataMode:(NSInteger)arg1 {
+	NSInteger dataMode = MSHookIvar<NSInteger>(self, "_dataMode");
+	
+	%orig;
+	
+	if (arg1 != dataMode) {
+		[self _notifyActiveStatusFromOldDataMode:dataMode newMode:arg1];
+	}
+}
+%end	/// %hook NTKFaceView
+
 %hook NTKFaceViewController
 %property (nonatomic, strong) UIView* backgroundView;
 
@@ -249,6 +270,22 @@
 	%orig(UIColor.clearColor);
 }
 %end	/// %hook NTKSiderealFaceView
+
+%hook NTKSolarFaceView
+- (void)_becameActiveFace {
+	MSHookIvar<NSString*>(self, "_locationManagerToken") = [[NTKLocationManager sharedLocationManager] startLocationUpdatesWithIdentifier:@"ntk.solarFace" handler:^(CLLocation* currentLocation, CLLocation* anyLocation, NSError* error) {
+		[self _sharedLocationManagerUpdatedLocation:anyLocation error:error];
+	}];
+}
+
+- (void)_becameInactiveFace {
+	NSString* token = MSHookIvar<NSString*>(self, "_locationManagerToken");
+	
+	if (token) {
+		[[NTKLocationManager sharedLocationManager] stopLocationUpdatesForToken:token];
+	}
+}
+%end	/// %hook NTKSolarFaceView
 
 %hook NTKTimelineDataOperation
 - (void)start {

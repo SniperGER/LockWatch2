@@ -43,6 +43,8 @@
 	
 	if (IS_COMPLICATION_BUNDLE(@"com.apple.NanoTimeKit.NTKCellularConnectivityComplicationDataSource")) {
 		return NSClassFromString(@"LWCellularConnectivityComplicationDataSource");
+	} else if (IS_COMPLICATION_BUNDLE(@"com.apple.weather.precipitation.chance")) {
+		return NSClassFromString(@"LWChanceRainComplicationDataSource");
 	}
 	
 	return nil;
@@ -50,75 +52,50 @@
 
 + (Class)dataSourceClassForComplicationType:(NTKComplicationType)type family:(CLKComplicationFamily)family forDevice:(CLKDevice*)device {
 	switch (type) {
-		case NTKComplicationTypeDate: 
-			return NSClassFromString(@"LWDateComplicationDataSource");
-			break;
-		case NTKComplicationTypeAlarm: break; // TODO
-		case NTKComplicationTypeTimer: break; // TODO
-		case NTKComplicationTypeStopwatch: break; // TODO
-		case NTKComplicationTypeWorldClock:
-			return NSClassFromString(@"LWWorldClockComplicationDataSource");
-			break;
+		case NTKComplicationTypeDate: return NSClassFromString(@"LWDateComplicationDataSource");
+		case NTKComplicationTypeAlarm: return NSClassFromString(@"LWAlarmComplicationDataSource");
+		case NTKComplicationTypeTimer: return NSClassFromString(@"LWTimerComplicationDataSource");
+		case NTKComplicationTypeStopwatch: break;
+		case NTKComplicationTypeWorldClock: return NSClassFromString(@"LWWorldClockComplicationDataSource");
 		case NTKComplicationTypeFindMy: break;
-		case NTKComplicationTypeWellness: 
-			return NSClassFromString(@"LWWellnessComplicationDataSource");
-			break;
-		case NTKComplicationTypeNextEvent: break; // TODO
-		case NTKComplicationTypeWeather: 
-			return NSClassFromString(@"LWWeatherDataSource");
-			break;
-		case NTKComplicationTypeMoonPhase: break; // TODO
-		case NTKComplicationTypeSunrise: break; // TODO
-		case NTKComplicationTypeBattery: 
-			return NSClassFromString(@"LWBatteryComplicationDataSource");
-			break;
-		case NTKComplicationTypeHeartrate: break;
-		case NTKComplicationTypeLunarDate: break; // TODO
-		case NTKComplicationTypeMusic:
-			return NSClassFromString(@"LWMusicComplicationDataSource");
-			break;
+		case NTKComplicationTypeWellness: return NSClassFromString(@"LWWellnessComplicationDataSource");
+		case NTKComplicationTypeNextEvent: break;
+		case NTKComplicationTypeWeather: return NSClassFromString(@"LWWeatherDataSource");
+		case NTKComplicationTypeMoonPhase: break;
+		case NTKComplicationTypeSunrise: break;
+		case NTKComplicationTypeBattery: return NSClassFromString(@"LWBatteryComplicationDataSource");
+		case NTKComplicationTypeMonogram: break;
+		case NTKComplicationTypeHeartBeat: break;
+		case NTKComplicationTypeLunarDate: break;
+		case NTKComplicationTypeMusic: return NSClassFromString(@"LWMusicComplicationDataSource");
 		case NTKComplicationTypeWorkout: break;
 		case NTKComplicationTypeBreathing: break;
-		case NTKComplicationTypeReminder: break; // TODO
+		case NTKComplicationTypeReminders: break;
 		case NTKComplicationTypeMediaRemote: break;
-		case NTKComplicationTypeWeatherConditions:
-			return NSClassFromString(@"LWConditionsDataSource");
-			break;
-		case NTKComplicationTypeMessages: break; // TODO
-		case NTKComplicationTypePhone: break; // TODO
-		case NTKComplicationTypeMaps: break; // TODO
-		case NTKComplicationTypeNews: break; // TODO
-		case NTKComplicationTypeMail: break; // TODO
-		case NTKComplicationTypeHomeKit: break; // TODO
-		case NTKComplicationTypeSiri: break; // TODO
+		case NTKComplicationTypeWeatherConditions: return NSClassFromString(@"LWConditionsDataSource");
+		case NTKComplicationTypeMessages: break;
+		case NTKComplicationTypePhone: break;
+		case NTKComplicationTypeMaps: break;
+		case NTKComplicationTypeNews: break;
+		case NTKComplicationTypeMail: break;
+		case NTKComplicationTypeHomeKit: break;
+		case NTKComplicationTypeSiri: return NSClassFromString(@"LWSiriComplicationDataSource");
 		case NTKComplicationTypeRemote: break;
+		case NTKComplicationTypeConnectivity: break;
 		case NTKComplicationTypeTinCan: break;
-		case NTKComplicationTypeNowPlaying: 
-			return NSClassFromString(@"LWNowPlayingComplicationDataSource");
-			break;
-		case NTKComplicationTypeRadio:
-			return NSClassFromString(@"LWRadioComplicationDataSource");
-			break;
-		case NTKComplicationTypeWeatherAirQuality: 
-			return NSClassFromString(@"LWAirQualityDataSource");
-			break;
-		case NTKComplicationTypePeople: break; // TODO
-		case NTKComplicationTypeSolar: break; // TODO
-		case NTKComplicationTypeAstronomyEarth: break; // TODO
-		case NTKComplicationTypeAstronomyLuna: break; // TODO
-		case NTKComplicationTypeAstronomyOrrery: break; // TODO
-		case NTKComplicationTypePodcast:
-			return NSClassFromString(@"LWPodcastComplicationDataSource");
-			break;
-		case NTKComplicationTypeWeatherUVIndex:
-			return NSClassFromString(@"LWUltravioletIndexDataSource");
-			break;
-		case NTKComplicationTypeWeatherWind:
-			return NSClassFromString(@"LWWindDataSource");
-			break;
-		case NTKComplicationTypeDigitalTime:
-			return NSClassFromString(@"LWDigitalTimeComplicationDataSource");
-			break;
+		case NTKComplicationTypeNowPlaying: return NSClassFromString(@"LWNowPlayingComplicationDataSource");
+		case NTKComplicationTypeRadio: return NSClassFromString(@"LWRadioComplicationDataSource");
+		case NTKComplicationTypeWeatherAirQuality: return NSClassFromString(@"LWAirQualityDataSource");
+		case NTKComplicationTypePeople: break;
+		case NTKComplicationTypeSolar: return NSClassFromString(@"LWSolarComplicationDataSource");
+		case NTKComplicationTypeAstronomyEarth: 
+		case NTKComplicationTypeAstronomyLuna:
+		case NTKComplicationTypeAstronomyOrrery:
+			return NSClassFromString(@"LWAstronomyComplicationDataSource");
+		case NTKComplicationTypePodcast: return NSClassFromString(@"LWPodcastComplicationDataSource");
+		case NTKComplicationTypeWeatherUVIndex: return NSClassFromString(@"LWUltravioletIndexDataSource");
+		case NTKComplicationTypeWeatherWind: return NSClassFromString(@"LWWindDataSource");
+		case NTKComplicationTypeDigitalTime: return NSClassFromString(@"LWDigitalTimeComplicationDataSource");
 		case NTKComplicationTypeECG: break;
 		case NTKComplicationTypeBundle: break;
 		default: break;

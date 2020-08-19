@@ -168,6 +168,18 @@ void LWLaunchApplication(NSString* bundleIdentifier, NSURL* url = nil) {
 }
 %end	/// %hook NTKLocalTimelineComplicationController
 
+%hook NTKLocationManager
++ (id)sharedLocationManager {
+    static LWComplicationLocationManager* sharedLocationManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedLocationManager = [[LWComplicationLocationManager alloc] init];
+    });
+
+    return sharedLocationManager;
+}
+%end	/// %hook NTKLocationManager
+
 %hook NTKRichComplicationView
 - (void)setHighlighted:(BOOL)arg1 {
 	if (MSHookIvar<BOOL>(self, "_highlighted") != arg1) {

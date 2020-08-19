@@ -14,6 +14,7 @@
 #import <WeatherFoundation/WeatherFoundation.h>
 
 #import "LWComplicationDataSourceBase.h"
+#import "LWComplicationLocationManager.h"
 
 #import "Core/LWPreferences.h"
 

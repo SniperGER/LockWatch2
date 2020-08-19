@@ -25,6 +25,11 @@
 - (NSDictionary*)JSONObjectRepresentation;
 @end
 
+@interface NTKFaceView (Private)
+// %new
+- (void)_notifyActiveStatusFromOldDataMode:(NSInteger)arg1 newMode:(NSInteger)arg2;
+@end
+
 @interface NTKFaceViewController (UIEffectView)
 // %property
 @property (nonatomic, strong) UIView* backgroundView;
