@@ -12,6 +12,8 @@
 
 #import "LWPersistentFaceCollection.h"
 
+extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
+
 @interface NSDistributedNotificationCenter : NSNotificationCenter
 @end
 
@@ -33,7 +35,13 @@
 @implementation LWPersistentFaceCollection
 
 + (NSArray*)allAvailableFaceStylesForDevice:(CLKDevice*)device {
-	return (__bridge NSArray*)NTKAllAvailableFaceStyles((__bridge void*)device);
+	NSArray* faceStyles = (__bridge NSArray*)NTKAllAvailableFaceStyles((__bridge void*)device);
+	
+	faceStyles = [faceStyles sortedArrayUsingComparator:^NSComparisonResult(NSNumber* number1, NSNumber* number2) {
+        return [NTKLocalizedNameForFaceStyle([number1 integerValue]) compare:NTKLocalizedNameForFaceStyle([number2 integerValue])];
+    }];
+	
+	return faceStyles;
 }
 
 + (NSArray*)defaultLibraryFaceStylesForDevice:(CLKDevice*)device {
