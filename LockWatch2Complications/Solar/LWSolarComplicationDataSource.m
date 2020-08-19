@@ -12,6 +12,10 @@
 
 @implementation LWSolarComplicationDataSource
 
++ (BOOL)acceptsComplicationFamily:(CLKComplicationFamily)family forDevice:(CLKDevice*)device {
+	return family == CLKComplicationFamilyGraphicBezel || family == CLKComplicationFamilyGraphicCircular;
+}
+
 - (void)dealloc {
 	[self _cancelLocationUpdates];
 }
