@@ -25,6 +25,13 @@ NS_ASSUME_NONNULL_BEGIN
 	NSObject<OS_dispatch_queue>* _queue;
 }
 
+- (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device;
+- (id)description;
+- (CLKComplicationTimelineEntry*)_defaultTimelineEntry;
+- (void)_invalidateIfNeeded;
+- (LWNowPlayingState)_nowPlayingState;
+- (void)_updateWithOrigin:(id)origin;
+
 @end
 
 NS_ASSUME_NONNULL_END

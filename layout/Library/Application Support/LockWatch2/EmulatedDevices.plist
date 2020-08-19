@@ -12,6 +12,8 @@
 			<false/>
 			<key>_isZeusBlack</key>
 			<false/>
+			<key>_runningGraceOrLater</key>
+			<true/>
 			<key>_screenBounds</key>
 			<string>{{0, 0}, { 156, 195 }}</string>
 			<key>_screenCornerRadius</key>
@@ -59,6 +61,8 @@
 			<false/>
 			<key>_isZeusBlack</key>
 			<false/>
+			<key>_runningGraceOrLater</key>
+			<true/>
 			<key>_screenBounds</key>
 			<string>{{0, 0}, { 156, 195 }}</string>
 			<key>_screenCornerRadius</key>
@@ -106,6 +110,8 @@
 			<true/>
 			<key>_isZeusBlack</key>
 			<true/>
+			<key>_runningGraceOrLater</key>
+			<true/>
 			<key>_screenBounds</key>
 			<string>{{0, 0}, { 162, 197 }}</string>
 			<key>_screenCornerRadius</key>
@@ -152,6 +158,8 @@
 			<key>_isLuxo</key>
 			<true/>
 			<key>_isZeusBlack</key>
+			<true/>
+			<key>_runningGraceOrLater</key>
 			<true/>
 			<key>_screenBounds</key>
 			<string>{{0, 0}, { 162, 197 }}</string>

@@ -9,6 +9,12 @@
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
+typedef NS_ENUM(NSUInteger, LWComplicationContentType) {
+/*  0 */	LWComplicationContentTypeNone,
+/*  1 */	LWComplicationContentTypeTemplate,
+/*  2 */	LWComplicationContentTypeDefault,
+/*  3 */	LWComplicationContentTypeFinishedOnly,
+};
 
 @interface LWPreferences : NSObject {
 	NSMutableDictionary* _defaults;
@@ -19,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSString* emulatedDeviceType;
 @property (nonatomic) NSInteger backgroundType;
 @property (nonatomic) BOOL batteryChargingViewHidden;
-@property (nonatomic) NSInteger complicationContent;
+@property (nonatomic) LWComplicationContentType complicationContent;
 
 @property (nonatomic) CGFloat horizontalOffsetPortrait;
 @property (nonatomic) CGFloat verticalOffsetPortrait;

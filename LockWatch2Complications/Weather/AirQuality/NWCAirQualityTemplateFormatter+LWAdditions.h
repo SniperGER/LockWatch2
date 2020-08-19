@@ -7,7 +7,7 @@
 //
 
 #import <NanoWeatherComplicationsCompanion/NWCAirQualityTemplateFormatter.h>
-#import "NTKComplicationFamily.h"
+#import "CLKComplicationFamily.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CLKComplicationTemplate*)_modularLargeTemplateForLocation:(WFLocation*)location isLocalLocation:(BOOL)isLocalLocation conditions:(WFAirQualityConditions*)conditions isLoading:(BOOL)isLoading;
 - (CLKComplicationTemplate*)_utilitarianLargeTemplateForLocation:(WFLocation*)location isLocalLocation:(BOOL)isLocalLocation conditions:(WFAirQualityConditions*)conditions isLoading:(BOOL)isLoading;
-- (void)formattedTemplateForFamily:(NTKComplicationFamily)family
+- (void)formattedTemplateForFamily:(CLKComplicationFamily)family
                     	 entryDate:(NSDate*)entryDate
 						 isLoading:(BOOL)isLoading
 		  withAirQualityConditions:(WFAirQualityConditions*)airQualityConditions

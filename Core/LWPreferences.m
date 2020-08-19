@@ -149,7 +149,7 @@
 	[_defaults setObject:@(batteryChargingViewHidden) forKey:@"batteryChargingViewHidden"];
 }
 
-- (void)setComplicationContent:(NSInteger)complicationContent {
+- (void)setComplicationContent:(LWComplicationContentType)complicationContent {
 	_complicationContent = complicationContent;
 	[_defaults setObject:@(complicationContent) forKey:@"complicationContent"];
 }

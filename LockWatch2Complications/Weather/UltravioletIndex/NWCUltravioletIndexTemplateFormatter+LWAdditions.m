@@ -94,7 +94,7 @@ extern NSArray* NWCPlaceholderDailyConditionsStartingAtDate(NSDate* date, int co
 	return template;
 }
 
-- (void)formattedTemplateForFamily:(NTKComplicationFamily)family
+- (void)formattedTemplateForFamily:(CLKComplicationFamily)family
                     	 entryDate:(NSDate*)entryDate
 						 isLoading:(BOOL)isLoading
 					withConditions:(WFWeatherConditions*)conditions
@@ -106,38 +106,39 @@ extern NSArray* NWCPlaceholderDailyConditionsStartingAtDate(NSDate* date, int co
 	CLKComplicationTemplate* template;
 	
 	switch (family) {
-		case NTKComplicationFamilyModularSmall:
+		case CLKComplicationFamilyModularSmall:
 			template = [self modularSmallTemplateForConditions:conditions];
 			break;
-		case NTKComplicationFamilyModularLarge:
+		case CLKComplicationFamilyModularLarge:
 			template = [self _modularLargeTemplateForLocation:location isLocalLocation:isLocalLocation conditions:conditions isLoading:isLoading];
 			break;
-		case NTKComplicationFamilyUtilitarianSmall:
-		case NTKComplicationFamilyUtilitarianSmallFlat:
+		case CLKComplicationFamilyUtilitarianSmall:
+		case CLKComplicationFamilyUtilitarianSmallFlat:
 			template = [self utilitarianSmallTemplateForConditions:conditions];
 			break;
-		case NTKComplicationFamilyUtilitarianLarge:
+		case CLKComplicationFamilyUtilitarianLarge:
+		case CLKComplicationFamilyUtilLargeNarrow:
 			template = [self _utilitarianLargeTemplateForConditions:conditions isLoading:isLoading];
 			break;
-		case NTKComplicationFamilyCircularSmall:
+		case CLKComplicationFamilyCircularSmall:
 			template = [self circularSmallTemplateForConditions:conditions];
 			break;
-		case NTKComplicationFamilyExtraLarge:
+		case CLKComplicationFamilyExtraLarge:
 			template = [self extraLargeTemplateForConditions:conditions];
 			break;
-		case NTKComplicationFamilyGraphicCorner:
+		case CLKComplicationFamilyGraphicCorner:
 			template = [self graphicCornerTemplateForConditions:conditions];
 			break;
-		case NTKComplicationFamilyGraphicBezel:
+		case CLKComplicationFamilyGraphicBezel:
 			template = [self graphicBezelTemplateForConditions:conditions];
 			break;
-		case NTKComplicationFamilyGraphicCircular:
+		case CLKComplicationFamilyGraphicCircular:
 			template = [self graphicCircularTemplateForConditions:conditions];
 			break;
-		case NTKComplicationFamilyGraphicRectangular:
+		case CLKComplicationFamilyGraphicRectangular:
 			[self _graphicRectangularTemplateForEntryDate:entryDate isLocalLocation:isLocalLocation conditions:conditions dailyForecastedConditions:dayForecasts timeZone:location.timeZone isLoading:isLoading templateBlock:templateBlock];
 			return;
-		case NTKComplicationFamilyCircularMedium:
+		case CLKComplicationFamilyCircularMedium:
 			template = [self circularMediumTemplateForConditions:conditions];
 			break;
 		default: break;

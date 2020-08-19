@@ -1,6 +1,6 @@
 //
 // LWMusicComplicationDataSource.h
-// LockWatch [SSH: janiks-mac-mini.local]
+// LockWatch
 //
 // Created by janikschmidt on 8/8/2020
 // Copyright © 2020 Team FESTIVAL. All rights reserved

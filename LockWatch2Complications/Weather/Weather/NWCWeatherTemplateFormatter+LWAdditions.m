@@ -49,7 +49,7 @@ extern NSString* NWCLocalizedString(NSString* key, NSString* comment);
 	return template;
 }
 
-- (void)formattedTemplateForFamily:(NTKComplicationFamily)family
+- (void)formattedTemplateForFamily:(CLKComplicationFamily)family
                     	 entryDate:(NSDate*)entryDate
 						 isLoading:(BOOL)isLoading
 					withConditions:(WFWeatherConditions*)conditions
@@ -62,35 +62,36 @@ extern NSString* NWCLocalizedString(NSString* key, NSString* comment);
 	CLKComplicationTemplate* template;
 	
 	switch (family) {
-		case NTKComplicationFamilyModularSmall:
+		case CLKComplicationFamilyModularSmall:
 			template = [self modularSmallTemplateForConditions:conditions];
 			break;
-		case NTKComplicationFamilyModularLarge:
+		case CLKComplicationFamilyModularLarge:
 			template = [self _modularLargeTemplateForLocation:location isLocalLocation:isLocalLocation airQualityConditions:nil conditions:conditions dailyForecastedConditions:dayForecasts[0] isLoading:isLoading];
 			break;
-		case NTKComplicationFamilyUtilitarianSmall:
-		case NTKComplicationFamilyUtilitarianSmallFlat:
+		case CLKComplicationFamilyUtilitarianSmall:
+		case CLKComplicationFamilyUtilitarianSmallFlat:
 			template = [self utilitarianSmallTemplateForConditions:conditions];
 			break;
-		case NTKComplicationFamilyUtilitarianLarge:
+		case CLKComplicationFamilyUtilitarianLarge:
+		case CLKComplicationFamilyUtilLargeNarrow:
 			template = [self _utilitarianLargeTemplateForConditions:conditions isLoading:isLoading];
 			break;
-		case NTKComplicationFamilyCircularSmall:
+		case CLKComplicationFamilyCircularSmall:
 			template = [self circularSmallTemplateForConditions:conditions];
 			break;
-		case NTKComplicationFamilyExtraLarge:
+		case CLKComplicationFamilyExtraLarge:
 			template = [self extraLargeTemplateForConditions:conditions];
 			break;
-		case NTKComplicationFamilyGraphicCorner:
+		case CLKComplicationFamilyGraphicCorner:
 			template = [self graphicCornerTemplateForCurrentObservations:conditions dailyForecastedConditions:dayForecasts[0]];
 			break;
-		case NTKComplicationFamilyGraphicBezel:
+		case CLKComplicationFamilyGraphicBezel:
 			template = [self graphicBezelTemplateForCurrentObservations:conditions dailyForecastedConditions:dayForecasts[0]];
 			break;
-		case NTKComplicationFamilyGraphicCircular:
+		case CLKComplicationFamilyGraphicCircular:
 			template = [self graphicCircularTemplateForCurrentObservations:conditions dailyForecastedConditions:dayForecasts[0]];
 			break;
-		case NTKComplicationFamilyCircularMedium:
+		case CLKComplicationFamilyCircularMedium:
 			template = [self circularMediumTemplateForConditions:conditions];
 			break;
 		default: break;

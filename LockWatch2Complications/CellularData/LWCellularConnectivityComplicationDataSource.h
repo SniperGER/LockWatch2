@@ -32,6 +32,13 @@ typedef NS_ENUM(NSInteger, LWCellularConnectivityState) {
 	NSObject<OS_dispatch_queue>* _queue;
 }
 
+- (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device;
+- (LWCellularConnectivityState)_cellularConnectivityStateForSubscriptionInfo:(STTelephonySubscriptionInfo*)subscriptionInfo;
+- (CLKComplicationTimelineEntry*)_currentTimelineEntry;
+- (CLKComplicationTimelineEntry*)_defaultTimelineEntry;
+- (STTelephonySubscriptionInfo*)_preferredSubscriptionInfo;
+- (void)_signalStrengthDidChange;
+
 @end
 
 NS_ASSUME_NONNULL_END

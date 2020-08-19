@@ -8,100 +8,54 @@
 
 #import "Complications.h"
 
+void LWLaunchApplication(NSString* bundleIdentifier, NSURL* url = nil) {
+	SBApplication* destinationApplication = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:bundleIdentifier];
+		
+	if (!destinationApplication) return;
+	
+	SBLockScreenUnlockRequest* request = [%c(SBLockScreenUnlockRequest) new];
+	[request setSource:17];
+	[request setIntent:3];
+	[request setName:[NSString stringWithFormat:@"SBWorkspaceRequest: Open \"%@\"", bundleIdentifier]];
+	[request setDestinationApplication:destinationApplication];
+	[request setWantsBiometricPresentation:YES];
+	[request setForceAlertAuthenticationUI:YES];
+	
+	FBSOpenApplicationService* appService = [%c(FBSOpenApplicationService) serviceWithDefaultShellEndpoint];
+	
+	[[%c(SBLockScreenManager) sharedInstance] unlockWithRequest:request completion:^(BOOL completed){
+		if (completed) {
+			if (url) {
+				FBSOpenApplicationOptions* openOptions = [%c(FBSOpenApplicationOptions) optionsWithDictionary:@{
+					@"__PayloadURL": url
+				}];
+				
+				[appService openApplication:bundleIdentifier withOptions:openOptions completion:nil];
+			} else {
+				[appService openApplication:bundleIdentifier withOptions:nil completion:nil];
+			}
+		}
+	}];
+}
+
 %group SpringBoard
 %hook NTKComplicationDataSource
-+ (Class)dataSourceClassForComplicationType:(unsigned long long)type family:(long long)family forDevice:(id)device {
-	NSInteger complicationContent = [[%c(LWPreferences) sharedInstance] complicationContent];
-	if (complicationContent == 0) {
-		return nil;
-	} else if (complicationContent == 1) {
-		return %orig;
-	}
-	
-	Class dataSourceClass;
-	
-	switch (type) {
-		case NTKComplicationTypeDate: 
-			dataSourceClass = %c(LWDateComplicationDataSource);
-			break;
-		case NTKComplicationTypeAlarm: break; // TODO
-		case NTKComplicationTypeTimer: break; // TODO
-		case NTKComplicationTypeStopwatch: break; // TODO
-		case NTKComplicationTypeWorldClock:
-			dataSourceClass= %c(LWWorldClockComplicationDataSource);
-			break;
-		case NTKComplicationTypeFindMy: break;
-		case NTKComplicationTypeWellness: 
-			dataSourceClass = %c(LWWellnessComplicationDataSource);
-			break;
-		case NTKComplicationTypeNextEvent: break; // TODO
-		case NTKComplicationTypeWeather: 
-			dataSourceClass = %c(LWWeatherDataSource);
-			break;
-		case NTKComplicationTypeMoonPhase: break; // TODO
-		case NTKComplicationTypeSunrise: break; // TODO
-		case NTKComplicationTypeBattery: 
-			dataSourceClass = %c(LWBatteryComplicationDataSource);
-			break;
-		case NTKComplicationTypeHeartrate: break;
-		case NTKComplicationTypeLunarDate: break; // TODO
-		case NTKComplicationTypeMusic:
-			dataSourceClass = %c(LWMusicComplicationDataSource);
-			break;
-		case NTKComplicationTypeWorkout: break;
-		case NTKComplicationTypeBreathing: break;
-		case NTKComplicationTypeReminder: break; // TODO
-		case NTKComplicationTypeMediaRemote: break;
-		case NTKComplicationTypeWeatherConditions:
-			dataSourceClass = %c(LWConditionsDataSource);
-			break;
-		case NTKComplicationTypeMessages: break; // TODO
-		case NTKComplicationTypePhone: break; // TODO
-		case NTKComplicationTypeMaps: break; // TODO
-		case NTKComplicationTypeNews: break; // TODO
-		case NTKComplicationTypeMail: break; // TODO
-		case NTKComplicationTypeHomeKit: break; // TODO
-		case NTKComplicationTypeSiri: break; // TODO
-		case NTKComplicationTypeRemote: break;
-		case NTKComplicationTypeTinCan: break;
-		case NTKComplicationTypeNowPlaying: 
-			dataSourceClass = %c(LWNowPlayingComplicationDataSource);
-			break;
-		case NTKComplicationTypeRadio:
-			dataSourceClass = %c(LWRadioComplicationDataSource);
-			break;
-		case NTKComplicationTypeWeatherAirQuality: 
-			dataSourceClass = %c(LWAirQualityDataSource);
-			break;
-		case NTKComplicationTypePeople: break; // TODO
-		case NTKComplicationTypeSolar: break; // TODO
-		case NTKComplicationTypeAstronomyEarth: break; // TODO
-		case NTKComplicationTypeAstronomyLuna: break; // TODO
-		case NTKComplicationTypeAstronomyOrrery: break; // TODO
-		case NTKComplicationTypePodcast:
-			dataSourceClass = %c(LWPodcastComplicationDataSource);
-			break;
-		case NTKComplicationTypeWeatherUVIndex:
-			dataSourceClass = %c(LWUltravioletIndexDataSource);
-			break;
-		case NTKComplicationTypeWeatherWind:
-			dataSourceClass = %c(LWWindDataSource);
-			break;
-		case NTKComplicationTypeDigitalTime:
-			dataSourceClass = %c(LWDigitalTimeComplicationDataSource);
-			break;
-		case NTKComplicationTypeECG: break;
-		case NTKComplicationTypeBundle: break;
++ (Class)dataSourceClassForComplicationType:(NTKComplicationType)type family:(CLKComplicationFamily)family forDevice:(CLKDevice*)device {
+	LWComplicationContentType complicationContentType = [[%c(LWPreferences) sharedInstance] complicationContent];
+	switch (complicationContentType) {
+		case LWComplicationContentTypeNone: return nil;
+		case LWComplicationContentTypeTemplate: return %orig;
 		default: break;
 	}
 	
+	Class dataSourceClass = [LWComplicationDataSourceBase dataSourceClassForComplicationType:type family:family forDevice:device];
+	
 	BOOL acceptsComplicationFamily = YES;
 	if (dataSourceClass) {
-		LWComplicationDataSourceBase* instance = [[dataSourceClass alloc] init];
-		acceptsComplicationFamily = [instance.class acceptsComplicationFamily:family forDevice:device];
+		acceptsComplicationFamily = [dataSourceClass acceptsComplicationFamily:family forDevice:device];
 	}
 	
-	if (complicationContent == 2) {
+	if (complicationContentType == LWComplicationContentTypeDefault) {
 		if (dataSourceClass && acceptsComplicationFamily) return dataSourceClass;
 		return %orig;
 	} else if (!acceptsComplicationFamily) return nil;
@@ -114,24 +68,16 @@
 - (Class)dataSourceClassForBundleComplication:(NTKBundleComplication*)bundleComplication {
 	if (![bundleComplication isKindOfClass:%c(NTKBundleComplication)]) return %orig;
 	
-	NSInteger complicationContent = [[%c(LWPreferences) sharedInstance] complicationContent];
-	if (complicationContent == 0) {
-		return nil;
-	} else if (complicationContent == 1) {
-		return %orig;
+	LWComplicationContentType complicationContentType = [[%c(LWPreferences) sharedInstance] complicationContent];
+	switch (complicationContentType) {
+		case LWComplicationContentTypeNone: return nil;
+		case LWComplicationContentTypeTemplate: return %orig;
+		default: break;
 	}
 	
-	Class dataSourceClass;
+	Class dataSourceClass = [LWComplicationDataSourceBase dataSourceClassForBundleComplication:bundleComplication];
 	
-	/// TODO
-	NSString* bundleIdentifier = bundleComplication.complication.bundleIdentifier;
-#define IsEqual(string) [bundleIdentifier isEqualToString:string]
-
-	if (IsEqual(@"com.apple.NanoTimeKit.NTKCellularConnectivityComplicationDataSource")) {
-		return %c(LWCellularConnectivityComplicationDataSource);
-	}
-	
-	if (complicationContent == 2) {
+	if (complicationContentType == LWComplicationContentTypeDefault) {
 		if (dataSourceClass) return dataSourceClass;
 		return %orig;
 	}
@@ -140,52 +86,84 @@
 }
 %end	/// %hook NTKBundleComplicationManager
 
+%hook NTKCompanionComplicationDataSource
+- (NSString*)complicationApplicationIdentifier {
+	NSString* applicationIdentifier = [LWComplicationDataSourceBase complicationApplicationIdentifierForComplicationType:[(NTKComplication*)self.complication complicationType]];
+	
+	if (applicationIdentifier) return applicationIdentifier;
+	return %orig;
+}
+%end	/// %hook NTKCompanionComplicationDataSource
+
 %hook NTKLauncherComplicationDataSource
 - (NSString*)_complicationApplicationIdentifier {
-	switch ([(NTKComplication*)self.complication complicationType]) {
-		case NTKComplicationTypeMessages: return @"com.apple.MobileSMS";
-		case NTKComplicationTypePhone: return @"com.apple.mobilephone";
-		case NTKComplicationTypeMaps: return @"com.apple.Maps";
-		case NTKComplicationTypeMail: return @"com.apple.mobilemail";
-		case NTKComplicationTypeHomeKit: return @"com.apple.Home";
-		default: return %orig;
-	}
+	NSString* applicationIdentifier = [LWComplicationDataSourceBase complicationApplicationIdentifierForComplicationType:[(NTKComplication*)self.complication complicationType]];
+	
+	if (applicationIdentifier) return applicationIdentifier;
+	return %orig;
 }
-%end
+%end	/// %hook NTKLauncherComplicationDataSource
+
+// - Complication Fixes
+
+%hook CKMessagesComplicationDataSource
+- (id)templateForFamily:(long long)arg1 unreadCount:(unsigned long long)arg2 locked:(BOOL)arg3 privacy:(BOOL)arg4 {
+	return %orig(arg1, arg2, [[(SpringBoard*)[UIApplication sharedApplication] pluginUserAgent] deviceIsPasscodeLocked], arg4);
+}
+%end	/// %hook CKMessagesComplicationDataSource
+
+%hook CLKImageProvider
+- (id)copyWithZone:(NSZone *)zone {
+	return self;
+}
+%end	/// %hook CLKImageProvider
+
+%hook CompassRichRectangularDialView
+%property (nonatomic, strong) CAGradientLayer* gradientMask;
+- (void)layoutSubviews {
+	%orig;
+	
+	[MSHookIvar<CAGradientLayer*>(self, "_leftGradient") removeFromSuperlayer];
+	[MSHookIvar<CAGradientLayer*>(self, "_rightGradient") removeFromSuperlayer];
+}
+%end	/// %hook CompassRichRectangularDialView
+
+%hook NTKAlarmTimelineEntry
+- (id)templateForComplicationFamily:(CLKComplicationFamily)arg1 {
+	if (arg1 == CLKComplicationFamilyUtilLargeNarrow) return [self _newLargeUtilityTemplate];
+	return %orig;
+}
+%end	/// %hook NTKAlarmTimelineEntry
+
+%hook NTKBatteryTimelineEntryModel
+- (id)templateForComplicationFamily:(CLKComplicationFamily)arg1 {
+	if (arg1 == CLKComplicationFamilyUtilLargeNarrow) return [self _newUtilitarianLargeTemplate];
+	return %orig;
+}
+%end	/// %hook NTKBatteryTimelineEntryModel
+
+%hook NTKBatteryUtilities
++ (UIColor*)colorForLevel:(CGFloat)arg1 andState:(NSInteger)arg2 {
+	if (NSProcessInfo.processInfo.isLowPowerModeEnabled) return UIColor.systemYellowColor;
+	
+	return %orig;
+}
+%end	/// %hook NTKBatteryUtilities
+
+%hook NTKDateTimelineEntryModel
+- (id)templateForComplicationFamily:(CLKComplicationFamily)arg1 {
+	if (arg1 == CLKComplicationFamilyUtilLargeNarrow) return [self _newLargeUtilitarianTemplate];
+	return %orig;
+}
+%end	/// %hook NTKDateTimelineEntryModel
 
 %hook NTKLocalTimelineComplicationController
 - (void)performTapAction {
 	CLKCComplicationDataSource* dataSource = MSHookIvar<CLKCComplicationDataSource*>(self, "_dataSource");
-	if (!dataSource) return;
+	if (!dataSource || ![dataSource supportsTapAction]) return;
 	
 	[dataSource getLaunchURLForTimelineEntryDate:nil timeTravelDate:nil withHandler:^(NSURL* url) {
-		SBApplication* destinationApplication = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:dataSource.complicationApplicationIdentifier];
-		
-		if (!destinationApplication) return;
-		
-		SBLockScreenUnlockRequest* request = [%c(SBLockScreenUnlockRequest) new];
-		[request setSource:17];
-		[request setIntent:3];
-		[request setName:[NSString stringWithFormat:@"SBWorkspaceRequest: Open \"%@\"", dataSource.complicationApplicationIdentifier]];
-		[request setDestinationApplication:destinationApplication];
-		[request setWantsBiometricPresentation:YES];
-		[request setForceAlertAuthenticationUI:YES];
-		
-		FBSOpenApplicationService* appService = [%c(FBSOpenApplicationService) serviceWithDefaultShellEndpoint];
-		
-		[[%c(SBLockScreenManager) sharedInstance] unlockWithRequest:request completion:^(BOOL completed){
-			if (completed) {
-				if (url) {
-					FBSOpenApplicationOptions* openOptions = [%c(FBSOpenApplicationOptions) optionsWithDictionary:@{
-						@"__PayloadURL": url
-					}];
-					
-					[appService openApplication:[dataSource complicationApplicationIdentifier] withOptions:openOptions completion:nil];
-				} else {
-					[appService openApplication:[dataSource complicationApplicationIdentifier] withOptions:nil completion:nil];
-				}
-			}
-		}];
+		LWLaunchApplication(dataSource.complicationApplicationIdentifier, url);
 	}];
 }
 %end	/// %hook NTKLocalTimelineComplicationController
@@ -208,6 +186,14 @@
 }
 %end	/// %hook NTKRichComplicationView
 
+%hook NTKStackedImagesComplicationImageView
+- (void)layoutSubviews {
+	%orig;
+	
+	[MSHookIvar<UIImageView*>(self, "_foregroundAccentImageView") setTintColor:self.imageProvider.foregroundAccentImageColor];
+}
+%end	/// %hook NTKStackedImagesComplicationImageView
+
 %hook NTKTimelineDataOperation
 - (void)start {
 	if ([MSHookIvar<NSObject*>(self, "_localDataSource") isKindOfClass:%c(LWComplicationDataSourceBase)]) {
@@ -218,6 +204,19 @@
 }
 %end	/// %hook NTKTimelineDataOperation
 
+%hook NTKTimerTimelineEntry
+- (id)templateForComplicationFamily:(CLKComplicationFamily)arg1 {
+	if (arg1 == CLKComplicationFamilyUtilLargeNarrow) return [self _newLargeFlatUtilityTemplate];
+	return %orig;
+}
+%end	/// %hook NTKTimerTimelineEntry
+
+%hook NTKVictoryAppLauncher
++ (void)attemptLaunchWithDelegate:(id)arg1 {
+	LWLaunchApplication(@"com.nike.nikeplus-gps");
+}
+%end
+
 %hook NTKWellnessEntryModel
 - (BOOL)userHasDoneActivitySetup {
 	return YES;
@@ -225,6 +224,11 @@
 
 - (BOOL)databaseLoading {
 	return NO;
+}
+
+- (id)templateForComplicationFamily:(CLKComplicationFamily)arg1 {
+	if (arg1 == CLKComplicationFamilyUtilLargeNarrow) return [NTKWellnessEntryModel largeUtility:self];
+	return %orig;
 }
 %end	/// %hook NTKWellnessEntryModel
 
@@ -258,13 +262,12 @@
 }
 %end	/// %hook NTKWellnessTimelineModel
 
-%hook NTKBatteryUtilities
-+ (UIColor*)colorForLevel:(CGFloat)arg1 andState:(NSInteger)arg2 {
-	if (NSProcessInfo.processInfo.isLowPowerModeEnabled) return UIColor.systemYellowColor;
-	
+%hook NTKWorldClockTimelineEntryModel
+- (id)templateForComplicationFamily:(CLKComplicationFamily)arg1 {
+	if (arg1 == CLKComplicationFamilyUtilLargeNarrow) return [self _newLargeUtilityTemplate];
 	return %orig;
 }
-%end	/// %hook NTKBatteryUtilities
+%end	/// %hook NTKWorldClockTimelineEntryModel
 
 %hook STTelephonyStateProvider
 - (void)_setSignalStrengthBars:(NSUInteger)arg1 maxBars:(NSUInteger)arg2 inSubscriptionContext:(id)arg3 {
@@ -527,21 +530,15 @@ static HDActivityCacheManager* activityCacheManager;
 	return imageProvider;
 }
 %end	/// %hook WFWeatherConditions
-
-%hook CLKImageProvider
-- (id)copyWithZone:(NSZone *)zone {
-	return self;
-}
-%end	/// %hook CLKImageProvider
-
-%hook NTKStackedImagesComplicationImageView
-- (void)layoutSubviews {
-	%orig;
-	
-	[MSHookIvar<UIImageView*>(self, "_foregroundAccentImageView") setTintColor:self.imageProvider.foregroundAccentImageColor];
-}
-%end	/// %hook NTKStackedImagesComplicationImageView
 %end	// %group WeatherComplications
+
+
+
+extern "C" BOOL NTKIsSystemAppRestrictedOrRemoved(NSString* identifier);
+
+MSHook(BOOL, NTKIsSystemAppRestrictedOrRemoved, NSString* key) {
+	return NO;
+}
 
 
 
@@ -553,9 +550,12 @@ static HDActivityCacheManager* activityCacheManager;
 		if (bundleIdentifier && preferences.enabled) {
 			%init();
 			
-			if ([bundleIdentifier isEqualToString:@"com.apple.springboard"]) {
-				dlopen("/System/Library/NanoTimeKit/ComplicationBundles/WeatherComplicationsCompanion.bundle/WeatherComplicationsCompanion", RTLD_NOW);
+			if (IN_SPRINGBOARD) {
+				// Preload complication bundles so we can hook into them
+				dlopen("/System/Library/NanoTimeKit/ComplicationBundles/MessagesComplication.bundle/MessagesComplication", RTLD_NOW);
+				dlopen("/System/Library/NanoTimeKit/ComplicationBundles/NanoCompassComplications.bundle/NanoCompassComplications", RTLD_NOW);
 				dlopen("/System/Library/NanoTimeKit/ComplicationBundles/NTKCellularConnectivityCompanionComplicationBundle.bundle/NTKCellularConnectivityCompanionComplicationBundle", RTLD_NOW);
+				dlopen("/System/Library/NanoTimeKit/ComplicationBundles/WeatherComplicationsCompanion.bundle/WeatherComplicationsCompanion", RTLD_NOW);
 				
 				void* weatherLib = dlopen("/usr/lib/LockWatch2Weather.dylib", RTLD_NOW);
 				if (weatherLib) {
@@ -563,9 +563,11 @@ static HDActivityCacheManager* activityCacheManager;
 				}
 				
 				%init(SpringBoard);
+				
+				MSHookFunction(NTKIsSystemAppRestrictedOrRemoved, MSHake(NTKIsSystemAppRestrictedOrRemoved));
 			}
 			
-			if ([bundleIdentifier isEqualToString:@"com.apple.healthd"] || [bundleIdentifier isEqualToString:@"com.apple.HealthKit"]) {
+			if (IN_BUNDLE(@"com.apple.healthd")) {
 				%init(healthd);
 			}
 		}

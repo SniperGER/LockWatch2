@@ -18,7 +18,10 @@
 #pragma mark - NTKComplicationDataSource
 
 - (CLKComplicationTemplate*)currentSwitcherTemplate {
-	if (!self.currentConditions && !self.switcherTemplate) return [[NWCWindTemplateFormatter sharedFormatter] switcherTemplateWithFamily:self.family];
+	if (!self.currentConditions && !self.switcherTemplate) {
+		if (self.family == CLKComplicationFamilyUtilLargeNarrow) return [[NWCWindTemplateFormatter sharedFormatter] switcherTemplateWithFamily:CLKComplicationFamilyUtilitarianLarge];
+		return [[NWCWindTemplateFormatter sharedFormatter] switcherTemplateWithFamily:self.family];
+	}
 	
 	return [super currentSwitcherTemplate];
 }

@@ -6,7 +6,7 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#import <ClockComplications/ClockComplications.h>
+#import <ClockKit/ClockKit.h>
 #import <HealthKit/HealthKit.h>
 #import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 #import <NanoWeatherComplicationsCompanion/NWCColor.h>
@@ -14,11 +14,15 @@
 #import <WeatherFoundation/WeatherFoundation.h>
 
 #import "LWComplicationDataSourceBase.h"
-#import "NTKComplicationFamily.h"
-#import "NTKComplicationType.h"
+
 #import "Core/LWPreferences.h"
 
 @class SBApplication;
+
+@interface CompassRichRectangularDialView : UIView
+// %property
+@property (nonatomic, strong) CAGradientLayer* gradientMask;
+@end
 
 @interface FBSOpenApplicationOptions : NSObject
 + (id)optionsWithDictionary:(id)arg1;
@@ -64,6 +68,10 @@
 @property(copy, nonatomic) NSString *name;
 @end
 
-@interface UIApplication (Private)
-- (BOOL)launchApplicationWithIdentifier:(id)arg1 suspended:(BOOL)arg2;
+@interface SBUserAgent : NSObject
+- (BOOL)deviceIsPasscodeLocked;
+@end
+
+@interface SpringBoard : UIApplication
+- (SBUserAgent*)pluginUserAgent;
 @end

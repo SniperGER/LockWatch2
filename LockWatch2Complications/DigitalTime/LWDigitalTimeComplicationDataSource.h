@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LWDigitalTimeComplicationDataSource : LWComplicationDataSourceBase
 
+- (CLKComplicationTemplate*)_templateWithShouldDisplayIdealizeState:(BOOL)shouldDisplayIdealizeState;
+
 @end
 
 NS_ASSUME_NONNULL_END

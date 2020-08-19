@@ -7,7 +7,7 @@
 //
 
 #import <NanoWeatherComplicationsCompanion/NWCConditionsTemplateFormatter.h>
-#import "NTKComplicationFamily.h"
+#import "CLKComplicationFamily.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 								   templateBlock:(void (^)(CLKComplicationTemplate* template))templateBlock;
 - (void)_modularSmallTemplateForEntryDate:(NSDate*)entryDate isLoading:(BOOL)isLoading conditions:(WFWeatherConditions*)conditions templateBlock:(void (^)(CLKComplicationTemplate* template))templateBlock;
 - (void)_utilitarianSmallTemplateForEntryDate:(NSDate*)entryDate isLoading:(BOOL)isLoading conditions:(WFWeatherConditions*)conditions templateBlock:(void (^)(CLKComplicationTemplate* template))templateBlock;
-- (void)formattedTemplateForFamily:(NTKComplicationFamily)family
+- (void)formattedTemplateForFamily:(CLKComplicationFamily)family
                     	 entryDate:(NSDate*)entryDate
 						 isLoading:(BOOL)isLoading
 					withConditions:(WFWeatherConditions*)conditions

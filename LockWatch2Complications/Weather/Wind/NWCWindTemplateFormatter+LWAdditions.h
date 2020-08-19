@@ -7,7 +7,7 @@
 //
 
 #import <NanoWeatherComplicationsCompanion/NWCWindTemplateFormatter.h>
-#import "NTKComplicationFamily.h"
+#import "CLKComplicationFamily.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 								   templateBlock:(void (^)(CLKComplicationTemplate* template))templateBlock;
 - (CLKComplicationTemplate*)_modularLargeTemplateForLocation:(WFLocation*)location isLocalLocation:(BOOL)isLocalLocation conditions:(WFWeatherConditions*)conditions isLoading:(BOOL)isLoading;
 - (CLKComplicationTemplate*)_utilitarianLargeTemplateForConditions:(WFWeatherConditions*)conditions isLoading:(BOOL)isLoading;
-- (void)formattedTemplateForFamily:(NTKComplicationFamily)family
+- (void)formattedTemplateForFamily:(CLKComplicationFamily)family
                     	 entryDate:(NSDate*)entryDate
 						 isLoading:(BOOL)isLoading
 					withConditions:(WFWeatherConditions*)conditions

@@ -12,13 +12,16 @@
 @implementation LWUltravioletIndexDataSource
 
 + (id)bundleIdentifier {
-	return @"com.apple.weather.airquality";
+	return @"com.apple.weather.uvi";
 }
 
 #pragma mark - NTKComplicationDataSource
 
 - (CLKComplicationTemplate*)currentSwitcherTemplate {
-	if (!self.currentConditions && !self.switcherTemplate) return [[NWCUltravioletIndexTemplateFormatter sharedFormatter] switcherTemplateWithFamily:self.family];
+	if (!self.currentConditions && !self.switcherTemplate) {
+		if (self.family == CLKComplicationFamilyUtilLargeNarrow) return [[NWCUltravioletIndexTemplateFormatter sharedFormatter] switcherTemplateWithFamily:CLKComplicationFamilyUtilitarianLarge];
+		return [[NWCUltravioletIndexTemplateFormatter sharedFormatter] switcherTemplateWithFamily:self.family];
+	}
 	
 	return [super currentSwitcherTemplate];
 }

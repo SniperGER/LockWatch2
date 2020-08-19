@@ -14,12 +14,6 @@
 
 @implementation LWDateComplicationDataSource
 
-+ (BOOL)acceptsComplicationFamily:(long long)family forDevice:(CLKDevice*)device {
-	if (family == NTKComplicationFamilyDate) return NO;
-	
-	return [super acceptsComplicationFamily:family forDevice:device];
-}
-
 - (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device {
 	if (self = [super initWithComplication:complication family:family forDevice:device]) {
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_invalidate) name:UIApplicationSignificantTimeChangeNotification object:nil];
@@ -67,11 +61,11 @@
 
 - (Class)richComplicationDisplayViewClassForDevice:(CLKDevice*)device {
 	switch (self.family) {
-		case NTKComplicationFamilyGraphicCorner:
+		case CLKComplicationFamilyGraphicCorner:
 			return objc_getClass("NTKDateRichComplicationCornerView");
-		case NTKComplicationFamilyGraphicBezel:
+		case CLKComplicationFamilyGraphicBezel:
 			return objc_getClass("NTKDateRichComplicationBezelCircularView");
-		case NTKComplicationFamilyGraphicCircular:
+		case CLKComplicationFamilyGraphicCircular:
 			return objc_getClass("NTKDateRichComplicationCircularView");
 		default: break;
 	}

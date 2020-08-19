@@ -2,13 +2,9 @@
 // LWWellnessComplicationDataSource.m
 // LockWatch
 //
-// Created by janikschmidt on 4/1/2020
+// Created by janikschmidt on 8/12/2020
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
-
-#import <objc/runtime.h>
-#import <HealthKit/HealthKit.h>
-#import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 
 #import "LWWellnessComplicationDataSource.h"
 
@@ -28,21 +24,23 @@
 
 #pragma mark - Instance Methods
 
-- (CLKComplicationTimelineEntry*)_timelineEntryFromModel:(NTKWellnessEntryModel*)model family:(NTKComplicationFamily)family {
-	return [model entryForComplicationFamily:family];
+- (CLKComplicationTimelineEntry*)_timelineEntryFromModel:(NTKWellnessEntryModel*)entryModel family:(CLKComplicationFamily)family {
+	return [entryModel entryForComplicationFamily:family];
 }
 
 #pragma mark - NTKComplicationDataSource
 
-- (CLKComplicationTemplate*)currentSwitcherTemplate {
-	NTKWellnessEntryModel* entryModel = [[NTKWellnessTimelineModel sharedModel] switcherWelnessEntry];
-	CLKComplicationTimelineEntry* timelineEntry = [self _timelineEntryFromModel:entryModel family:self.family];
-	
-	return [timelineEntry complicationTemplate];
-}
-
 - (id)complicationApplicationIdentifier {
 	return @"com.apple.Fitness";
+}
+
+- (CLKComplicationTemplate*)currentSwitcherTemplate {
+	NTKWellnessEntryModel* entryModel = [[NTKWellnessTimelineModel sharedModel] switcherWelnessEntry];
+	
+	if (self.family == CLKComplicationFamilyUtilLargeNarrow) return [NTKWellnessEntryModel largeUtility:entryModel];
+	
+	CLKComplicationTimelineEntry* timelineEntry = [self _timelineEntryFromModel:entryModel family:self.family];
+	return [timelineEntry complicationTemplate];
 }
 
 - (void)getCurrentTimelineEntryWithHandler:(void (^)(CLKComplicationTimelineEntry* timelineEntry))handler {
@@ -65,14 +63,14 @@
 
 - (Class)richComplicationDisplayViewClassForDevice:(CLKDevice*)device {
 	switch (self.family) {
-		case NTKComplicationFamilyGraphicCorner:
-			return objc_getClass("NTKWellnessRichComplicationCornerView");
-		case NTKComplicationFamilyGraphicBezel:
-			return objc_getClass("NTKWellnessRichComplicationBezelCircularView");
-		case NTKComplicationFamilyGraphicCircular:
-			return objc_getClass("NTKWellnessRichComplicationCircularView");
-		case NTKComplicationFamilyGraphicRectangular:
-			return objc_getClass("NTKWellnessRichComplicationRectangularView");
+		case CLKComplicationFamilyGraphicCorner:
+			return NSClassFromString(@"NTKWellnessRichComplicationCornerView");
+		case CLKComplicationFamilyGraphicBezel:
+			return NSClassFromString(@"NTKWellnessRichComplicationBezelCircularView");
+		case CLKComplicationFamilyGraphicCircular:
+			return NSClassFromString(@"NTKWellnessRichComplicationCircularView");
+		case CLKComplicationFamilyGraphicRectangular:
+			return NSClassFromString(@"NTKWellnessRichComplicationRectangularView");
 		default: break;
 	}
 	

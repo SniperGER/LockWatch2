@@ -113,7 +113,7 @@ extern NSArray* NWCPlaceholderHourlyConditionsStartingAtDate(NSDate* date, int c
 	}
 }
 
-- (void)formattedTemplateForFamily:(NTKComplicationFamily)family
+- (void)formattedTemplateForFamily:(CLKComplicationFamily)family
                     	 entryDate:(NSDate*)entryDate
 						 isLoading:(BOOL)isLoading
 					withConditions:(WFWeatherConditions*)conditions
@@ -123,32 +123,32 @@ extern NSArray* NWCPlaceholderHourlyConditionsStartingAtDate(NSDate* date, int c
 				   isLocalLocation:(BOOL)isLocalLocation
 					 templateBlock:(void (^)(CLKComplicationTemplate* template))templateBlock {
 	switch (family) {
-		case NTKComplicationFamilyModularSmall:
+		case CLKComplicationFamilyModularSmall:
 			[self _modularSmallTemplateForEntryDate:entryDate isLoading:isLoading conditions:conditions templateBlock:templateBlock];
 			break;
-		case NTKComplicationFamilyUtilitarianSmall:
-		case NTKComplicationFamilyUtilitarianSmallFlat:
+		case CLKComplicationFamilyUtilitarianSmall:
+		case CLKComplicationFamilyUtilitarianSmallFlat:
 			[self _utilitarianSmallTemplateForEntryDate:entryDate isLoading:isLoading conditions:conditions templateBlock:templateBlock];
 			break;
-		case NTKComplicationFamilyCircularSmall:
+		case CLKComplicationFamilyCircularSmall:
 			[self _circularSmallTemplateForEntryDate:entryDate isLoading:isLoading conditions:conditions templateBlock:templateBlock];
 			break;
-		case NTKComplicationFamilyExtraLarge:
+		case CLKComplicationFamilyExtraLarge:
 			[self _extraLargeTemplateForEntryDate:entryDate isLoading:isLoading conditions:conditions templateBlock:templateBlock];
 			break;
-		case NTKComplicationFamilyGraphicCorner:
+		case CLKComplicationFamilyGraphicCorner:
 			[self _graphicCornerTemplateForEntryDate:entryDate isLoading:isLoading conditions:conditions templateBlock:templateBlock];
 			break;
-		case NTKComplicationFamilyGraphicBezel:
+		case CLKComplicationFamilyGraphicBezel:
 			[self _graphicBezelTemplateForEntryDate:entryDate isLoading:isLoading conditions:conditions dailyForecastedConditions:dayForecasts[0] templateBlock:templateBlock];
 			break;
-		case NTKComplicationFamilyGraphicCircular:
+		case CLKComplicationFamilyGraphicCircular:
 			[self _graphicCircularTemplateForEntryDate:entryDate isLoading:isLoading conditions:conditions templateBlock:templateBlock];
 			break;
-		case NTKComplicationFamilyGraphicRectangular:
+		case CLKComplicationFamilyGraphicRectangular:
 			[self _graphicRectangularTemplateForEntryDate:entryDate isLocalLocation:isLocalLocation conditions:conditions dailyForecastedConditions:dayForecasts[0] hourlyForecastedConditions:hourlyForecasts timeZone:location.timeZone isLoading:isLoading templateBlock:templateBlock];
 			break;
-		case NTKComplicationFamilyCircularMedium:
+		case CLKComplicationFamilyCircularMedium:
 			[self _circularMediumTemplateForEntryDate:entryDate isLoading:isLoading conditions:conditions templateBlock:templateBlock];
 			break;
 		default: break;

@@ -29,6 +29,8 @@
 - (STTelephonySubscriptionInfo*)_secondarySubscriptionInfo;
 @end
 
+
+
 @implementation LWCellularConnectivityComplicationDataSource
 
 - (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device {
@@ -113,6 +115,10 @@
 	[self _signalStrengthDidChange];
 }
 
+- (id)complicationApplicationIdentifier {
+	return @"com.apple.Preferences";
+}
+
 - (CLKComplicationTemplate*)currentSwitcherTemplate {
 	if (_timelineEntry) {
 		return [_timelineEntry complicationTemplate];
@@ -127,6 +133,10 @@
 	} else {
 		handler([self _defaultTimelineEntry]);
 	}
+}
+
+- (void)getLaunchURLForTimelineEntryDate:(NSDate*)entryDate timeTravelDate:(NSDate*)timeTravelDate withHandler:(void (^)(NSURL* url))handler {
+	handler([NSURL URLWithString:@"prefs:root=MOBILE_DATA_SETTINGS_ID"]);
 }
 
 - (void)resume {

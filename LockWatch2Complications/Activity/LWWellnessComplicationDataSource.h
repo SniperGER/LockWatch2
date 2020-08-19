@@ -2,7 +2,7 @@
 // LWWellnessComplicationDataSource.h
 // LockWatch
 //
-// Created by janikschmidt on 4/1/2020
+// Created by janikschmidt on 8/12/2020
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
@@ -12,13 +12,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class NTKWellnessEntryModel;
-
 @interface LWWellnessComplicationDataSource : LWComplicationDataSourceBase <NTKWellnessTimelineModelSubscriber>
 
 - (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device;
 - (void)dealloc;
-- (CLKComplicationTimelineEntry*)_timelineEntryFromModel:(NTKWellnessEntryModel*)model family:(NTKComplicationFamily)family;
+- (CLKComplicationTimelineEntry*)_timelineEntryFromModel:(NTKWellnessEntryModel*)entryModel family:(CLKComplicationFamily)family;
 
 @end
 

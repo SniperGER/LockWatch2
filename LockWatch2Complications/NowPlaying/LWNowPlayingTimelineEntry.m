@@ -10,8 +10,8 @@
 #import <MediaPlayerUI/MediaPlayerUI.h>
 #import <NanoTimeKitCompanion/NTKOverrideTextProvider.h>
 
+#import "CLKComplicationFamily.h"
 #import "LWNowPlayingTimelineEntry.h"
-#import "NTKComplicationFamily.h"
 #import "NowPlayingIndicator/LWNowPlayingIndicatorFullColorProvider.h"
 #import "NowPlayingIndicator/LWNowPlayingIndicatorProvider.h"
 
@@ -93,16 +93,18 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 
 - (CLKComplicationTemplate*)musicTemplateForComplicationFamily:(NSInteger)family {
 	switch (family) {
-		case NTKComplicationFamilyModularSmall: return [self _music_smallModular];
-		case NTKComplicationFamilyModularLarge: return [self _music_largeModular];
-		case NTKComplicationFamilyUtilitarianSmall: return [self _music_smallUtility];
-		case NTKComplicationFamilyUtilitarianLarge: return [self _music_largeUtility];
-		case NTKComplicationFamilyExtraLarge: return [self _music_extraLarge];
-		case NTKComplicationFamilyGraphicCorner: return [self _music_signatureCorner];
-		case NTKComplicationFamilyGraphicBezel: return [self _music_signatureBezel];
-		case NTKComplicationFamilyGraphicCircular: return [self _music_signatureCircular];
-		case NTKComplicationFamilyGraphicRectangular: return [self _music_signatureRectangular];
-		case NTKComplicationFamilyCircularMedium: return [self _music_mediumCircular];
+		case CLKComplicationFamilyModularSmall: return [self _music_smallModular];
+		case CLKComplicationFamilyModularLarge: return [self _music_largeModular];
+		case CLKComplicationFamilyUtilitarianSmall: return [self _music_smallUtility];
+		case CLKComplicationFamilyUtilitarianLarge:
+		case CLKComplicationFamilyUtilLargeNarrow:
+			return [self _music_largeUtility];
+		case CLKComplicationFamilyExtraLarge: return [self _music_extraLarge];
+		case CLKComplicationFamilyGraphicCorner: return [self _music_signatureCorner];
+		case CLKComplicationFamilyGraphicBezel: return [self _music_signatureBezel];
+		case CLKComplicationFamilyGraphicCircular: return [self _music_signatureCircular];
+		case CLKComplicationFamilyGraphicRectangular: return [self _music_signatureRectangular];
+		case CLKComplicationFamilyCircularMedium: return [self _music_mediumCircular];
 	}
 	
 	return nil;
@@ -118,9 +120,11 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 
 - (CLKComplicationTemplate*)nowPlayingTemplateForComplicationFamily:(NSInteger)family {
 	switch (family) {
-		case NTKComplicationFamilyModularLarge: return [self _nowPlaying_largeModular];
-		case NTKComplicationFamilyUtilitarianLarge: return [self _nowPlaying_largeUtility];
-		case NTKComplicationFamilyGraphicRectangular: return [self _nowPlaying_signatureRectangular];
+		case CLKComplicationFamilyModularLarge: return [self _nowPlaying_largeModular];
+		case CLKComplicationFamilyUtilitarianLarge:
+		case CLKComplicationFamilyUtilLargeNarrow:
+			return [self _nowPlaying_largeUtility];
+		case CLKComplicationFamilyGraphicRectangular: return [self _nowPlaying_signatureRectangular];
 	}
 	
 	return nil;
@@ -136,7 +140,7 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 
 - (CLKComplicationTemplate*)podcastTemplateForComplicationFamily:(NSInteger)family {
 	switch (family) {
-		case NTKComplicationFamilyModularLarge: return [self _podcast_largeModular];
+		case CLKComplicationFamilyModularLarge: return [self _podcast_largeModular];
 	}
 	
 	return nil;
@@ -148,7 +152,7 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 
 - (CLKComplicationTemplate*)radioTemplateForComplicationFamily:(NSInteger)family {
 	switch (family) {
-		case NTKComplicationFamilyModularLarge: return [self _radio_largeModular];
+		case CLKComplicationFamilyModularLarge: return [self _radio_largeModular];
 	}
 	
 	return nil;
@@ -626,7 +630,7 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 
 #pragma mark - Podcasts
 
-- (CLKComplicationTemplateModularLargeStandardBody*)_podcast_largeModular {
+- (CLKComplicationTemplate*)_podcast_largeModular {
 	CLKComplicationTemplateModularLargeStandardBody* template = [CLKComplicationTemplateModularLargeStandardBody new];
 	
 	CLKSimpleTextProvider* headerTextProvider;
@@ -644,7 +648,7 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 		headerTextProvider = [CLKSimpleTextProvider textProviderWithText:_artist];
 		body1TextProvider = [CLKSimpleTextProvider textProviderWithText:_title];
 		
-		// LWNowPlayingIndicatorImageProvider* imageProvider = [self _nowPlayingProviderForFamily:1 tintColor:PODCAST_TINT_COLOR];
+		// LWNowPlayingIndicatorProvider* imageProvider = [LWNowPlayingIndicatorProvider nowPlayingIndicatorProviderWithTintColor:PODCAST_TINT_COLOR state:_state];
 		
 		// if (imageProvider) {
 		// 	[template setHeaderImageProvider:imageProvider];
@@ -658,7 +662,7 @@ extern UIImage* NTKImageNamed(NSString* imageName);
 		[template setBody2TextProvider:body2TextProvider];
 	}
 	
-	[template setTintColor:PODCAST_TINT_COLOR];
+	[template setTintColor:[self podcastTintColor]];
 	
 	return template;
 }

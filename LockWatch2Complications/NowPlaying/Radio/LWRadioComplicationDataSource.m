@@ -124,7 +124,7 @@ extern NSString* CLKStringForComplicationFamily(long long family);
 	if ([self _nowPlayingState] != LWNowPlayingStateNotPlaying) {
 		handler([NSURL URLWithString:@"music://show-now-playing"]);
 	} else {
-		handler(nil);
+		handler([NSURL URLWithString:@"itunesradio://"]);
 	}
 }
 

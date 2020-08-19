@@ -49,7 +49,7 @@ extern NSString* NWCLocalizedString(NSString* key, NSString* comment);
 	return template;
 }
 
-- (void)formattedTemplateForFamily:(NTKComplicationFamily)family
+- (void)formattedTemplateForFamily:(CLKComplicationFamily)family
                     	 entryDate:(NSDate*)entryDate
 						 isLoading:(BOOL)isLoading
 		  withAirQualityConditions:(WFAirQualityConditions*)airQualityConditions
@@ -59,35 +59,36 @@ extern NSString* NWCLocalizedString(NSString* key, NSString* comment);
 	CLKComplicationTemplate* template;
 	
 	switch (family) {
-		case NTKComplicationFamilyModularSmall:
+		case CLKComplicationFamilyModularSmall:
 			template = [self modularSmallTemplateForLocation:location conditions:airQualityConditions];
 			break;
-		case NTKComplicationFamilyModularLarge:
+		case CLKComplicationFamilyModularLarge:
 			template = [self _modularLargeTemplateForLocation:location isLocalLocation:isLocalLocation conditions:airQualityConditions isLoading:isLoading];
 			break;
-		case NTKComplicationFamilyUtilitarianSmall:
-		case NTKComplicationFamilyUtilitarianSmallFlat:
+		case CLKComplicationFamilyUtilitarianSmall:
+		case CLKComplicationFamilyUtilitarianSmallFlat:
 			template = [self utilitarianSmallTemplateForConditions:airQualityConditions];
 			break;
-		case NTKComplicationFamilyUtilitarianLarge:
+		case CLKComplicationFamilyUtilitarianLarge:
+		case CLKComplicationFamilyUtilLargeNarrow:
 			template = [self _utilitarianLargeTemplateForLocation:location isLocalLocation:isLocalLocation conditions:airQualityConditions isLoading:isLoading];
 			break;
-		case NTKComplicationFamilyCircularSmall:
+		case CLKComplicationFamilyCircularSmall:
 			template = [self circularSmallTemplateForConditions:airQualityConditions];
 			break;
-		case NTKComplicationFamilyExtraLarge:
+		case CLKComplicationFamilyExtraLarge:
 			template = [self extraLargeTemplateForConditions:airQualityConditions];
 			break;
-		case NTKComplicationFamilyGraphicCorner:
+		case CLKComplicationFamilyGraphicCorner:
 			template = [self graphicCornerTemplateForConditions:airQualityConditions location:location];
 			break;
-		case NTKComplicationFamilyGraphicBezel:
+		case CLKComplicationFamilyGraphicBezel:
 			template = [self graphicBezelTemplateForConditions:airQualityConditions location:location];
 			break;
-		case NTKComplicationFamilyGraphicCircular:
+		case CLKComplicationFamilyGraphicCircular:
 			template = [self graphicCircularTemplateForConditions:airQualityConditions location:location];
 			break;
-		case NTKComplicationFamilyCircularMedium:
+		case CLKComplicationFamilyCircularMedium:
 			template = [self circularMediumTemplateForConditions:airQualityConditions];
 			break;
 		default: break;

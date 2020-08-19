@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class LWNowPlayingIndicatorProvider, MPUNowPlayingIndicatorView;
+@class LWNowPlayingIndicatorFullColorProvider, LWNowPlayingIndicatorProvider, MPUNowPlayingIndicatorView;
 
 @interface LWNowPlayingIndicatorView : UIView {
 	MPUNowPlayingIndicatorView* _indicatorView;
@@ -20,6 +20,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) UIColor* overrideColor;
 @property (nonatomic) LWNowPlayingIndicatorProvider* imageProvider;
 @property (nonatomic) BOOL usesLegibility;
+
+- (instancetype)initFullColorImageViewWithDevice:(CLKDevice*)device;
+- (instancetype)initWithFrame:(CGRect)frame;
+- (void)layoutSubviews;
+- (MPUNowPlayingIndicatorView*)_createIndicatorView;
+- (void)configureWithImageProvider:(LWNowPlayingIndicatorFullColorProvider*)imageProvider reason:(int)reason;
+- (UIColor*)overrideColor;
+- (void)pauseLiveFullColorImageView;
+- (void)resumeLiveFullColorImageView;
 
 @end
 
