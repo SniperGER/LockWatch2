@@ -179,6 +179,8 @@
 
 - (id)initWithFace:(id)arg1 configuration:(id /* block */)arg2 {
 	id r = %orig;
+	
+	if ([self isKindOfClass:%c(NTKCompanionFaceViewController)]) return r;
 
 	switch ([[LWPreferences sharedInstance] backgroundType]) {
 		case 0: break;
@@ -197,23 +199,19 @@
 	return r;
 }
 
-- (void)viewDidLoad {
-	%orig;
-	
-	[self.faceView setClipsToBounds:YES];
-	[self.faceView.layer setCornerRadius:self.face.device.screenCornerRadius];
-
-	if (@available(iOS 13, *)) {
-		[self.faceView.layer setCornerCurve:kCACornerCurveContinuous];
-	}
-}
-
 - (void)viewDidLayoutSubviews {
 	%orig;
 	
-	if (![self.faceView.subviews containsObject:self.backgroundView]) {
+	[self.view setClipsToBounds:YES];
+	[self.view.layer setCornerRadius:[[CLKDevice currentDevice] screenCornerRadius]];
+
+	if (@available(iOS 13, *)) {
+		[self.view.layer setCornerCurve:kCACornerCurveContinuous];
+	}
+	
+	if (![self.view.subviews containsObject:self.backgroundView]) {
 		[self.backgroundView removeFromSuperview];
-		[self.faceView insertSubview:self.backgroundView atIndex:0];
+		[self.view insertSubview:self.backgroundView atIndex:0];
 	}
 	
 	if (!CGRectEqualToRect(self.view.bounds, self.backgroundView.bounds)) {

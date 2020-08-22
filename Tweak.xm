@@ -465,12 +465,12 @@ static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* obs
 				
 				void* customizationBundle = dlopen("/System/Library/NanoPreferenceBundles/Customization/NTKCustomization.bundle/NTKCustomization", RTLD_LAZY);
 				if (!customizationBundle) {
-					NSLog(@"Could not load customization bundle. Watch face management will be partly unavailable.");
+					NSLog(@"Could not load customization bundle. Watch face management will be partly unavailable. (%s)", dlerror());
 				}
 				
 				void* complicationsLib = dlopen("/Library/MobileSubstrate/DynamicLibraries/LockWatch2Complications.dylib", RTLD_LAZY);
 				if (!complicationsLib) {
-					NSLog(@"Disabling complications.");
+					NSLog(@"Disabling complications. Error: %s", dlerror());
 				}
 				
 				CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, LWPreferencesChanged, CFSTR("ml.festival.lockwatch2/PreferencesChanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);

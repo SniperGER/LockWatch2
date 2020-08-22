@@ -140,7 +140,7 @@ extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 				}
 			}
 		}];
-		[self setSelectedFaceIndex:selectedFaceIndex suppressingCallbackToObserver:nil];
+		[self setSelectedFaceIndex:MIN(MAX(selectedFaceIndex, 0), self.numberOfFaces - 1) suppressingCallbackToObserver:nil];
 	}
 	
 	return self;
@@ -159,7 +159,7 @@ extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 		}];
 		
 		NSInteger selectedFaceIndex = [jsonObjectRepresentation[@"selectedFaceIndex"] integerValue];
-		[self setSelectedFaceIndex:selectedFaceIndex suppressingCallbackToObserver:nil];
+		[self setSelectedFaceIndex:MIN(MAX(selectedFaceIndex, 0), self.numberOfFaces - 1) suppressingCallbackToObserver:nil];
 	}
 	
 	return self;

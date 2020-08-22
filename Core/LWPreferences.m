@@ -167,7 +167,7 @@
 
 
 - (BOOL)synchronize {
-	return [_defaults writeToFile:PREFERENCES_PATH atomically:NO];
+	return [_defaults writeToFile:PREFERENCES_PATH atomically:YES];
 }
 
 @end

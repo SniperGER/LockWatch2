@@ -121,7 +121,7 @@
 	NSUInteger index = [_addableFaceCollection indexOfFace:face];
 	NTKCompanionFaceViewController* faceViewController = [_faceViewControllers objectForKey:@(index)];
 	
-	[face applyDefaultComplicationConfiguration];
+	[face applyDefaultConfiguration];
 	
 	if (!faceViewController) {
 		faceViewController = [[NTKCompanionFaceViewController alloc] initWithFace:face];
