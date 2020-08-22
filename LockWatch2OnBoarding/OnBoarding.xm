@@ -166,21 +166,21 @@ void showLWUpgradeNotification() {
 %new
 - (void)showLWOnBoardingNotificationIfNecessary {
 	if (!preferences.onBoardingCompleted && !didShowOnBoardingNotification) {
-		showLWOnBoardingNotification();
-		
 		didShowOnBoardingNotification = YES;
+		
+		showLWOnBoardingNotification();
 	}
 }
 
 %new
 - (void)showLWUpgradeNotificationIfNecessary {
 	if (preferences.onBoardingCompleted && (!preferences.upgradeLastVersion || ![preferences.upgradeLastVersion isEqualToString:[NSString stringWithUTF8String:__VERSION]]) && !didShowUpgradeNotification) {
-		showLWUpgradeNotification();
-		
 		didShowUpgradeNotification = YES;
 		
 		[preferences setUpgradeLastVersion:[NSString stringWithUTF8String:__VERSION]];
 		[preferences synchronize];
+		
+		showLWUpgradeNotification();
 	}
 }
 %end	/// %hook SpringBoard

@@ -29,7 +29,7 @@ extern NSBundle* NTKLocationBundle();
 
 
 + (CLLocation*)_locationFromDefaults {
-	NSData* locationData = (__bridge NSData*)CFPreferencesCopyAppValue(CFSTR("LWComplicationLocationManagerLastLocationKey"), CFSTR("ml.festival.lockwatch2"));
+	NSData* locationData = (__bridge NSData*)CFPreferencesCopyAppValue(CFSTR("LWComplicationLocationManagerLastLocationKey"), CFSTR("ml.festival.lockwatch2.location"));
 
 	if (locationData) {
 		CLLocation* location = [NSKeyedUnarchiver unarchivedObjectOfClass:NSClassFromString(@"CLLocation") fromData:locationData error:nil];
@@ -44,10 +44,10 @@ extern NSBundle* NTKLocationBundle();
 	if (location) {
 		NSData* locationData = [NSKeyedArchiver archivedDataWithRootObject:location requiringSecureCoding:YES error:nil];
 		if (locationData) {
-			CFPreferencesSetAppValue(CFSTR("LWComplicationLocationManagerLastLocationKey"), (__bridge CFDataRef)locationData, CFSTR("ml.festival.lockwatch2"));
+			CFPreferencesSetAppValue(CFSTR("LWComplicationLocationManagerLastLocationKey"), (__bridge CFDataRef)locationData, CFSTR("ml.festival.lockwatch2.location"));
 		}
 	} else {
-		CFPreferencesSetAppValue(CFSTR("LWComplicationLocationManagerLastLocationKey"), NULL, CFSTR("ml.festival.lockwatch2"));
+		CFPreferencesSetAppValue(CFSTR("LWComplicationLocationManagerLastLocationKey"), NULL, CFSTR("ml.festival.lockwatch2.location"));
 	}
 }
 

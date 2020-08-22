@@ -118,9 +118,9 @@
 	}
 	_onBoardingCompleted = [[_defaults objectForKey:@"onBoardingCompleted"] boolValue];
 	
-	// if (![_defaults.allKeys containsObject:@"upgradeLastVersion"]) {
-	// 	[_defaults setObject:[NSString stringWithUTF8String:__VERSION] forKey:@"upgradeLastVersion"];
-	// }
+	if (![_defaults.allKeys containsObject:@"upgradeLastVersion"]) {
+		[_defaults setObject:@"" forKey:@"upgradeLastVersion"];
+	}
 	_upgradeLastVersion = [_defaults objectForKey:@"upgradeLastVersion"];
 }
 
@@ -167,7 +167,7 @@
 
 
 - (BOOL)synchronize {
-	return [_defaults writeToFile:PREFERENCES_PATH atomically:YES];
+	return [_defaults writeToURL:[NSURL fileURLWithPath:PREFERENCES_PATH] error:nil];
 }
 
 @end

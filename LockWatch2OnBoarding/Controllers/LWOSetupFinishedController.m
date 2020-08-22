@@ -21,6 +21,7 @@ extern NSString* LWOLocalizedString(NSString* key, NSString* value);
 
 - (void)setupWillDismissWithCompletionState:(BOOL)completed {
 	[[NSClassFromString(@"LWPreferences") sharedInstance] setOnBoardingCompleted:YES];
+	[[NSClassFromString(@"LWPreferences") sharedInstance] setUpgradeLastVersion:[NSString stringWithUTF8String:__VERSION]];
 	[[NSClassFromString(@"LWPreferences") sharedInstance] synchronize];
 }
 
