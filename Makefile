@@ -14,7 +14,7 @@ TWEAK_NAME = LockWatch2
 
 LockWatch2_FILES = $(wildcard *.xm) $(wildcard *.m) $(wildcard Core/*.m) $(wildcard LockScreen/*.m)
 LockWatch2_CFLAGS = -fobjc-arc -I$(THEOS_PROJECT_DIR) -I$(THEOS_PROJECT_DIR)/Headers -include Prefix.pch
-LockWatch2_PRIVATE_FRAMEWORKS = ClockComplications ClockKit MaterialKit MobileTimer NanoRegistry NanoTimeKitCompanion Preferences ProtocolBuffer SpringBoardUIServices
+LockWatch2_PRIVATE_FRAMEWORKS = ClockKit MaterialKit MobileTimer NanoRegistry NanoTimeKitCompanion Preferences ProtocolBuffer SpringBoardUIServices
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
