@@ -260,6 +260,16 @@ static BOOL scrollEnabled = YES;
 }
 %end	/// %hook NTKCFaceDetailEditOptionCell
 
+%hook NTKCFaceDetailDescriptionSectionController
++ (BOOL)hasDescriptionSectionForFace:(NTKFace*)arg1 inGallery:(BOOL)arg2 orExternal:(BOOL)arg3 {
+	return %orig(arg1, YES, arg3);
+}
+
+- (id)initWithTableViewController:(id)arg1 face:(NTKFace*)arg2 inGallery:(BOOL)arg3 external:(BOOL)arg4 {
+	return %orig(arg1, arg2, YES, arg4);
+}
+%end	/// %hook NTKCFaceDetailDescriptionSectionController
+
 %hook NTKCCLibraryListViewController
 - (void)viewWillAppear:(BOOL)arg1 {
 	scrollEnabled = YES;
