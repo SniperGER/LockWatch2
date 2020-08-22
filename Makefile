@@ -26,4 +26,4 @@ include $(THEOS_MAKE_PATH)/aggregate.mk
 endif
 
 before-stage::
-	find . -name ".DS_Store" -delete
+	@find . -name ".DS_Store" -delete
