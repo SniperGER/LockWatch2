@@ -413,7 +413,7 @@ static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* obs
 	} else if (currentDevice) {
 		NSDictionary* watchData = [currentDevice JSONObjectRepresentation];
 		
-		if (currentDevice.physicalDevice) {
+		if ([currentDevice respondsToSelector:@selector(physicalDevice)] && currentDevice.physicalDevice) {
 			watchData = [currentDevice.physicalDevice JSONObjectRepresentation];
 		}
 		
