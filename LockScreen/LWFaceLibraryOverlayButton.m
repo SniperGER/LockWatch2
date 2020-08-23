@@ -11,14 +11,6 @@
 #import "LWClockViewController.h"
 #import "LWFaceLibraryOverlayButton.h"
 
-@interface _UILegibilitySettings : NSObject
-- (UIColor*)primaryColor;
-@end
-
-
-
-extern BOOL UIColorIsLightColor(UIColor* color);
-
 @implementation LWFaceLibraryOverlayButton
 
 - (id)initWithFrame:(CGRect)frame {

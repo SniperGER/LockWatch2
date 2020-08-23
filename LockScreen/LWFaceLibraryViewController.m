@@ -28,8 +28,7 @@
 
 extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 
-@interface NSDistributedNotificationCenter : NSNotificationCenter
-@end
+
 
 @implementation LWFaceLibraryViewController
 
@@ -303,6 +302,8 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 			[self.delegate faceLibraryViewControllerDidCompleteSelection:self];
 			[self _setPresented:NO];
 		}];
+		
+		// [[[[NSClassFromString(@"SBLockScreenManager") sharedInstance] lockScreenEnvironment] idleTimerProvider] resetIdleTimerIfTopMost];
 	}
 }
 

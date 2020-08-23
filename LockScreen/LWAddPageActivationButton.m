@@ -9,14 +9,6 @@
 #import "LWClockViewController.h"
 #import "LWAddPageActivationButton.h"
 
-@interface _UILegibilitySettings : NSObject
-- (UIColor*)primaryColor;
-@end
-
-
-
-extern BOOL UIColorIsLightColor(UIColor* color);
-
 @implementation LWAddPageActivationButton
 
 - (id)initWithFrame:(CGRect)frame {

@@ -10,9 +10,6 @@
 
 #import "LWCellularConnectivityComplicationDataSource.h"
 
-@interface NSDistributedNotificationCenter : NSNotificationCenter
-@end
-
 @interface NTKCellularConnectivityTimelineEntryModel : NTKTimelineEntryModel
 - (void)setCellularConnectivityState:(NSInteger)arg1;
 @end

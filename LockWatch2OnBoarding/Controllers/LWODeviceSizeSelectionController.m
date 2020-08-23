@@ -10,9 +10,6 @@
 
 #import "Core/LWPreferences.h"
 
-@interface NSDistributedNotificationCenter : NSNotificationCenter
-@end
-
 @implementation LWODeviceSizeSelectionController
 
 #pragma mark - FSVLOBBaseSetupControllerInterface

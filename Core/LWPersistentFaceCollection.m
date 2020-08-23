@@ -14,8 +14,7 @@
 
 extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 
-@interface NSDistributedNotificationCenter : NSNotificationCenter
-@end
+
 
 @implementation NTKFaceCollection (JSON)
 - (NSDictionary*)JSONObjectRepresentation {

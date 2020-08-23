@@ -11,7 +11,7 @@ LockWatch2Preferences_FILES = $(wildcard *.m) $(wildcard *.mm)
 LockWatch2Preferences_INSTALL_PATH = /Library/PreferenceBundles
 LockWatch2Preferences_FRAMEWORKS = UIKit WebKit
 LockWatch2Preferences_PRIVATE_FRAMEWORKS = Preferences SpringBoardServices
-LockWatch2Preferences_CFLAGS = -fobjc-arc
+LockWatch2Preferences_CFLAGS = -fobjc-arc -include ../Prefix.pch
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 

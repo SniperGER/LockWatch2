@@ -37,19 +37,6 @@
 @property (nonatomic, strong) UIView* backgroundView;
 @end
 
-@interface NSDistributedNotificationCenter : NSNotificationCenter
-@end
-
-@interface SBUserAgent : NSObject
-- (BOOL)deviceIsPasscodeLocked;
-@end
-
-@interface SpringBoard : UIApplication
-- (SBUserAgent*)pluginUserAgent;
-@end
-
-
-
 BOOL UIColorIsLightColor(UIColor* color) {
 	CGFloat red, green, blue, alpha;
 	[color getRed:&red green:&green blue:&blue alpha:&alpha];
@@ -58,6 +45,8 @@ BOOL UIColorIsLightColor(UIColor* color) {
 	
 	return brightness >= 0.5;
 }
+
+
 
 @implementation LWClockViewController
 

@@ -2,9 +2,6 @@
 #include "LWWhatsNewController.h"
 #include <spawn.h>
 
-@interface NSDistributedNotificationCenter : NSNotificationCenter
-@end
-
 @implementation LWRootListController
 
 - (void)viewDidLoad {

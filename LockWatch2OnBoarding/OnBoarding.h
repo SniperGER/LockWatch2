@@ -17,7 +17,7 @@
  * Headers
  */
 
-@interface SpringBoard : UIApplication
+@interface SpringBoard ()
 // %new
 - (void)showLWOnBoardingNotificationIfNecessary;
 // %new

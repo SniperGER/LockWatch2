@@ -7,3 +7,25 @@
 //
 
 #define __VERSION "2.0b3-u2"
+
+
+
+extern BOOL UIColorIsLightColor(UIColor* color);
+
+
+
+@interface NSDistributedNotificationCenter : NSNotificationCenter
+@end
+
+@interface SBUserAgent : NSObject
+- (BOOL)deviceIsPasscodeLocked;
+@end
+
+@interface SpringBoard : UIApplication
+- (SBUserAgent*)pluginUserAgent;
+@end
+
+@interface _UILegibilitySettings : NSObject
+- (UIColor*)primaryColor;
+@end
+

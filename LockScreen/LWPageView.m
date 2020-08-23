@@ -17,14 +17,6 @@
 #import "Core/LWEmulatedCLKDevice.h"
 #import "Core/LWPageDelegate.h"
 
-@interface _UILegibilitySettings : NSObject
-- (UIColor*)primaryColor;
-@end
-
-
-
-extern BOOL UIColorIsLightColor(UIColor* color);
-
 @implementation LWPageView
 
 - (instancetype)initWithFrame:(CGRect)frame {
