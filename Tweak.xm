@@ -150,14 +150,6 @@ BOOL isLandscapePhone() {
 	%orig;
 }
 
-- (void)_startFadeOutAnimationFromLockSource:(int)arg1 {
-	if (clockViewController.isIncrementallyZooming || clockViewController.faceLibraryIsPresented) {
-		return;
-	}
-	
-	%orig;
-}
-
 - (void)turnOnScreenFullyWithBacklightSource:(NSInteger)arg1 {
 	if (arg1 == 20) {
 		[clockViewController.faceViewController handleWristRaiseScreenWake];

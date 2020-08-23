@@ -505,6 +505,8 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 			[self showAddPageIfAvailable];
 			[_libraryOverlayView.editButton setEnabled:[self _pageIsEditableAtIndex:_switcherController.currentPageIndex]];
 			[self _configureForSwitcherPageIndex:_switcherController.currentPageIndex];
+			
+			[[[[NSClassFromString(@"SBLockScreenManager") sharedInstance] coverSheetViewController] idleTimerController] addIdleTimerDisabledAssertionReason:@"ml.festival.lockwatch2.library-presented"];
 		} else {
 			[self hideAddPageIfAvailable];
 			[_libraryOverlayView.editButton setEnabled:NO];
@@ -514,6 +516,8 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 				[_switcherController cancelPageDeletionAnimated:NO];
 				[self _tearDownDeleteConfirmation];
 			}];
+			
+			[[[[NSClassFromString(@"SBLockScreenManager") sharedInstance] coverSheetViewController] idleTimerController] removeIdleTimerDisabledAssertionReason:@"ml.festival.lockwatch2.library-presented"];
 		}
 	}
 }

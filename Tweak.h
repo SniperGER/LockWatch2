@@ -39,18 +39,7 @@ extern "C" CFNotificationCenterRef CFNotificationCenterGetDistributedCenter();
  * Headers
  */
 
-@class CSCoverSheetViewController, CSMainPageContentViewController, NTKCCFacesViewController, SBFLockScreenDateViewController, SBFLockScreenDateView;
-
-@interface SBLockScreenManager : NSObject
-+ (instancetype)sharedInstance;
-- (CSCoverSheetViewController*)coverSheetViewController;
-@end
-
-@interface CSCoverSheetViewController : UIViewController
-- (CSMainPageContentViewController*)mainPageContentViewController;
-- (SBFLockScreenDateViewController*)dateViewController;
-- (UIWindow*)_window;
-@end
+@class CSMainPageContentViewController, NTKCCFacesViewController, SBFLockScreenDateViewController, SBFLockScreenDateView;
 
 @interface CSFixedFooterView : UIView
 @end

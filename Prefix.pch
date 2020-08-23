@@ -14,7 +14,26 @@ extern BOOL UIColorIsLightColor(UIColor* color);
 
 
 
+@class CSMainPageContentViewController, SBDashBoardIdleTimerController, SBFLockScreenDateViewController;
+
+@interface CSCoverSheetViewController : UIViewController
+- (SBFLockScreenDateViewController*)dateViewController;
+- (SBDashBoardIdleTimerController*)idleTimerController;
+- (CSMainPageContentViewController*)mainPageContentViewController;
+- (UIWindow*)_window;
+@end
+
 @interface NSDistributedNotificationCenter : NSNotificationCenter
+@end
+
+@interface SBLockScreenManager : NSObject
++ (instancetype)sharedInstance;
+- (CSCoverSheetViewController*)coverSheetViewController;
+@end
+@interface SBDashBoardIdleTimerController : NSObject
+- (void)resetIdleTimerIfTopMost;
+- (void)addIdleTimerDisabledAssertionReason:(id)arg1;
+- (void)removeIdleTimerDisabledAssertionReason:(id)arg1;
 @end
 
 @interface SBUserAgent : NSObject
