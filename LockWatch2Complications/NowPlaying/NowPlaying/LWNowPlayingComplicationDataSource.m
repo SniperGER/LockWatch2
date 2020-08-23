@@ -52,7 +52,7 @@ extern NSString* CLKStringForComplicationFamily(long long family);
 }
 
 - (LWNowPlayingState)_nowPlayingState {
-	if ([_nowPlayingController currentNowPlayingAppIsRunning]) {
+	if ([_nowPlayingController currentNowPlayingAppIsRunning] && _nowPlayingController.currentNowPlayingMetadata.nowPlayingInfo != nil) {
 		if ([_nowPlayingController isPlaying]) return LWNowPlayingStatePlaying;
 		
 		return LWNowPlayingStatePaused;

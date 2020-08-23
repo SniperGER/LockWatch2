@@ -49,7 +49,7 @@ extern NSString* CLKStringForComplicationFamily(long long family);
 }
 
 - (LWNowPlayingState)_nowPlayingState {
-	if (([_nowPlayingController nowPlayingAppIsSystemMediaApp] && _nowPlayingController.currentNowPlayingMetadata.radioStationName == nil) && [_nowPlayingController currentNowPlayingAppIsRunning]) {
+	if (([_nowPlayingController nowPlayingAppIsSystemMediaApp] && _nowPlayingController.currentNowPlayingMetadata.radioStationName == nil) && [_nowPlayingController currentNowPlayingAppIsRunning] && _nowPlayingController.currentNowPlayingMetadata.nowPlayingInfo != nil) {
 		if ([_nowPlayingController isPlaying]) return LWNowPlayingStatePlaying;
 		
 		return LWNowPlayingStatePaused;
