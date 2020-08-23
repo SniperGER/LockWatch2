@@ -27,7 +27,7 @@
 		_tiledPages = [NSMutableDictionary dictionary];
 		_fetchedPages = [NSMutableDictionary dictionary];
 		
-		_device = [CLKDevice currentDevice];
+		// _device = [CLKDevice currentDevice];
 	}
 	
 	return self;

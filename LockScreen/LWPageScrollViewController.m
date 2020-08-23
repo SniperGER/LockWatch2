@@ -24,7 +24,7 @@
 
 - (instancetype)initWithScrollOrientation:(NSInteger)scrollOrientation {
 	if (self = [super init]) {
-		_device = [CLKDevice currentDevice];
+		// _device = [CLKDevice currentDevice];
 		
 		_pageViewControllers = [NSMutableDictionary dictionary];
 		_recycledPages = [NSMutableSet set];
@@ -39,7 +39,7 @@
 }
 
 - (void)loadView {
-	UIScrollView* view = [[UIScrollView alloc] initWithFrame:_device.actualScreenBounds];
+	UIScrollView* view = [[UIScrollView alloc] initWithFrame:[[CLKDevice currentDevice] actualScreenBounds]];
 	[view setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[view setBounces:NO];
 	[view setClipsToBounds:NO];
@@ -72,7 +72,7 @@
 			if (_deleteConfirmationView) {
 				[_deleteConfirmationView sizeToFit];
 				
-				if ([[_device.nrDevice valueForProperty:@"mainScreenClass"] integerValue] == NRDeviceMainScreenClass44mm) {
+				if ([[[[CLKDevice currentDevice] nrDevice] valueForProperty:@"mainScreenClass"] integerValue] == NRDeviceMainScreenClass44mm) {
 					[_deleteConfirmationView setCenter:(CGPoint){ CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) - 7 }];
 				} else {
 					[_deleteConfirmationView setCenter:(CGPoint){ CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) }];
@@ -123,7 +123,7 @@
 }
 
 - (CGRect)_frameForCenteredPage {
-	return _device.actualScreenBounds;
+	return [[CLKDevice currentDevice] actualScreenBounds];
 }
 
 - (void)_handleDidAnimatePageDeletion {

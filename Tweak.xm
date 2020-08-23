@@ -412,12 +412,14 @@ static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* obs
 		[CLKDevice setCurrentDevice:device];
 	} else if (currentDevice) {
 		NSDictionary* watchData = [currentDevice JSONObjectRepresentation];
+		NRDevice* nrDevice;
 		
 		if ([currentDevice respondsToSelector:@selector(physicalDevice)] && currentDevice.physicalDevice) {
 			watchData = [currentDevice.physicalDevice JSONObjectRepresentation];
+			nrDevice = [currentDevice.physicalDevice nrDevice];
+		} else {
+			nrDevice = [currentDevice nrDevice];
 		}
-		
-		NRDevice* nrDevice = [currentDevice nrDevice];
 		
 		LWEmulatedCLKDevice* device = [[LWEmulatedCLKDevice alloc] initWithJSONObjectRepresentation:watchData forNRDevice:nrDevice];
 		

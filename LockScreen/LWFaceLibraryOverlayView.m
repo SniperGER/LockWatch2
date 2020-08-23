@@ -24,7 +24,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 		[self setTranslatesAutoresizingMaskIntoConstraints:NO];
 		[self setClipsToBounds:NO];
 		
-		_device = device;
+		// _device = device;
 		
 		_leftTitleLabel = [self _newTitleLabel];
 		[self addSubview:_leftTitleLabel];
@@ -57,7 +57,9 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	
-	NRDeviceMainScreenClass mainScreenClass = [[_device.nrDevice valueForProperty:@"mainScreenClass"] integerValue];
+	CLKDevice* device = [CLKDevice currentDevice];
+	
+	NRDeviceMainScreenClass mainScreenClass = [[device.nrDevice valueForProperty:@"mainScreenClass"] integerValue];
 	CGFloat _labelCenterY = 0;
 	
 	switch (mainScreenClass) {
@@ -90,19 +92,19 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	switch (mainScreenClass) {
 		case NRDeviceMainScreenClass38mm:
 			_buttonBounds = (CGRect){ CGPointZero, { 98, 25 }};
-			_buttonCenter = (CGPoint){ CGRectGetMidX(_device.actualScreenBounds), CGRectGetHeight(_device.actualScreenBounds) - CGRectGetMidY(_buttonBounds) };
+			_buttonCenter = (CGPoint){ CGRectGetMidX(device.actualScreenBounds), CGRectGetHeight(device.actualScreenBounds) - CGRectGetMidY(_buttonBounds) };
 			break;
 		case NRDeviceMainScreenClass40mm:
 			_buttonBounds = (CGRect){ CGPointZero, { 113, 31 }};
-			_buttonCenter = (CGPoint){ CGRectGetMidX(_device.actualScreenBounds), CGRectGetHeight(_device.actualScreenBounds) - (CGRectGetMidY(_buttonBounds) + 2) };
+			_buttonCenter = (CGPoint){ CGRectGetMidX(device.actualScreenBounds), CGRectGetHeight(device.actualScreenBounds) - (CGRectGetMidY(_buttonBounds) + 2) };
 			break;
 		case NRDeviceMainScreenClass42mm:
 			_buttonBounds = (CGRect){ CGPointZero, { 102.5, 28 }};
-			_buttonCenter = (CGPoint){ CGRectGetMidX(_device.actualScreenBounds), CGRectGetHeight(_device.actualScreenBounds) - CGRectGetMidY(_buttonBounds) };
+			_buttonCenter = (CGPoint){ CGRectGetMidX(device.actualScreenBounds), CGRectGetHeight(device.actualScreenBounds) - CGRectGetMidY(_buttonBounds) };
 			break;
 		case NRDeviceMainScreenClass44mm:
 			_buttonBounds = (CGRect){ CGPointZero, { 128, 31 }};
-			_buttonCenter = (CGPoint){ CGRectGetMidX(_device.actualScreenBounds), CGRectGetHeight(_device.actualScreenBounds) - (CGRectGetMidY(_buttonBounds) + 2) };
+			_buttonCenter = (CGPoint){ CGRectGetMidX(device.actualScreenBounds), CGRectGetHeight(device.actualScreenBounds) - (CGRectGetMidY(_buttonBounds) + 2) };
 			break;
 		default: break;
 	}
@@ -134,7 +136,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 - (UIButton*)_newButton {
 	LWFaceLibraryOverlayButton* button = [LWFaceLibraryOverlayButton buttonWithType:UIButtonTypeCustom];
 	
-	NRDeviceMainScreenClass mainScreenClass = [[_device.nrDevice valueForProperty:@"mainScreenClass"] integerValue];
+	NRDeviceMainScreenClass mainScreenClass = [[[[CLKDevice currentDevice] nrDevice] valueForProperty:@"mainScreenClass"] integerValue];
 	
 	switch (mainScreenClass) {
 		case NRDeviceMainScreenClass38mm:
@@ -156,7 +158,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 - (SBUILegibilityLabel*)_newTitleLabel {
 	SBUILegibilityLabel* label = [SBUILegibilityLabel new];
 	
-	NRDeviceMainScreenClass mainScreenClass = [[_device.nrDevice valueForProperty:@"mainScreenClass"] integerValue];
+	NRDeviceMainScreenClass mainScreenClass = [[[[CLKDevice currentDevice] nrDevice] valueForProperty:@"mainScreenClass"] integerValue];
 	
 	switch (mainScreenClass) {
 		case NRDeviceMainScreenClass38mm:

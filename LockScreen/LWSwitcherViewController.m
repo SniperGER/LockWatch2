@@ -68,21 +68,23 @@ CGFloat SineEaseInOut(CGFloat p) {
 }
 
 - (CGRect)_frameForCenteredPage {
+	CLKDevice* device = [CLKDevice currentDevice];
+	
 	if (_zoomLevel > 0) {
-		CGFloat pageWidth = CGRectGetWidth(_device.actualScreenBounds) - ((CGRectGetWidth(_device.actualScreenBounds) - _pageWidthWhenZoomedOut) * _zoomLevel);
+		CGFloat pageWidth = CGRectGetWidth(device.actualScreenBounds) - ((CGRectGetWidth(device.actualScreenBounds) - _pageWidthWhenZoomedOut) * _zoomLevel);
 		
 		CGRect pageBounds = (CGRect){
 			CGPointZero,
 			{
 				pageWidth,
-				(pageWidth / CGRectGetWidth(_device.actualScreenBounds)) * CGRectGetHeight(_device.actualScreenBounds)
+				(pageWidth / CGRectGetWidth(device.actualScreenBounds)) * CGRectGetHeight(device.actualScreenBounds)
 			}
 		};
 		
 		return (CGRect){
 			{
-				CGRectGetMidX(_device.actualScreenBounds) - CGRectGetMidX(pageBounds),
-				CGRectGetMidY(_device.actualScreenBounds) - CGRectGetMidY(pageBounds) + (-7 * _zoomLevel),
+				CGRectGetMidX(device.actualScreenBounds) - CGRectGetMidX(pageBounds),
+				CGRectGetMidY(device.actualScreenBounds) - CGRectGetMidY(pageBounds) + (-7 * _zoomLevel),
 			},
 			pageBounds.size
 		};

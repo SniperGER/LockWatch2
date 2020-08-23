@@ -65,9 +65,10 @@ static _UILegibilitySettings* _legibilitySettings;
 - (instancetype)init {
 	if (self = [super init]) {
 		_preferences = [LWPreferences sharedInstance];
-		_device = [CLKDevice currentDevice];
+		// _device = [CLKDevice currentDevice];
 
-		if (!_device || !_device.nrDevice) return nil;
+		CLKDevice* device = [CLKDevice currentDevice];
+		if (!device || !device.nrDevice) return nil;
 		
 		[self loadAddableFaceCollection];
 		[self loadLibraryFaceCollection];
@@ -81,7 +82,7 @@ static _UILegibilitySettings* _legibilitySettings;
 		}];
 		
 		[[NSDistributedNotificationCenter defaultCenter] addObserverForName:@"ml.festival.lockwatch2/AddToLibrary" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification) {
-			NTKFace* face = [NTKFace faceWithJSONObjectRepresentation:notification.userInfo[@"faceJSON"] forDevice:_device];
+			NTKFace* face = [NTKFace faceWithJSONObjectRepresentation:notification.userInfo[@"faceJSON"] forDevice:[CLKDevice currentDevice]];
 			[_libraryFaceCollection appendFace:face suppressingCallbackToObserver:self];
 			[_libraryFaceCollection setSelectedFace:face suppressingCallbackToObserver:self];
 			[(LWPersistentFaceCollection*)_libraryFaceCollection synchronize];
@@ -90,7 +91,7 @@ static _UILegibilitySettings* _legibilitySettings;
 		}];
 		
 		[[NSDistributedNotificationCenter defaultCenter] addObserverForName:@"ml.festival.lockwatch2/SyncLibrary" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification) {
-			_libraryFaceCollection = [[LWPersistentFaceCollection alloc] initWithCollectionIdentifier:@"LibraryFaces" forDevice:_device JSONObjectRepresentation:notification.userInfo[@"faceJSON"]];
+			_libraryFaceCollection = [[LWPersistentFaceCollection alloc] initWithCollectionIdentifier:@"LibraryFaces" forDevice:[CLKDevice currentDevice] JSONObjectRepresentation:notification.userInfo[@"faceJSON"]];
 			[(LWPersistentFaceCollection*)_libraryFaceCollection synchronize];
 			
 			[self _createOrRecreateFaceContent];
@@ -103,7 +104,7 @@ static _UILegibilitySettings* _legibilitySettings;
 - (void)loadView {
 	LWClockView* view = [[LWClockView alloc] initWithFrame:(CGRect){
 		CGPointZero,
-		{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight(_device.actualScreenBounds) }
+		{ CGRectGetWidth(UIScreen.mainScreen.bounds), CGRectGetHeight([[CLKDevice currentDevice] actualScreenBounds]) }
 	}];
 	
 	[view setDelegate:self];
@@ -120,10 +121,11 @@ static _UILegibilitySettings* _legibilitySettings;
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
 	
+	CLKDevice* device = [CLKDevice currentDevice];
 	CGFloat _centerX = 0;
 	
 	if ([self isLandscapePhone]) {
-		_centerX = (CGRectGetMinX(CGRectInset(self.view.bounds, _dateViewInsets.left, 0)) + (CGRectGetWidth(_device.actualScreenBounds) / 2)) + ((CGRectGetWidth(CGRectInset(self.view.bounds, _dateViewInsets.left, 0)) - CGRectGetWidth(_device.actualScreenBounds)) * CLAMP(_alignmentPercent + 1, 0, 2));
+		_centerX = (CGRectGetMinX(CGRectInset(self.view.bounds, _dateViewInsets.left, 0)) + (CGRectGetWidth(device.actualScreenBounds) / 2)) + ((CGRectGetWidth(CGRectInset(self.view.bounds, _dateViewInsets.left, 0)) - CGRectGetWidth(device.actualScreenBounds)) * CLAMP(_alignmentPercent + 1, 0, 2));
 		
 		CGFloat scale = [[LWPreferences sharedInstance] scaleLandscapePhone];
 		[_libraryViewController.view setTransform:CGAffineTransformMakeScale(scale, scale)];
@@ -201,9 +203,11 @@ static _UILegibilitySettings* _legibilitySettings;
 	[self _putLibraryViewControllerIntoClockViewController];
 	[_libraryViewController.view layoutIfNeeded];
 	
+	CLKDevice* device = [CLKDevice currentDevice];
+	
 	[NSLayoutConstraint activateConstraints:@[
-		[_libraryViewController.view.widthAnchor constraintEqualToConstant:CGRectGetWidth(_device.actualScreenBounds)],
-		[_libraryViewController.view.heightAnchor constraintEqualToConstant:CGRectGetHeight(_device.actualScreenBounds)]
+		[_libraryViewController.view.widthAnchor constraintEqualToConstant:CGRectGetWidth(device.actualScreenBounds)],
+		[_libraryViewController.view.heightAnchor constraintEqualToConstant:CGRectGetHeight(device.actualScreenBounds)]
 	]];
 }
 
@@ -375,15 +379,15 @@ static _UILegibilitySettings* _legibilitySettings;
 }
 
 - (void)loadAddableFaceCollection {
-	_addableFaceCollection = [LWPersistentFaceCollection defaultAddableFaceCollectionForDevice:_device];
+	_addableFaceCollection = [LWPersistentFaceCollection defaultAddableFaceCollectionForDevice:[CLKDevice currentDevice]];
 }
 
 - (void)loadLibraryFaceCollection {
 	_libraryFaceCollection = [LWPersistentFaceCollection faceCollectionWithContentsOfFile:LIBRARY_PATH 
 																	 collectionIdentifier:@"LibraryFaces"
-																				forDevice:_device];
+																				forDevice:[CLKDevice currentDevice]];
 	if (!_libraryFaceCollection) {
-		_libraryFaceCollection = [LWPersistentFaceCollection defaultLibraryFaceCollectionForDevice:_device];
+		_libraryFaceCollection = [LWPersistentFaceCollection defaultLibraryFaceCollectionForDevice:[CLKDevice currentDevice]];
 	}
 	
 	[_libraryFaceCollection addObserver:self];

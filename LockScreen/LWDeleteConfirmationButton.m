@@ -18,7 +18,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 
 - (instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
-		_device = [CLKDevice currentDevice];
+		// _device = [CLKDevice currentDevice];
 		
 		UIImage* deleteConfirmationImage = [UIImage imageNamed:@"DeleteConfirmation" inBundle:[NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"] compatibleWithTraitCollection:nil];
 		_deleteIconView = [[UIImageView alloc] initWithImage:[deleteConfirmationImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];

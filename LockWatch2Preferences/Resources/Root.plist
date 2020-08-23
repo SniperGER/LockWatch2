@@ -51,6 +51,8 @@
 			<string>isEmulatingDevice</string>
 			<key>label</key>
 			<string>USE_EMULATED_DEVICE</string>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/WatchSelected</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -81,6 +83,8 @@
 			</array>
 			<key>staticTextMessage</key>
 			<string>RESET_LIBRARY_FOOTER</string>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/WatchSelected</string>
 		</dict>
 		
 		<dict>

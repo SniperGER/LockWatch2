@@ -34,7 +34,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 
 - (instancetype)initWithLibraryCollection:(NTKFaceCollection*)libraryFaceCollection addableCollection:(NTKFaceCollection*)addableFaceCollection {
 	if (self = [super init]) {
-		_device = [CLKDevice currentDevice];
+		// _device = [CLKDevice currentDevice];
 		
 		_libraryFaceCollection = libraryFaceCollection;
 		_addableFaceCollection = addableFaceCollection;
@@ -77,6 +77,8 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
+	CLKDevice* device = [CLKDevice currentDevice];
+	
 	[self.view setTranslatesAutoresizingMaskIntoConstraints:NO];
 
 	LWDeleteConfirmationButton* deleteConfirmationButton = [[LWDeleteConfirmationButton alloc] initWithFrame:CGRectZero];
@@ -84,7 +86,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 
 	_switcherController = [LWSwitcherViewController new];
 	
-	NRDeviceMainScreenClass mainScreenClass = [[_device.nrDevice valueForProperty:@"mainScreenClass"] integerValue];
+	NRDeviceMainScreenClass mainScreenClass = [[device.nrDevice valueForProperty:@"mainScreenClass"] integerValue];
 	CGFloat _scaleFactor = 1;
 	
 	switch (mainScreenClass) {
@@ -104,10 +106,10 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	}
 	
 	[_switcherController setPageWidthWhenZoomedOut:ceilf(
-		(CGRectGetWidth(_device.actualScreenBounds) / CGRectGetHeight(_device.actualScreenBounds)) *
-		(CGRectGetHeight(_device.actualScreenBounds) * _scaleFactor)
+		(CGRectGetWidth(device.actualScreenBounds) / CGRectGetHeight(device.actualScreenBounds)) *
+		(CGRectGetHeight(device.actualScreenBounds) * _scaleFactor)
 	)];
-	[_switcherController setPageScaleWhenZoomedOut:(_switcherController.pageWidthWhenZoomedOut / CGRectGetWidth(_device.actualScreenBounds))];
+	[_switcherController setPageScaleWhenZoomedOut:(_switcherController.pageWidthWhenZoomedOut / CGRectGetWidth(device.actualScreenBounds))];
 	
 	[_switcherController setInterpageSpacing:20];
 	[_switcherController setInterpageSpacingWhenZoomedIn:20];
@@ -124,7 +126,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	[self.view addSubview:_switcherController.view];
 	[_switcherController didMoveToParentViewController:self];
 
-	_libraryOverlayView = [[LWFaceLibraryOverlayView alloc] initForDevice:_device];
+	_libraryOverlayView = [[LWFaceLibraryOverlayView alloc] initForDevice:device];
 	[self.view addSubview:_libraryOverlayView];
 	
 	[_libraryOverlayView.editButton addTarget:self action:@selector(_startFaceEditing) forControlEvents:UIControlEventTouchUpInside];
@@ -798,14 +800,14 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 - (void)pageScrollViewController:(LWPageScrollViewController*)pageScrollViewController configurePage:(LWPageView*)pageView atIndex:(NSInteger)index {
 	if (_switcherController == pageScrollViewController) {
 		[pageView setOutlineStrokeWidth:3];
-		[pageView setOutlineCornerRadius:_device.actualScreenCornerRadius + 8];
+		[pageView setOutlineCornerRadius:[[CLKDevice currentDevice] actualScreenCornerRadius] + 8];
 		[pageView setOutlineInsets:(UIEdgeInsets){ -8, -8, -8, -8 }];
 	}
 }
 
 - (CGSize)pageScrollViewController:(LWPageScrollViewController*)pageScrollViewController contentViewSizeForPageAtIndex:(NSInteger)index {
 	if (self.view) {
-		return _device.screenBounds.size;
+		return [[CLKDevice currentDevice] screenBounds].size;
 	}
 	
 	return CGSizeZero;

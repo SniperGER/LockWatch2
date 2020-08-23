@@ -22,7 +22,7 @@
 
 - (instancetype)initWithLibraryFaceCollection:(NTKFaceCollection*)libraryFaceCollection addableFaceCollection:(NTKFaceCollection*)addableFaceCollection {
 	if (self = [super init]) {
-		_device = [CLKDevice currentDevice];
+		// _device = [CLKDevice currentDevice];
 		_libraryFaceCollection = libraryFaceCollection;
 		_addableFaceCollection = addableFaceCollection;
 		_localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
@@ -43,7 +43,7 @@
 }
 
 - (void)loadView {
-	UIView* view = [[UIView alloc] initWithFrame:_device.screenBounds];
+	UIView* view = [[UIView alloc] initWithFrame:[[CLKDevice currentDevice] screenBounds]];
 	[view setClipsToBounds:NO];
 	
 	self.view = view;

@@ -21,7 +21,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
-		_device = [CLKDevice currentDevice];
+		// _device = [CLKDevice currentDevice];
 		
 		[self setShowsHorizontalScrollIndicator:NO];
 		[self setShowsVerticalScrollIndicator:NO];
@@ -37,7 +37,7 @@
 		_tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_handleTap:)];
 		[self addGestureRecognizer:_tapGesture];
 		
-		[self setContentSize:(CGSize){ 0, CGRectGetHeight(_device.actualScreenBounds) * 2 }];
+		[self setContentSize:(CGSize){ 0, CGRectGetHeight([[CLKDevice currentDevice] actualScreenBounds]) * 2 }];
 		
 		[self setScrollEnabled:_allowsDelete];
 		[_tapGesture setEnabled:_allowsSelect];
@@ -51,11 +51,13 @@
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	
+	CLKDevice* device = [CLKDevice currentDevice];
+	
 	[_contentView setBounds:(CGRect){ CGPointZero, _contentViewSize }];
 	[_contentView setCenter:(CGPoint){ CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds) - self.contentOffset.y }];
 	
-	CGFloat scale = _pageSize.width / CGRectGetWidth(_device.actualScreenBounds);
-	CGFloat contentViewScale = (CGRectGetWidth(_device.actualScreenBounds) / CGRectGetWidth(_device.screenBounds)) * scale;
+	CGFloat scale = _pageSize.width / CGRectGetWidth(device.actualScreenBounds);
+	CGFloat contentViewScale = (CGRectGetWidth(device.actualScreenBounds) / CGRectGetWidth(device.screenBounds)) * scale;
 	[_contentView setTransform:CGAffineTransformMakeScale(contentViewScale, contentViewScale)];
 	
 	if (_outlineView) {
@@ -79,7 +81,7 @@
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-	return (CGSize){ _pageSize.width, CGRectGetHeight(_device.actualScreenBounds) };
+	return (CGSize){ _pageSize.width, CGRectGetHeight([[CLKDevice currentDevice] actualScreenBounds]) };
 }
 
 #pragma mark - Instance Methods
