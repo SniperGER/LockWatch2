@@ -82,7 +82,7 @@
 	
 	// OnBoarding - Customize
 	"ONBOARDING_CUSTOMIZE_TITLE" = "Customize watch faces";
-	"ONBOARDING_CUSTOMIZE_DETAIL" = "To customize a watch face, tap on \"Customize\". Here you can select a color and change its apperance, or choose complications.";
+	"ONBOARDING_CUSTOMIZE_DETAIL" = "To customize a watch face, tap on \"Customize\". Here you can select a color and change its appearance, or choose complications.";
 	
 	// Respring alert
 	"ONBOARDING_RESTART_SPRINGBOARD_TITLE" = "Restart SpringBoard?";
