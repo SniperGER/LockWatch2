@@ -7,10 +7,7 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	_emulatedDeviceSelectionSpecifier = [self specifierForID:@"EMULATED_DEVICE"];
-	[self removeContiguousSpecifiers:@[ _emulatedDeviceSelectionSpecifier ] animated:NO];
-	
-	[self _updateEmulatedWatchAvailability];
+	[self reloadSpecifiers];
 }
 
 - (NSArray *)specifiers {
@@ -26,6 +23,9 @@
 
 - (void)reloadSpecifiers {
 	[super reloadSpecifiers];
+	
+	_emulatedDeviceSelectionSpecifier = [self specifierForID:@"EMULATED_DEVICE"];
+	[self removeContiguousSpecifiers:@[ _emulatedDeviceSelectionSpecifier ] animated:NO];
 	
 	[self _updateEmulatedWatchAvailability];
 }
@@ -57,10 +57,9 @@
 
 - (void)_updateEmulatedWatchAvailability {
 	PSSpecifier* useEmulatedDeviceSpecifier = [self specifierForID:@"USE_EMULATED_DEVICE"];
-
 	BOOL isEmulatingDevice = [[self readPreferenceValue:useEmulatedDeviceSpecifier] boolValue];
 
-	if (isEmulatingDevice) {
+	if (isEmulatingDevice && ![self containsSpecifier:_emulatedDeviceSelectionSpecifier]) {
 		[self insertContiguousSpecifiers:@[ _emulatedDeviceSelectionSpecifier ] afterSpecifier:useEmulatedDeviceSpecifier animated:YES];
 	} else {
 		[self removeContiguousSpecifiers:@[ _emulatedDeviceSelectionSpecifier ] animated:YES];
