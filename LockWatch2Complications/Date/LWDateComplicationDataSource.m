@@ -14,6 +14,12 @@
 
 @implementation LWDateComplicationDataSource
 
++ (BOOL)acceptsComplicationFamily:(CLKComplicationFamily)family forDevice:(CLKDevice*)device {
+	if (family == CLKComplicationFamilyDate) return NO;
+	
+	return [super acceptsComplicationFamily:family forDevice:device];
+}
+
 - (instancetype)initWithComplication:(NTKComplication*)complication family:(long long)family forDevice:(CLKDevice*)device {
 	if (self = [super initWithComplication:complication family:family forDevice:device]) {
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_invalidate) name:UIApplicationSignificantTimeChangeNotification object:nil];
