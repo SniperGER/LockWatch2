@@ -9,7 +9,6 @@
 + (NSUUID*)uuid;
 - (NSString*)author;
 - (NSString*)faceDescription;
-- (NSString*)localizedName;
 - (NSString*)name;
 
 @end
