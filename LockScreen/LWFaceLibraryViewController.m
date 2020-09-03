@@ -175,7 +175,21 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	[currentPageView setContentAlpha:1.0];
 	[currentPageView setOutlineAlpha:1.0];
 	
-	[self _updateButtonsForSwipeToDeleteFraction:0 pageIndex:_switcherController.currentPageIndex];
+	[UIView performWithoutAnimation:^{
+		CFTimeInterval startTime = CACurrentMediaTime();
+		
+		__block NSTimer* zoomAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:60 / 1000 repeats:YES block:^(NSTimer* timer) {
+			CGFloat progress = (CACurrentMediaTime() - startTime) / 0.2;
+			[self _updateButtonsForSwipeToDeleteFraction:(1 - progress) pageIndex:_switcherController.currentPageIndex];
+			
+			if (progress >= 1) {
+				[timer invalidate];
+				zoomAnimationTimer = nil;
+				
+				return;
+			}
+		}];
+	}];
 }
 
 - (void)_beginSuspendingWorkForReason:(NSString*)reason {
