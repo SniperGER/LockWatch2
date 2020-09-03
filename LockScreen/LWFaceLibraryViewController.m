@@ -297,18 +297,21 @@ extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 		
 		NSURL* fileURL = [NSURL fileURLWithPath:filePath];
 		
-		UIActivityViewController* activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[ fileURL ] applicationActivities:nil];
-		[activityViewController setCompletionWithItemsHandler:^(UIActivityType activityType, BOOL completed, NSArray* returnedItems, NSError* activityError) {
+		_greenfieldSharingController = [[UIActivityViewController alloc] initWithActivityItems:@[ fileURL ] applicationActivities:nil];
+		[_greenfieldSharingController.popoverPresentationController setPermittedArrowDirections:UIPopoverArrowDirectionAny];
+		[_greenfieldSharingController setCompletionWithItemsHandler:^(UIActivityType activityType, BOOL completed, NSArray* returnedItems, NSError* activityError) {
 			[[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+			
+			_greenfieldSharingController = nil;
 		}];
 		
 		if (_isFaceEditing) {
-			[activityViewController.popoverPresentationController setBarButtonItem:_editingViewController.topViewController.navigationItem.leftBarButtonItem];
+			[_greenfieldSharingController.popoverPresentationController setBarButtonItem:_editingViewController.topViewController.navigationItem.leftBarButtonItem];
 		} else {
-			[activityViewController.popoverPresentationController setSourceView:_libraryOverlayView.shareButton];
+			[_greenfieldSharingController.popoverPresentationController setSourceView:_libraryOverlayView.shareButton];
 		}
 
-		[self presentViewController:activityViewController animated:YES completion:nil];
+		[self presentViewController:_greenfieldSharingController animated:YES completion:nil];
 	}
 }
 
@@ -322,6 +325,12 @@ extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 
 - (void)_dismissSwitcherAnimated:(BOOL)animated withIndex:(NSInteger)index remainFrozen:(BOOL)remainFrozen completion:(void (^_Nullable)())block {
 	if (!_presented) return;
+	
+	if (_greenfieldSharingController) {
+		[_greenfieldSharingController dismissViewControllerAnimated:animated completion:^{
+			_greenfieldSharingController = nil;
+		}];
+	}
 	
 	if (!_isIncrementallyZooming) {
 		if (index == [self _indexOfAddPage]) {

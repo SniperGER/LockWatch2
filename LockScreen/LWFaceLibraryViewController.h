@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 	BOOL _isZoomingToLibrary;
 	CGPoint _previousSwitcherScrollOffset;
 	UINavigationController* _editingViewController;
+	UIActivityViewController* _greenfieldSharingController;
 }
 
 @property (nonatomic, readonly) BOOL isFaceSwitching;
