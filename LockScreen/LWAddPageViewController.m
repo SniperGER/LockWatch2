@@ -20,6 +20,8 @@
 #import "Core/LWEmulatedCLKDevice.h"
 #import "Core/LWPersistentFaceCollection.h"
 
+extern UIColor* NTKCActionColor();
+
 @implementation LWAddPageViewController
 
 - (instancetype)initWithLibraryFaceCollection:(NTKFaceCollection*)libraryFaceCollection addableFaceCollection:(NTKFaceCollection*)addableFaceCollection externalFaceCollection:(NTKFaceCollection*)externalFaceCollection {
@@ -126,15 +128,15 @@
 - (NTKCompanionFaceViewController*)_viewControllerForFace:(NTKFace*)face isExternalFace:(BOOL)isExternalFace {
 	if (!isExternalFace) {
 		NSInteger index = [_addableFaceCollection indexOfFace:face];
-	NTKCompanionFaceViewController* faceViewController = [_faceViewControllers objectForKey:@(index)];
+		NTKCompanionFaceViewController* faceViewController = [_faceViewControllers objectForKey:@(index)];
 	
-	if (!faceViewController) {
+		if (!faceViewController) {
 			faceViewController = [[NTKCompanionFaceViewController alloc] initWithFace:face forEditing:YES];
+			
+			[_faceViewControllers setObject:faceViewController forKey:@(index)];
+		}
 		
-		[_faceViewControllers setObject:faceViewController forKey:@(index)];
-	}
-	
-	return faceViewController;
+		return faceViewController;
 	} else {
 		NSInteger index = [_externalFaceCollection indexOfFace:face];
 		NTKCompanionFaceViewController* faceViewController = [_externalFaceViewControllers objectForKey:@(index)];
@@ -143,8 +145,8 @@
 			faceViewController = [[NTKCompanionFaceViewController alloc] initWithFace:face forEditing:YES];
 			
 			[_externalFaceViewControllers setObject:faceViewController forKey:@(index)];
-}
-
+		}
+		
 		return faceViewController;
 	}
 }
@@ -182,60 +184,114 @@
 	}
 }
 
+#pragma mark - Document picker delegate
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
+	NSDictionary* faceJSON = [NSDictionary dictionaryWithContentsOfURL:[urls lastObject]];
+	
+	if (!faceJSON) {
+		UIAlertController* alertController = [UIAlertController alertControllerWithTitle:[_localizableBundle localizedStringForKey:@"GENERIC_ERROR" value:nil table:nil]
+																				 message:[_localizableBundle localizedStringForKey:@"ERROR_INVALID_FACE_JSON" value:nil table:nil]
+																		  preferredStyle:UIAlertControllerStyleAlert];
+	
+		[alertController addAction:[UIAlertAction actionWithTitle:[_localizableBundle localizedStringForKey:@"GENERIC_CONFIRM" value:nil table:nil] style:UIAlertActionStyleDefault handler:nil]];
+		
+		[self presentViewController:alertController animated:YES completion:nil];
+		return;
+	}
+	
+	NTKFace* face = [NTKFace faceWithJSONObjectRepresentation:faceJSON forDevice:[CLKDevice currentDevice]];
+	if (!face) {
+		UIAlertController* alertController = [UIAlertController alertControllerWithTitle:[_localizableBundle localizedStringForKey:@"GENERIC_ERROR" value:nil table:nil]
+																				 message:[_localizableBundle localizedStringForKey:@"ERROR_INVALID_FACE" value:nil table:nil]
+																		  preferredStyle:UIAlertControllerStyleAlert];
+	
+		[alertController addAction:[UIAlertAction actionWithTitle:[_localizableBundle localizedStringForKey:@"GENERIC_CONFIRM" value:nil table:nil] style:UIAlertActionStyleDefault handler:nil]];
+		
+		[self presentViewController:alertController animated:YES completion:nil];
+		return;
+	}
+	
+	NTKCompanionFaceViewController* faceViewController = [[NTKCompanionFaceViewController alloc] initWithFace:face forEditing:YES];
+	
+	[self.delegate addPageViewController:self didSelectFace:face faceViewController:faceViewController];
+	[self dismiss];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 2;
+	return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NTKCCLibraryListCell* cell = [tableView dequeueReusableCellWithIdentifier:[objc_getClass("NTKCCLibraryListCell") reuseIdentifier] forIndexPath:indexPath];
-    
-	if (!cell) {
-        cell = [[objc_getClass("NTKCCLibraryListCell") alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[objc_getClass("NTKCCLibraryListCell") reuseIdentifier]];
-    }
-	
-	if (indexPath.section == 1) {
-		NTKFace* face = [_addableFaceCollection faceAtIndex:indexPath.row];
-		[face applyDefaultConfiguration];
+	if (indexPath.section == 0) {
+		NTKCFaceDetailActionCell* cell = [[NSClassFromString(@"NTKCFaceDetailActionCell") alloc] initWithAction:2];
 		
-		[cell setCurrentFace:NO];
-		[cell setFaceName:[face name]];
+		[cell.textLabel setText:[_localizableBundle localizedStringForKey:@"IMPORT_WATCH_FACE" value:nil table:nil]];
+		[cell.textLabel setTextColor:NTKCActionColor()];
 		
-		NTKCompanionFaceViewController* faceViewController = [self _viewControllerForFace:[_addableFaceCollection faceAtIndex:indexPath.row] isExternalFace:NO];
-		[cell setFaceView:faceViewController.faceView];
-	} else if (indexPath.section == 2) {
-		NTKFace<LWCustomFaceInterface>* face = [_externalFaceCollection faceAtIndex:indexPath.row];
-		[face applyDefaultConfiguration];
+		return cell;
+	} else {
+		NTKCCLibraryListCell* cell = [tableView dequeueReusableCellWithIdentifier:[objc_getClass("NTKCCLibraryListCell") reuseIdentifier] forIndexPath:indexPath];
 		
-		[cell setCurrentFace:YES];
-		[cell setFaceName:[face name]];
-		[(UILabel*)[cell valueForKey:@"_subtitle"] setText:[face author]];
+		if (!cell) {
+        	cell = [[objc_getClass("NTKCCLibraryListCell") alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[objc_getClass("NTKCCLibraryListCell") reuseIdentifier]];
+		}
 		
-		NTKCompanionFaceViewController* faceViewController = [self _viewControllerForFace:face isExternalFace:YES];
-		[cell setFaceView:faceViewController.faceView];
+		if (indexPath.section == 1) {
+			NTKFace* face = [_addableFaceCollection faceAtIndex:indexPath.row];
+			[face applyDefaultConfiguration];
+			
+			[cell setCurrentFace:NO];
+			[cell setFaceName:[face name]];
+			
+			NTKCompanionFaceViewController* faceViewController = [self _viewControllerForFace:[_addableFaceCollection faceAtIndex:indexPath.row] isExternalFace:NO];
+			[cell setFaceView:faceViewController.faceView];
+		} else if (indexPath.section == 2) {
+			NTKFace<LWCustomFaceInterface>* face = [_externalFaceCollection faceAtIndex:indexPath.row];
+			[face applyDefaultConfiguration];
+			
+			[cell setCurrentFace:YES];
+			[cell setFaceName:[face name]];
+			[(UILabel*)[cell valueForKey:@"_subtitle"] setText:[face author]];
+			
+			NTKCompanionFaceViewController* faceViewController = [self _viewControllerForFace:face isExternalFace:YES];
+			[cell setFaceView:faceViewController.faceView];
+		}
+		
+		return cell;
 	}
-    
-    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section == 0) {
-		NTKFace* face = [_addableFaceCollection faceAtIndex:indexPath.row];
-		[self.delegate addPageViewController:self didSelectFace:face faceViewController:[self _viewControllerForFace:face isExternalFace:NO]];
-	} else if (indexPath.section == 1) {
-		NTKFace* face = [_externalFaceCollection faceAtIndex:indexPath.row];
-		[self.delegate addPageViewController:self didSelectFace:face faceViewController:[self _viewControllerForFace:face isExternalFace:YES]];
+		[tableView deselectRowAtIndexPath:indexPath animated:YES];
+		
+		UIDocumentPickerViewController* pickerViewController = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[ @"com.apple.property-list", @"public.data" ] inMode:UIDocumentPickerModeImport];
+		[pickerViewController setDelegate:self];
+		
+		[self presentViewController:pickerViewController animated:YES completion:nil];
+	} else {
+		if (indexPath.section == 1) {
+			NTKFace* face = [_addableFaceCollection faceAtIndex:indexPath.row];
+			[self.delegate addPageViewController:self didSelectFace:face faceViewController:[self _viewControllerForFace:face isExternalFace:NO]];
+		} else if (indexPath.section == 2) {
+			NTKFace* face = [_externalFaceCollection faceAtIndex:indexPath.row];
+			[self.delegate addPageViewController:self didSelectFace:face faceViewController:[self _viewControllerForFace:face isExternalFace:YES]];
+		}
+		
+		[self dismiss];
 	}
-	
-	[self dismiss];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return _addableFaceCollection.numberOfFaces;
+			return 1;
 		case 1:
+			return _addableFaceCollection.numberOfFaces;
+		case 2:
 			return _externalFaceCollection.numberOfFaces;
 		default: break;
 	}
@@ -244,7 +300,7 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-	if (section == 1 && !_externalFaceCollection.numberOfFaces) {
+	if (section == 2 && !_externalFaceCollection.numberOfFaces) {
 		return [_localizableBundle localizedStringForKey:@"LIBRARY_EXTERNAL_FACES_FOOTER" value:nil table:nil];
 	}
 	
@@ -253,9 +309,9 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	switch (section) {
-		case 0:
-			return [_localizableBundle localizedStringForKey:@"LIBRARY_APPLE_FACES_HEADER" value:nil table:nil];
 		case 1:
+			return [_localizableBundle localizedStringForKey:@"LIBRARY_APPLE_FACES_HEADER" value:nil table:nil];
+		case 2:
 			return [_localizableBundle localizedStringForKey:@"LIBRARY_EXTERNAL_FACES_HEADER" value:nil table:nil];
 		default: break;
 	}

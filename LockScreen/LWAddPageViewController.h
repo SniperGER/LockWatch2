@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol LWAddPageViewControllerDelegate;
 @class CLKDevice, LWAddPageActivationButton, NTKCCLibraryListViewController, NTKCompanionFaceViewController, NTKFaceCollection;
 
-@interface LWAddPageViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
+@interface LWAddPageViewController : UIViewController <UIDocumentPickerDelegate, UITableViewDataSource, UITableViewDelegate> {
 	UISegmentedControl* segmentedControl;
 	CLKDevice* _device;
 	NTKFaceCollection* _libraryFaceCollection;

@@ -15,6 +15,9 @@
 
 - (id)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
+		[self setTranslatesAutoresizingMaskIntoConstraints:NO];
+		[self setTitle:@"" forState:UIControlStateNormal];
+		
 		_visualEffectView = [[UIVisualEffectView alloc] initWithEffect:nil];
 		[_visualEffectView setUserInteractionEnabled:NO];
 		[_visualEffectView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -43,6 +46,7 @@
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	
+	[self sendSubviewToBack:_visualEffectView];
 	[_visualEffectView.layer setCornerRadius:[[CLKDevice currentDevice] isLuxo] ? CGRectGetHeight(self.bounds) / 2 : 8];
 }
 

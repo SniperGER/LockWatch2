@@ -27,6 +27,7 @@
 #import "Core/LWPersistentFaceCollection.h"
 
 extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
+extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 
 
 
@@ -130,6 +131,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	_libraryOverlayView = [[LWFaceLibraryOverlayView alloc] initForDevice:device];
 	[self.view addSubview:_libraryOverlayView];
 	
+	[_libraryOverlayView.shareButton addTarget:self action:@selector(_didTapShareButton) forControlEvents:UIControlEventTouchUpInside];
 	[_libraryOverlayView.editButton addTarget:self action:@selector(_startFaceEditing) forControlEvents:UIControlEventTouchUpInside];
 	[_libraryOverlayView.cancelButton addTarget:self action:@selector(_handleCancelButtonPress) forControlEvents:UIControlEventTouchUpInside];
 	
@@ -219,6 +221,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 - (void)_configureForSwitcherPageIndex:(NSInteger)index {
 	[self _configureForSwitcherScrollFraction:0 lowIndex:index highIndex:-1];
 	[_libraryOverlayView.editButton setEnabled:[self _pageIsEditableAtIndex:index]];
+	[_libraryOverlayView.shareButton setEnabled:[self _pageIsEditableAtIndex:index]];
 }
 
 - (void)_configureForSwitcherScrollFraction:(CGFloat)fraction lowIndex:(NSInteger)lowIndex highIndex:(NSInteger)highIndex {
@@ -233,9 +236,9 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	}
 	
 	[_libraryOverlayView.editButton setAlpha:LERP(lowAlpha, highAlpha, fraction)];
+	[_libraryOverlayView.shareButton setAlpha:LERP(lowAlpha, highAlpha, fraction)];
 	
 	if (_switcherController.zoomedOut) {
-		
 		[_switcherController.scrollView enumeratePagesWithBlock:^(LWPageView* pageView, NSInteger index, BOOL* stop) {
 			if (index == lowIndex) {
 				CGFloat _fraction = MIN(MAX(CLAMP(fraction, 0, 0.75), 0), 1);
@@ -275,6 +278,38 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 
 - (void)_confirmDelete {
 	[_switcherController confirmPageDeletion];
+}
+
+- (void)_didTapShareButton {
+	NSInteger currentPageIndex = _switcherController.currentPageIndex;
+	
+	if (currentPageIndex < [_libraryFaceCollection numberOfFaces]) {
+		NTKFace* face = [_libraryFaceCollection faceAtIndex:currentPageIndex];
+		
+		if (![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/LockWatch 2", NSTemporaryDirectory()] isDirectory:nil]) {
+			[[NSFileManager defaultManager] createDirectoryAtPath:[NSString stringWithFormat:@"%@/LockWatch 2", NSTemporaryDirectory()] withIntermediateDirectories:YES attributes:nil error:nil];
+		}
+		
+		NSString* filePath = [NSString stringWithFormat:@"%@/LockWatch 2/%@.watchface", NSTemporaryDirectory(), face.faceStyle == 0x100 ? face.name : NTKLocalizedNameForFaceStyle(face.faceStyle)];
+		
+		/// TODO: Research Greenfield serialization in iOS 14
+		[[face JSONObjectRepresentation] writeToFile:filePath atomically:YES];
+		
+		NSURL* fileURL = [NSURL fileURLWithPath:filePath];
+		
+		UIActivityViewController* activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[ fileURL ] applicationActivities:nil];
+		[activityViewController setCompletionWithItemsHandler:^(UIActivityType activityType, BOOL completed, NSArray* returnedItems, NSError* activityError) {
+			[[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+		}];
+		
+		if (_isFaceEditing) {
+			[activityViewController.popoverPresentationController setBarButtonItem:_editingViewController.topViewController.navigationItem.leftBarButtonItem];
+		} else {
+			[activityViewController.popoverPresentationController setSourceView:_libraryOverlayView.shareButton];
+		}
+
+		[self presentViewController:activityViewController animated:YES completion:nil];
+	}
 }
 
 - (void)_dismissSwitcherAnimated:(BOOL)animated withIndex:(NSInteger)index {
@@ -521,12 +556,14 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 		if (_presented) {
 			[self showAddPageIfAvailable];
 			[_libraryOverlayView.editButton setEnabled:[self _pageIsEditableAtIndex:_switcherController.currentPageIndex]];
+			[_libraryOverlayView.shareButton setEnabled:[self _pageIsEditableAtIndex:_switcherController.currentPageIndex]];
 			[self _configureForSwitcherPageIndex:_switcherController.currentPageIndex];
 			
 			[[[[NSClassFromString(@"SBLockScreenManager") sharedInstance] coverSheetViewController] idleTimerController] addIdleTimerDisabledAssertionReason:@"ml.festival.lockwatch2.library-presented"];
 		} else {
 			[self hideAddPageIfAvailable];
 			[_libraryOverlayView.editButton setEnabled:NO];
+			[_libraryOverlayView.shareButton setEnabled:NO];
 			
 			// Hide the library when CSCoverSheetViewController disappears
 			[UIView performWithoutAnimation:^{
@@ -552,7 +589,10 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 				[navigationController.navigationBar setTintColor:[UIColor colorWithRed:1.0 green:0.624 blue:0.039 alpha:1.0]];
 				_editingViewController = navigationController;
 				
+				UIBarButtonItem* shareButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(_didTapShareButton)];
 				UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(_stopFaceEditing)];
+				
+				customizationViewController.navigationItem.leftBarButtonItem = shareButton;
 				customizationViewController.navigationItem.rightBarButtonItem = doneButton;
 				
 				if (@available(iOS 13.0, *)) {
@@ -564,6 +604,8 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 
 				[UIApplication.sharedApplication.windows enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(UIWindow* window, NSUInteger index, BOOL* stop) {
 					if ([window isKindOfClass:NSClassFromString(@"SBCoverSheetWindow")]) {
+						_isFaceEditing = YES;
+						
 						[window.rootViewController presentViewController:navigationController animated:YES completion:nil];
 						*stop = YES;
 					}
@@ -578,6 +620,8 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 }
 
 - (void)_stopFaceEditing:(BOOL)animated {
+	_isFaceEditing = NO;
+	
 	[_editingViewController dismissViewControllerAnimated:animated completion:^ {
 		[(LWPersistentFaceCollection*)_libraryFaceCollection synchronize];
 	}];
@@ -613,6 +657,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 
 - (void)_updateButtonsForSwipeToDeleteFraction:(CGFloat)fraction pageIndex:(NSInteger)index {
 	[_libraryOverlayView.editButton setAlpha:MIN(MAX([self _editButtonAlphaAtPageIndex:index] - CLAMP(fraction, 0.0, 0.6), 0), 1)];
+	[_libraryOverlayView.shareButton setAlpha:MIN(MAX([self _editButtonAlphaAtPageIndex:index] - CLAMP(fraction, 0.0, 0.6), 0), 1)];
 	
 	CGFloat translation = MIN(MAX(CLAMP(fraction, 0.4, 1.0), 0), 1);
 	[_libraryOverlayView.cancelButton setTransform:CGAffineTransformMakeTranslation(0, CGRectGetHeight(_libraryOverlayView.cancelButton.bounds) * (1 - translation))];
@@ -910,6 +955,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	if (_switcherController == pageScrollViewController) {
 		_switcherStartingPageIndex = [_switcherController currentPageIndex];
 		[_libraryOverlayView.editButton setEnabled:NO];
+		[_libraryOverlayView.shareButton setEnabled:NO];
 		
 		if (_presented) {
 			[_switcherController.scrollView setTilingSuspended:YES];

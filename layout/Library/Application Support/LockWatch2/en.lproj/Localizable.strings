@@ -9,6 +9,7 @@
 {
 	"GENERIC_CANCEL" = "Cancel";
 	"GENERIC_CONFIRM" = "OK";
+	"GENERIC_ERROR" = "Error";
 	
 	"NO_DEVICE_TITLE" = "LockWatch - No device found";
 	"NO_DEVICE_MESSAGE" = "LockWatch could not find any physical or emulated Apple Watch. Without an Apple Watch, LockWatch does not work.\n\nEither pair an Apple Watch to your device or select an emulated device from LockWatch's preferences.";
@@ -27,4 +28,8 @@
 	
 	"ADD_TO_PROMPT" = "Choose a location to add this watch face to.";
 	"ADD_TO_LOCK_SCREEN" = "Lock Screen";
+	
+	"IMPORT_WATCH_FACE" = "Import watch face";
+	"ERROR_INVALID_FACE" = "This watch face could not be imported. You may need to install a third-party watch face before you can use this watch face.";
+	"ERROR_INVALID_FACE_JSON" = "This watch face could not be imported, because the data is invalid.";
 }

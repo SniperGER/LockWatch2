@@ -9,6 +9,7 @@
 {
 	"GENERIC_CANCEL" = "Abbrechen";
 	"GENERIC_CONFIRM" = "OK";
+	"GENERIC_ERROR" = "Fehler";
 	
 	"NO_DEVICE_TITLE" = "LockWatch 2 - Kein Gerät gefunden";
 	"NO_DEVICE_MESSAGE" = "LockWatch 2 konnte keine gekoppelte oder simulierte Apple Watch finden. Ohne Apple Watch funktioniert LockWatch 2 nicht.\n\nKoppele eine Apple Watch mit diesem Gerät oder wähle eine simulierte Apple Watch in den Einstellungen.";
@@ -27,4 +28,8 @@
 	
 	"ADD_TO_PROMPT" = "Wähle einen Ort, zu dem du das Zifferblatt hinzufügen möchtest.";
 	"ADD_TO_LOCK_SCREEN" = "Sperrbildschirm";
+	
+	"IMPORT_WATCH_FACE" = "Zifferblatt importieren";
+	"ERROR_INVALID_FACE" = "Das Zifferblatt konnte nicht importiert werden. Du musst möglicherweise ein Drittanbieter-Zifferblatt installieren, bevor dieses Zifferblatt verwendet werden kann.";
+	"ERROR_INVALID_FACE_JSON" = "Das Zifferblatt konnte nicht importiert werden, da die Daten ungültig sind.";
 }

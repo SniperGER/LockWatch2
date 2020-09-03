@@ -20,16 +20,16 @@ NS_ASSUME_NONNULL_BEGIN
 	CGFloat _rightTitleAlpha;
 	CGFloat _leftTitleOffset;
 	CGFloat _rightTitleOffset;
-	CGFloat _editTitleLabelWidth;
-	CGFloat _cancelTitleLabelWidth;
 }
 
 @property (nonatomic, readonly) UIButton* cancelButton;
 @property (nonatomic, readonly) UIButton* editButton;
+@property (nonatomic, readonly) UIButton* shareButton;
 
 - (instancetype)initForDevice:(CLKDevice*)device;
 - (void)_legibilitySettingsChanged;
-- (UIButton*)_newButton;
+- (UIButton*)_newEditOrCancelButton;
+- (UIButton*)_newShareButton;
 - (SBUILegibilityLabel*)_newTitleLabel;
 - (void)setLeftTitle:(nullable NSString*)leftTitle;
 - (void)setLeftTitleOffset:(CGFloat)leftTitleOffset alpha:(CGFloat)alpha;

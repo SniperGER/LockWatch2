@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 	BOOL _deleteUnderway;
 	BOOL _isZoomingToLibrary;
 	CGPoint _previousSwitcherScrollOffset;
-	UIViewController* _editingViewController;
+	UINavigationController* _editingViewController;
 }
 
 @property (nonatomic, readonly) BOOL isFaceSwitching;
