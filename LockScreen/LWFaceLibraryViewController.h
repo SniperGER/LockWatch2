@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LWFaceLibraryViewController : UIViewController <LWAddPageViewControllerDelegate, LWPageScrollViewControllerDataSource, LWPageScrollViewControllerDelegate, NTKFaceCollectionObserver> {
 	CLKDevice* _device;
 	NTKFaceCollection* _libraryFaceCollection;
+	NTKFaceCollection* _externalFaceCollection;
     NTKFaceCollection* _addableFaceCollection;
 	LWSwitcherViewController* _switcherController;
     LWAddPageViewController* _addFaceViewController;
@@ -48,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NTKFaceViewController* selectedFaceViewController;
 @property (nonatomic, weak) id <LWFaceLibraryViewControllerDelegate> _Nullable delegate;
 
-- (instancetype)initWithLibraryCollection:(NTKFaceCollection*)libraryFaceCollection addableCollection:(NTKFaceCollection*)addableFaceCollection;
+- (instancetype)initWithLibraryCollection:(NTKFaceCollection*)libraryFaceCollection addableCollection:(NTKFaceCollection*)addableFaceCollection externalFaceCollection:(NTKFaceCollection*)externalFaceCollection;
 - (void)didMoveToParentViewController:(nullable UIViewController*)viewController;
 - (void)viewDidLayoutSubviews;
 - (void)viewDidLoad;

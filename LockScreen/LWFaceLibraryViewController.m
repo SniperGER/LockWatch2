@@ -32,18 +32,19 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 
 @implementation LWFaceLibraryViewController
 
-- (instancetype)initWithLibraryCollection:(NTKFaceCollection*)libraryFaceCollection addableCollection:(NTKFaceCollection*)addableFaceCollection {
+- (instancetype)initWithLibraryCollection:(NTKFaceCollection*)libraryFaceCollection addableCollection:(NTKFaceCollection*)addableFaceCollection externalFaceCollection:(NTKFaceCollection*)externalFaceCollection {
 	if (self = [super init]) {
 		// _device = [CLKDevice currentDevice];
 		
-		_libraryFaceCollection = libraryFaceCollection;
 		_addableFaceCollection = addableFaceCollection;
+		_externalFaceCollection = externalFaceCollection;
+		_libraryFaceCollection = libraryFaceCollection;
 		
 		_faceViewControllersByFace = [NSMapTable weakToWeakObjectsMapTable];
 		_waitingToZoomWhileScrollingToIndex = -1;
 		_suspendWorkReasons = [NSMutableSet set];
 		
-		_addFaceViewController = [[LWAddPageViewController alloc] initWithLibraryFaceCollection:libraryFaceCollection addableFaceCollection:addableFaceCollection];
+		_addFaceViewController = [[LWAddPageViewController alloc] initWithLibraryFaceCollection:libraryFaceCollection addableFaceCollection:addableFaceCollection externalFaceCollection:externalFaceCollection];
 		[_addFaceViewController setDelegate:self];
 	}
 	

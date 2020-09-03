@@ -6,13 +6,44 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#define kLWLibraryFacesCollectionIdentifier @"LibraryFaces"
 #define kLWAddableFacesCollectionIdentifier @"AddableFaces"
+#define kLWExternalFacesCollectionIdentifier @"ExternalFaces"
+#define kLWLibraryFacesCollectionIdentifier @"LibraryFaces"
 #define LIBRARY_PATH @"/var/mobile/Library/Preferences/ml.festival.lockwatch2.CurrentFaces.plist"
+#define THIRD_PARTY_FACES_PATH @"/Library/Application Support/LockWatch2/Faces"
 
+#import <dlfcn.h>
+#import <objc/runtime.h>
+
+#import "LWCustomFaceInterface.h"
 #import "LWPersistentFaceCollection.h"
 
 extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
+
+
+
+@implementation NSBundle (ClassList)
+- (NSArray<Class>*)classList {
+	if (![self executablePath]) return nil;
+	
+	static NSMutableArray* classList;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        classList = [NSMutableArray array];
+		
+		dlopen([[self executablePath] UTF8String], RTLD_NOW);
+		
+		unsigned int classCount = 0;
+		const char** classes = objc_copyClassNamesForImage([[self executablePath] UTF8String], &classCount);
+		for (int i=0; i < classCount; i++) {
+			NSString* className = [NSString stringWithUTF8String:classes[i]];
+			[classList addObject:NSClassFromString(className)];
+		}
+    });
+
+    return classList;
+}
+@end
 
 
 
@@ -68,6 +99,34 @@ extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 	int selectedFaceIndex = [self.class defaultLibrarySelectedFaceForDevice:device];
 	
 	return [[LWPersistentFaceCollection alloc] initWithCollectionIdentifier:kLWLibraryFacesCollectionIdentifier forDevice:device faceStyles:faceStyles selectedFaceIndex:selectedFaceIndex];
+}
+
++ (instancetype)externalFaceCollectionForDevice:(CLKDevice*)device {
+	if (!device) return nil;
+	
+	NSMutableArray* classList = [NSMutableArray array];
+	
+	[[[NSFileManager defaultManager] contentsOfDirectoryAtPath:THIRD_PARTY_FACES_PATH error:nil] enumerateObjectsUsingBlock:^(NSString* entry, NSUInteger index, BOOL* stop) {
+		NSBundle* bundle = [NSBundle bundleWithPath:[NSString stringWithFormat:@"%@/%@", THIRD_PARTY_FACES_PATH, entry]];
+		if (!bundle || !bundle.executablePath) return;
+		
+		[[bundle classList] enumerateObjectsUsingBlock:^(Class class, NSUInteger index, BOOL* stop) {
+			if ([class isSubclassOfClass:[NTKFace class]] && 
+				[class conformsToProtocol:@protocol(LWCustomFaceInterface)] &&
+				[class acceptsDevice:device]) {
+				[classList addObject:class];
+			}
+		}];
+	}];
+	
+	classList = [[classList sortedArrayUsingComparator:^NSComparisonResult(Class class1, Class class2) {
+        NTKFace* face1 = [class1 new];
+        NTKFace* face2 = [class2 new];
+		
+		return [[face1 name] compare:[face2 name]];
+    }] mutableCopy];
+	
+	return [[LWPersistentFaceCollection alloc] initWithCollectionIdentifier:kLWExternalFacesCollectionIdentifier forDevice:device externalFaceClasses:classList];
 }
 
 + (instancetype)faceCollectionWithContentsOfFile:(NSString*)path
@@ -159,6 +218,22 @@ extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 		
 		NSInteger selectedFaceIndex = [jsonObjectRepresentation[@"selectedFaceIndex"] integerValue];
 		[self setSelectedFaceIndex:MIN(MAX(selectedFaceIndex, 0), self.numberOfFaces - 1) suppressingCallbackToObserver:nil];
+	}
+	
+	return self;
+}
+
+- (instancetype)initWithCollectionIdentifier:(NSString*)identifier
+								   forDevice:(CLKDevice*)device
+						 externalFaceClasses:(NSArray<Class>*)classList {
+	if (self = [super initWithCollectionIdentifier:identifier deviceUUID:device.nrDeviceUUID]) {
+		[classList enumerateObjectsUsingBlock:^(Class faceClass, NSUInteger index, BOOL* stop) {
+			NTKFace* face = [[faceClass alloc] _initWithFaceStyle:0x100 forDevice:device];
+			
+			if (face) {
+				[self appendFace:face suppressingCallbackToObserver:nil];
+			}
+		}];
 	}
 	
 	return self;

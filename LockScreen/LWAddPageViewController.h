@@ -17,9 +17,11 @@ NS_ASSUME_NONNULL_BEGIN
 	UISegmentedControl* segmentedControl;
 	CLKDevice* _device;
 	NTKFaceCollection* _libraryFaceCollection;
+	NTKFaceCollection* _externalFaceCollection;
 	NTKFaceCollection* _addableFaceCollection;
 	LWAddPageActivationButton* _activationButton;
 	NSMutableDictionary* _faceViewControllers;
+	NSMutableDictionary* _externalFaceViewControllers;
 	UINavigationController* _navigationController;
 	UITableViewController* _addableFacesViewController;
 	NTKCCLibraryListViewController* _libraryFacesViewController;
@@ -30,12 +32,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, getter=isActive) BOOL active;
 @property (nonatomic, weak) id <LWAddPageViewControllerDelegate> delegate;
 
-- (instancetype)initWithLibraryFaceCollection:(NTKFaceCollection*)libraryFaceCollection addableFaceCollection:(NTKFaceCollection*)addableFaceCollection;
+- (instancetype)initWithLibraryFaceCollection:(NTKFaceCollection*)libraryFaceCollection addableFaceCollection:(NTKFaceCollection*)addableFaceCollection externalFaceCollection:(NTKFaceCollection*)externalFaceCollection;
 - (void)loadView;
 - (void)viewDidLayoutSubviews;
 - (BOOL)_canShowWhileLocked;
 - (void)_activationButtonPress;
-- (NTKCompanionFaceViewController*)_viewControllerForFace:(NTKFace*)face;
+- (NTKCompanionFaceViewController*)_viewControllerForFace:(NTKFace*)face isExternalFace:(BOOL)isExternalFace;
 - (void)dismiss;
 - (void)dismissAnimated:(BOOL)animated;
 - (void)segmentControlDidChange:(UISegmentedControl*)segmentedControl;

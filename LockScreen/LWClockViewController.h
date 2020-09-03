@@ -36,6 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) LWPreferences* preferences;
 @property (nonatomic) CLKDevice* device;
 @property (nonatomic, readonly) NTKFaceCollection* addableFaceCollection;
+@property (nonatomic, readonly) NTKFaceCollection* externalFaceCollection;
 @property (nonatomic, readonly) NTKFaceCollection* libraryFaceCollection;
 @property (nonatomic) CGFloat alignmentPercent;
 @property (nonatomic) UIEdgeInsets dateViewInsets;

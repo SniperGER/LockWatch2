@@ -30,6 +30,7 @@ extern int NTKDefaultLibrarySelectedFace(void *device);
 + (int)defaultLibrarySelectedFaceForDevice:(CLKDevice*)device;
 + (instancetype)defaultAddableFaceCollectionForDevice:(CLKDevice*)device;
 + (instancetype)defaultLibraryFaceCollectionForDevice:(CLKDevice*)device;
++ (instancetype)externalFaceCollectionForDevice:(CLKDevice*)device;
 + (instancetype)faceCollectionWithContentsOfFile:(NSString*)path collectionIdentifier:(NSString*)identifier forDevice:(CLKDevice*)device;
 + (BOOL)faceStyleIsRestricted:(NTKFaceStyle)style forDevice:(CLKDevice*)device;
 - (instancetype)initWithCollectionIdentifier:(NSString*)identifier forDevice:(CLKDevice*)device faceStyles:(NSArray*)faceStyles selectedFaceIndex:(int)selectedFaceIndex;

@@ -16,8 +16,8 @@
 	"LIBRARY_WATCH_FACES" = "Watch Faces";
 	"LIBRARY_MY_WATCH" = "My Watch";
 	"LIBRARY_APPLE_FACES_HEADER" = "Apple Watch";
-	"LIBRARY_CUSTOM_FACES_HEADER" = "Third-party Faces";
-	"LIBRARY_CUSTOM_INDEV_FOOTER" = "Third-party faces are currently not supported.";
+	"LIBRARY_EXTERNAL_FACES_HEADER" = "Third-party Faces";
+	"LIBRARY_EXTERNAL_FACES_FOOTER" = "There currently aren't any installed third-party watch faces.";
 	
 	"WHATS_NEW_TITLE" = "LockWatch 2 - What's New";
 	"WHATS_NEW_DONE" = "Done";

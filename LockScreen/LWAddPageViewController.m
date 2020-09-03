@@ -16,21 +16,27 @@
 #import "LWAddPageViewController.h"
 
 #import "Core/LWAddPageViewControllerDelegate.h"
+#import "Core/LWCustomFaceInterface.h"
 #import "Core/LWEmulatedCLKDevice.h"
+#import "Core/LWPersistentFaceCollection.h"
 
 @implementation LWAddPageViewController
 
-- (instancetype)initWithLibraryFaceCollection:(NTKFaceCollection*)libraryFaceCollection addableFaceCollection:(NTKFaceCollection*)addableFaceCollection {
+- (instancetype)initWithLibraryFaceCollection:(NTKFaceCollection*)libraryFaceCollection addableFaceCollection:(NTKFaceCollection*)addableFaceCollection externalFaceCollection:(NTKFaceCollection*)externalFaceCollection {
 	if (self = [super init]) {
 		// _device = [CLKDevice currentDevice];
-		_libraryFaceCollection = libraryFaceCollection;
+
 		_addableFaceCollection = addableFaceCollection;
+		_externalFaceCollection = externalFaceCollection;
+		_libraryFaceCollection = libraryFaceCollection;
+		
 		_localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
 		
 		_activationButton = [[LWAddPageActivationButton alloc] initWithFrame:(CGRect){{ 0, 0 }, { 57, 57 }}];
 		[_activationButton addTarget:self action:@selector(_activationButtonPress) forControlEvents:UIControlEventTouchUpInside];
 		
 		_faceViewControllers = [NSMutableDictionary dictionary];
+		_externalFaceViewControllers = [NSMutableDictionary dictionary];
 	
 		[_addableFaceCollection enumerateFacesWithIndexesUsingBlock:^(NTKFace* face, NSUInteger index, BOOL* stop) {
 			NTKCompanionFaceViewController* faceViewController = [[NTKCompanionFaceViewController alloc] initWithFace:face];
@@ -117,21 +123,31 @@
 	[_libraryFacesViewController.tableView setContentOffset:(CGPoint){ 0, -_libraryFacesViewController.tableView.adjustedContentInset.top }];
 }
 
-- (NTKCompanionFaceViewController*)_viewControllerForFace:(NTKFace*)face {
-	NSUInteger index = [_addableFaceCollection indexOfFace:face];
+- (NTKCompanionFaceViewController*)_viewControllerForFace:(NTKFace*)face isExternalFace:(BOOL)isExternalFace {
+	if (!isExternalFace) {
+		NSInteger index = [_addableFaceCollection indexOfFace:face];
 	NTKCompanionFaceViewController* faceViewController = [_faceViewControllers objectForKey:@(index)];
 	
-	[face applyDefaultConfiguration];
-	
 	if (!faceViewController) {
-		faceViewController = [[NTKCompanionFaceViewController alloc] initWithFace:face];
+			faceViewController = [[NTKCompanionFaceViewController alloc] initWithFace:face forEditing:YES];
 		
 		[_faceViewControllers setObject:faceViewController forKey:@(index)];
 	}
 	
 	return faceViewController;
+	} else {
+		NSInteger index = [_externalFaceCollection indexOfFace:face];
+		NTKCompanionFaceViewController* faceViewController = [_externalFaceViewControllers objectForKey:@(index)];
+	
+		if (!faceViewController) {
+			faceViewController = [[NTKCompanionFaceViewController alloc] initWithFace:face forEditing:YES];
+			
+			[_externalFaceViewControllers setObject:faceViewController forKey:@(index)];
 }
 
+		return faceViewController;
+	}
+}
 
 - (void)dismiss {
 	[self dismissAnimated:YES];
@@ -179,10 +195,24 @@
         cell = [[objc_getClass("NTKCCLibraryListCell") alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[objc_getClass("NTKCCLibraryListCell") reuseIdentifier]];
     }
 	
-	if (indexPath.section == 0) {
-		[cell setFaceName:[[_addableFaceCollection faceAtIndex:indexPath.row] name]];
+	if (indexPath.section == 1) {
+		NTKFace* face = [_addableFaceCollection faceAtIndex:indexPath.row];
+		[face applyDefaultConfiguration];
 		
-		NTKCompanionFaceViewController* faceViewController = [self _viewControllerForFace:[_addableFaceCollection faceAtIndex:indexPath.row]];
+		[cell setCurrentFace:NO];
+		[cell setFaceName:[face name]];
+		
+		NTKCompanionFaceViewController* faceViewController = [self _viewControllerForFace:[_addableFaceCollection faceAtIndex:indexPath.row] isExternalFace:NO];
+		[cell setFaceView:faceViewController.faceView];
+	} else if (indexPath.section == 2) {
+		NTKFace<LWCustomFaceInterface>* face = [_externalFaceCollection faceAtIndex:indexPath.row];
+		[face applyDefaultConfiguration];
+		
+		[cell setCurrentFace:YES];
+		[cell setFaceName:[face name]];
+		[(UILabel*)[cell valueForKey:@"_subtitle"] setText:[face author]];
+		
+		NTKCompanionFaceViewController* faceViewController = [self _viewControllerForFace:face isExternalFace:YES];
 		[cell setFaceView:faceViewController.faceView];
 	}
     
@@ -192,7 +222,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section == 0) {
 		NTKFace* face = [_addableFaceCollection faceAtIndex:indexPath.row];
-		[self.delegate addPageViewController:self didSelectFace:face faceViewController:[self _viewControllerForFace:face]];
+		[self.delegate addPageViewController:self didSelectFace:face faceViewController:[self _viewControllerForFace:face isExternalFace:NO]];
+	} else if (indexPath.section == 1) {
+		NTKFace* face = [_externalFaceCollection faceAtIndex:indexPath.row];
+		[self.delegate addPageViewController:self didSelectFace:face faceViewController:[self _viewControllerForFace:face isExternalFace:YES]];
 	}
 	
 	[self dismiss];
@@ -203,7 +236,7 @@
 		case 0:
 			return _addableFaceCollection.numberOfFaces;
 		case 1:
-			return 0;
+			return _externalFaceCollection.numberOfFaces;
 		default: break;
 	}
 	
@@ -211,10 +244,8 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-	switch (section) {
-		case 1:
-			return [_localizableBundle localizedStringForKey:@"LIBRARY_CUSTOM_INDEV_FOOTER" value:nil table:nil];
-		default: break;
+	if (section == 1 && !_externalFaceCollection.numberOfFaces) {
+		return [_localizableBundle localizedStringForKey:@"LIBRARY_EXTERNAL_FACES_FOOTER" value:nil table:nil];
 	}
 	
 	return nil;
@@ -225,7 +256,7 @@
 		case 0:
 			return [_localizableBundle localizedStringForKey:@"LIBRARY_APPLE_FACES_HEADER" value:nil table:nil];
 		case 1:
-			return [_localizableBundle localizedStringForKey:@"LIBRARY_CUSTOM_FACES_HEADER" value:nil table:nil];
+			return [_localizableBundle localizedStringForKey:@"LIBRARY_EXTERNAL_FACES_HEADER" value:nil table:nil];
 		default: break;
 	}
 	

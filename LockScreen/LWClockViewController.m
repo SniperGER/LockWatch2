@@ -71,6 +71,7 @@ static _UILegibilitySettings* _legibilitySettings;
 		if (!device || !device.nrDevice) return nil;
 		
 		[self loadAddableFaceCollection];
+		[self loadExternalFaceCollection];
 		[self loadLibraryFaceCollection];
 		
 		[[NSDistributedNotificationCenter defaultCenter] addObserverForName:@"ml.festival.lockwatch2/ResetLibrary" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification) {
@@ -197,7 +198,7 @@ static _UILegibilitySettings* _legibilitySettings;
 	
 	_libraryViewIsPresented = NO;
 	
-	_libraryViewController = [[LWFaceLibraryViewController alloc] initWithLibraryCollection:_libraryFaceCollection addableCollection:_addableFaceCollection];
+	_libraryViewController = [[LWFaceLibraryViewController alloc] initWithLibraryCollection:_libraryFaceCollection addableCollection:_addableFaceCollection externalFaceCollection:_externalFaceCollection];
 	[_libraryViewController setDelegate:self];
 	
 	[self _putLibraryViewControllerIntoClockViewController];
@@ -380,6 +381,10 @@ static _UILegibilitySettings* _legibilitySettings;
 
 - (void)loadAddableFaceCollection {
 	_addableFaceCollection = [LWPersistentFaceCollection defaultAddableFaceCollectionForDevice:[CLKDevice currentDevice]];
+}
+
+- (void)loadExternalFaceCollection {
+	_externalFaceCollection = [LWPersistentFaceCollection externalFaceCollectionForDevice:_device];
 }
 
 - (void)loadLibraryFaceCollection {
