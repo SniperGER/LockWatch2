@@ -384,7 +384,7 @@ static _UILegibilitySettings* _legibilitySettings;
 }
 
 - (void)loadExternalFaceCollection {
-	_externalFaceCollection = [LWPersistentFaceCollection externalFaceCollectionForDevice:_device];
+	_externalFaceCollection = [LWPersistentFaceCollection externalFaceCollectionForDevice:[CLKDevice currentDevice]];
 }
 
 - (void)loadLibraryFaceCollection {
