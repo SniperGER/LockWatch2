@@ -26,20 +26,15 @@ extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 - (NSArray<Class>*)classList {
 	if (![self executablePath]) return nil;
 	
-	static NSMutableArray* classList;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        classList = [NSMutableArray array];
+	dlopen([[self executablePath] UTF8String], RTLD_NOW);
+	NSMutableArray* classList = [NSMutableArray array];
 		
-		dlopen([[self executablePath] UTF8String], RTLD_NOW);
-		
-		unsigned int classCount = 0;
-		const char** classes = objc_copyClassNamesForImage([[self executablePath] UTF8String], &classCount);
-		for (int i=0; i < classCount; i++) {
-			NSString* className = [NSString stringWithUTF8String:classes[i]];
-			[classList addObject:NSClassFromString(className)];
-		}
-    });
+	unsigned int classCount = 0;
+	const char** classes = objc_copyClassNamesForImage([[self executablePath] UTF8String], &classCount);
+	for (int i=0; i < classCount; i++) {
+		NSString* className = [NSString stringWithUTF8String:classes[i]];
+		[classList addObject:NSClassFromString(className)];
+	}
 
     return classList;
 }
