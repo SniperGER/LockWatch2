@@ -29,7 +29,11 @@
 	"ADD_TO_PROMPT" = "Wähle einen Ort, zu dem du das Zifferblatt hinzufügen möchtest.";
 	"ADD_TO_LOCK_SCREEN" = "Sperrbildschirm";
 	
-	"IMPORT_WATCH_FACE" = "Zifferblatt importieren";
-	"ERROR_INVALID_FACE" = "Das Zifferblatt konnte nicht importiert werden. Du musst möglicherweise ein Drittanbieter-Zifferblatt installieren, bevor dieses Zifferblatt verwendet werden kann.";
-	"ERROR_INVALID_FACE_JSON" = "Das Zifferblatt konnte nicht importiert werden, da die Daten ungültig sind.";
+	"IMPORT_WATCH_FACE" = "Zifferblatt hinzufügen";
+	"ERROR_MISSING_FACE_TITLE" = "Zusätliches Zifferblatt benötigt";
+	"ERROR_MISSING_FACE_MESSAGE" = "Dieses Zifferblatt benötigt ein zusätzliches Zifferblatt-Paket. Möchtest du es installieren?";
+	"ERROR_MISSING_FACE_INSTALL" = "Installieren";
+	
+	"ERROR_INCOMPATIBLE_FACE_TITLE" = "Ziffernblatt imkompatibel";
+	"ERROR_INCOMPATIBLE_FACE_MESSAGE" = "Das Zifferblatt konnte nicht hinzugefügt werden, da es mit dem ausgewählten Apple Watch-Modell nicht kompatibel ist.";
 }

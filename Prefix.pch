@@ -14,7 +14,7 @@ extern BOOL UIColorIsLightColor(UIColor* color);
 
 
 
-@class CSMainPageContentViewController, SBDashBoardIdleTimerController, SBFLockScreenDateViewController;
+@class CSMainPageContentViewController, SBApplication, SBDashBoardIdleTimerController, SBFLockScreenDateViewController;
 
 @interface CSCoverSheetViewController : UIViewController
 - (SBFLockScreenDateViewController*)dateViewController;
@@ -23,13 +23,38 @@ extern BOOL UIColorIsLightColor(UIColor* color);
 - (UIWindow*)_window;
 @end
 
+@interface FBSOpenApplicationOptions : NSObject
++ (id)optionsWithDictionary:(id)arg1;
+@end
+
+@interface FBSOpenApplicationService : NSObject
++ (instancetype)serviceWithDefaultShellEndpoint;
+- (void)openApplication:(id)arg1 withOptions:(id)arg2 completion:(id /* block */)arg4;
+@end
+
 @interface NSDistributedNotificationCenter : NSNotificationCenter
+@end
+
+@interface SBApplicationController : NSObject
++ (id)sharedInstance;
+- (id)applicationWithBundleIdentifier:(id)arg1;
 @end
 
 @interface SBLockScreenManager : NSObject
 + (instancetype)sharedInstance;
 - (CSCoverSheetViewController*)coverSheetViewController;
+- (BOOL)unlockWithRequest:(id)arg1 completion:(id /* block */)arg2;
 @end
+
+@interface SBLockScreenUnlockRequest : NSObject
+@property(nonatomic) BOOL forceAlertAuthenticationUI;
+@property(nonatomic) BOOL wantsBiometricPresentation;
+@property(retain, nonatomic) SBApplication *destinationApplication;
+@property(nonatomic) int intent;
+@property(nonatomic) int source;
+@property(copy, nonatomic) NSString *name;
+@end
+
 @interface SBDashBoardIdleTimerController : NSObject
 - (void)resetIdleTimerIfTopMost;
 - (void)addIdleTimerDisabledAssertionReason:(id)arg1;

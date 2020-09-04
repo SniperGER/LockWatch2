@@ -35,6 +35,7 @@
 	if (self.faceStyle == 0x100) {
 		[r setObject:@"custom" forKey:@"face type"];
 		[r setObject:NSStringFromClass(self.class) forKey:@"class"];
+		[r setObject:[[NSBundle bundleForClass:self.class] bundleIdentifier] forKey:@"bundle identifier"];
 	}
 	
 	return r;

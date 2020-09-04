@@ -29,7 +29,11 @@
 	"ADD_TO_PROMPT" = "Choose a location to add this watch face to.";
 	"ADD_TO_LOCK_SCREEN" = "Lock Screen";
 	
-	"IMPORT_WATCH_FACE" = "Import watch face";
-	"ERROR_INVALID_FACE" = "This watch face could not be imported. You may need to install a third-party watch face before you can use this watch face.";
-	"ERROR_INVALID_FACE_JSON" = "This watch face could not be imported, because the data is invalid.";
+	"IMPORT_WATCH_FACE" = "Add watch face";
+	"ERROR_MISSING_FACE_TITLE" = "Additional watch face required";
+	"ERROR_MISSING_FACE_MESSAGE" = "This watch face requires an additional watch face package. Would you like to install it?";
+	"ERROR_MISSING_FACE_INSTALL" = "Install";
+	
+	"ERROR_INCOMPATIBLE_FACE_TITLE" = "Incompatible watch face";
+	"ERROR_INCOMPATIBLE_FACE_MESSAGE" = "The watch face could not be imported, because it's incompatible with the selected Apple Watch model.";
 }

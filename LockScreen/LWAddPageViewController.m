@@ -22,6 +22,36 @@
 
 extern UIColor* NTKCActionColor();
 
+void LWLaunchApplication(NSString* bundleIdentifier, NSURL* url) {
+	SBApplication* destinationApplication = [[NSClassFromString(@"SBApplicationController") sharedInstance] applicationWithBundleIdentifier:bundleIdentifier];
+		
+	if (!destinationApplication) return;
+	
+	SBLockScreenUnlockRequest* request = [NSClassFromString(@"SBLockScreenUnlockRequest") new];
+	[request setSource:17];
+	[request setIntent:3];
+	[request setName:[NSString stringWithFormat:@"SBWorkspaceRequest: Open \"%@\"", bundleIdentifier]];
+	[request setDestinationApplication:destinationApplication];
+	[request setWantsBiometricPresentation:YES];
+	[request setForceAlertAuthenticationUI:YES];
+	
+	FBSOpenApplicationService* appService = [NSClassFromString(@"FBSOpenApplicationService") serviceWithDefaultShellEndpoint];
+	
+	[[NSClassFromString(@"SBLockScreenManager") sharedInstance] unlockWithRequest:request completion:^(BOOL completed){
+		if (completed) {
+			if (url) {
+				FBSOpenApplicationOptions* openOptions = [NSClassFromString(@"FBSOpenApplicationOptions") optionsWithDictionary:@{
+					@"__PayloadURL": url
+				}];
+				
+				[appService openApplication:bundleIdentifier withOptions:openOptions completion:nil];
+			} else {
+				[appService openApplication:bundleIdentifier withOptions:nil completion:nil];
+			}
+		}
+	}];
+}
+
 @implementation LWAddPageViewController
 
 - (instancetype)initWithLibraryFaceCollection:(NTKFaceCollection*)libraryFaceCollection addableFaceCollection:(NTKFaceCollection*)addableFaceCollection externalFaceCollection:(NTKFaceCollection*)externalFaceCollection {
@@ -201,14 +231,34 @@ extern UIColor* NTKCActionColor();
 	}
 	
 	NTKFace* face = [NTKFace faceWithJSONObjectRepresentation:faceJSON forDevice:[CLKDevice currentDevice]];
-	if (!face) {
-		UIAlertController* alertController = [UIAlertController alertControllerWithTitle:[_localizableBundle localizedStringForKey:@"GENERIC_ERROR" value:nil table:nil]
-																				 message:[_localizableBundle localizedStringForKey:@"ERROR_INVALID_FACE" value:nil table:nil]
+	if (!face && [faceJSON objectForKey:@"bundle identifier"]) {
+		UIAlertController* alertController = [UIAlertController alertControllerWithTitle:[_localizableBundle localizedStringForKey:@"ERROR_MISSING_FACE_TITLE" value:nil table:nil]
+																				 message:[_localizableBundle localizedStringForKey:@"ERROR_MISSING_FACE_MESSAGE" value:nil table:nil]
+																		  preferredStyle:UIAlertControllerStyleAlert];
+		
+		[alertController addAction:[UIAlertAction actionWithTitle:[_localizableBundle localizedStringForKey:@"ERROR_MISSING_FACE_INSTALL" value:nil table:nil] style:UIAlertActionStyleDefault handler:^(UIAlertAction* action) {
+			if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"cydia://"]]) {
+				LWLaunchApplication(@"com.saurik.Cydia", [NSURL URLWithString:[NSString stringWithFormat:@"cydia://package/%@", [faceJSON objectForKey:@"bundle identifier"]]]);
+			} else if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"zbra://"]]) {
+				LWLaunchApplication(@"xyz.willy.zebra", [NSURL URLWithString:[NSString stringWithFormat:@"zbra://packages/%@", [faceJSON objectForKey:@"bundle identifier"]]]);
+			} else if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"sileo://"]]) {
+				LWLaunchApplication(@"org.coolstar.SileoStore", [NSURL URLWithString:[NSString stringWithFormat:@"sileo://package/%@", [faceJSON objectForKey:@"bundle identifier"]]]);
+			}
+		}]];
+		[alertController addAction:[UIAlertAction actionWithTitle:[_localizableBundle localizedStringForKey:@"GENERIC_CANCEL" value:nil table:nil] style:UIAlertActionStyleCancel handler:nil]];
+		
+		[self presentViewController:alertController animated:YES completion:nil];
+		
+		return;
+	} else if (!face || ([face.class respondsToSelector:@selector(acceptsDevice:)] && ![face.class acceptsDevice:[CLKDevice currentDevice]])) {
+		UIAlertController* alertController = [UIAlertController alertControllerWithTitle:[_localizableBundle localizedStringForKey:@"ERROR_INCOMPATIBLE_FACE_TITLE" value:nil table:nil]
+																				 message:[_localizableBundle localizedStringForKey:@"ERROR_INCOMPATIBLE_FACE_MESSAGE" value:nil table:nil]
 																		  preferredStyle:UIAlertControllerStyleAlert];
 	
 		[alertController addAction:[UIAlertAction actionWithTitle:[_localizableBundle localizedStringForKey:@"GENERIC_CONFIRM" value:nil table:nil] style:UIAlertActionStyleDefault handler:nil]];
 		
 		[self presentViewController:alertController animated:YES completion:nil];
+		
 		return;
 	}
 	
