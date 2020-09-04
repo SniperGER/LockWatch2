@@ -16,8 +16,8 @@
 	
 	"LIBRARY_WATCH_FACES" = "Zifferblätter";
 	"LIBRARY_MY_WATCH" = "Meine Uhr";
-	"LIBRARY_APPLE_FACES_HEADER" = "Apple Watch";
-	"LIBRARY_EXTERNAL_FACES_HEADER" = "Drittanbieter";
+	"LIBRARY_APPLE_FACES_HEADER" = "Apple Watch-Zifferblätter";
+	"LIBRARY_EXTERNAL_FACES_HEADER" = "Drittanbieter-Zifferblätter";
 	"LIBRARY_EXTERNAL_FACES_FOOTER" = "Es sind derzeit keine Zifferblätter von Drittanbietern installiert.";
 	
 	"WHATS_NEW_TITLE" = "LockWatch 2 - Neuigkeiten";
