@@ -328,6 +328,7 @@ extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 	
 	if (_greenfieldSharingController) {
 		[_greenfieldSharingController dismissViewControllerAnimated:animated completion:^{
+			_greenfieldSharingController.completionWithItemsHandler(nil, 0, nil, nil);
 			_greenfieldSharingController = nil;
 		}];
 	}
@@ -637,6 +638,7 @@ extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 	
 	if (_greenfieldSharingController) {
 		[_greenfieldSharingController dismissViewControllerAnimated:animated completion:^{
+			_greenfieldSharingController.completionWithItemsHandler(nil, 0, nil, nil);
 			_greenfieldSharingController = nil;
 		}];
 	}
