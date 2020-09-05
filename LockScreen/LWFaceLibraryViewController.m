@@ -634,6 +634,12 @@ extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 	[_editingViewController dismissViewControllerAnimated:animated completion:^ {
 		[(LWPersistentFaceCollection*)_libraryFaceCollection synchronize];
 	}];
+	
+	if (_greenfieldSharingController) {
+		[_greenfieldSharingController dismissViewControllerAnimated:animated completion:^{
+			_greenfieldSharingController = nil;
+		}];
+	}
 }
 
 - (void)_tearDownDeleteConfirmation {
