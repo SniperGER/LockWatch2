@@ -545,12 +545,13 @@ static HDActivityCacheManager* activityCacheManager;
 %end	// %group WeatherComplications
 
 
-
+#if !TARGET_OS_SIMULATOR
 extern "C" BOOL NTKIsSystemAppRestrictedOrRemoved(NSString* identifier);
 
 MSHook(BOOL, NTKIsSystemAppRestrictedOrRemoved, NSString* key) {
 	return NO;
 }
+#endif
 
 
 
@@ -576,7 +577,9 @@ MSHook(BOOL, NTKIsSystemAppRestrictedOrRemoved, NSString* key) {
 				
 				%init(SpringBoard);
 				
+#if !TARGET_OS_SIMULATOR
 				MSHookFunction(NTKIsSystemAppRestrictedOrRemoved, MSHake(NTKIsSystemAppRestrictedOrRemoved));
+#endif
 			}
 			
 			if (IN_BUNDLE(@"com.apple.healthd")) {

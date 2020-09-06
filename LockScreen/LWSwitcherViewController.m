@@ -6,9 +6,6 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#define CLAMP(value, min, max) (value - min) / (max - min)
-#define LERP(a, b, value) a + (b - a) * value
-
 #import "LWPageScrollView.h"
 #import "LWPageView.h"
 #import "LWSwitcherViewController.h"

@@ -21,7 +21,7 @@ BOOL isLandscapePhone() {
 	clockViewController = [LWClockViewController new];
 	
 	if (!clockViewController) {
-		NSBundle* localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
+		NSBundle* localizableBundle = [NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH];
 
 		UIAlertController* alert = [UIAlertController alertControllerWithTitle:[localizableBundle localizedStringForKey:@"NO_DEVICE_TITLE" value:nil table:nil]
 																	   message:[localizableBundle localizedStringForKey:@"NO_DEVICE_MESSAGE" value:nil table:nil]
@@ -288,7 +288,7 @@ static BOOL scrollEnabled = YES;
 - (void)viewDidLoad {
 	%orig;
 	
-	NSBundle* localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
+	NSBundle* localizableBundle = [NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH];
 
 	PSSpecifier* syncSpecifier = [PSSpecifier preferenceSpecifierNamed:[localizableBundle localizedStringForKey:@"SYNC_TO_LOCK_SCREEN" value:nil table:nil] target:self set:nil get:nil detail:nil cell:13 edit:nil];
 	[syncSpecifier setButtonAction:@selector(syncToLockscreen)];
@@ -297,7 +297,7 @@ static BOOL scrollEnabled = YES;
 
 %new
 - (void)syncToLockscreen {
-	NSBundle* localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
+	NSBundle* localizableBundle = [NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH];
 	
 	UIAlertController* alertController = [UIAlertController alertControllerWithTitle:[localizableBundle localizedStringForKey:@"SYNC_TO_LOCK_SCREEN" value:nil table:nil]
 																			 message:[localizableBundle localizedStringForKey:@"SYNC_TO_LOCK_SCREEN_PROMPT" value:nil table:nil]
@@ -318,7 +318,7 @@ static BOOL scrollEnabled = YES;
 
 %hook NTKCFaceDetailViewController
 - (void)_addTapped {
-	NSBundle* localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
+	NSBundle* localizableBundle = [NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH];
 	
 	UIAlertController* alertController = [UIAlertController alertControllerWithTitle:[localizableBundle localizedStringForKey:@"ADD_TO_PROMPT" value:nil table:nil] message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 	
@@ -396,7 +396,7 @@ static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* obs
 	
 	LWEmulatedCLKDevice* currentDevice = [LWEmulatedCLKDevice currentDevice];
 	
-	if (preferences.isEmulatingDevice) {
+	if (preferences.isEmulatingDevice || TARGET_OS_SIMULATOR) {
 		NSDictionary* watchData = [[NSDictionary alloc] initWithContentsOfFile:WATCH_DATA_PATH][preferences.emulatedDeviceType];
 
 		LWEmulatedNRDevice* nrDevice = [[LWEmulatedNRDevice alloc] initWithJSONObjectRepresentation:watchData[@"registry"] pairingID:[NSUUID new]];
@@ -463,9 +463,9 @@ static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* obs
 			%init();
 			
 			if ([bundleIdentifier isEqualToString:@"com.apple.springboard"]) {
-	#if !TARGET_OS_SIMULATOR
+#if !TARGET_OS_SIMULATOR
 				MSHookFunction(((void*)MSFindSymbol(NULL, "_NTKShowHardwareSpecificFaces")),(void*)_NTKShowHardwareSpecificFaces, (void**)&old_NTKShowHardwareSpecificFaces);
-	#endif
+#endif
 				
 				void* customizationBundle = dlopen("/System/Library/NanoPreferenceBundles/Customization/NTKCustomization.bundle/NTKCustomization", RTLD_LAZY);
 				if (!customizationBundle) {

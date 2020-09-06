@@ -9,8 +9,6 @@
 #define kLWAddableFacesCollectionIdentifier @"AddableFaces"
 #define kLWExternalFacesCollectionIdentifier @"ExternalFaces"
 #define kLWLibraryFacesCollectionIdentifier @"LibraryFaces"
-#define LIBRARY_PATH @"/var/mobile/Library/Preferences/ml.festival.lockwatch2.CurrentFaces.plist"
-#define THIRD_PARTY_FACES_PATH @"/Library/Application Support/LockWatch2/Faces"
 
 #import <dlfcn.h>
 #import <objc/runtime.h>
@@ -170,6 +168,9 @@ extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 	
 	// Globally disabled faces
 	switch (style) {
+		case NTKFaceStyleKaleidoscope:
+			restricted = TARGET_OS_SIMULATOR;
+			break;
 		default:
 			break;
 	}

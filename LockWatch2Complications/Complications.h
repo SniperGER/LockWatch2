@@ -6,6 +6,8 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
+#include <substrate.h>
+
 #import <ClockKit/ClockKit.h>
 #import <HealthKit/HealthKit.h>
 #import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>

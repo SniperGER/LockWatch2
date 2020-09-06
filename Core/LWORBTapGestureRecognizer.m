@@ -6,9 +6,6 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#define CLAMP(value, min, max) (value - min) / (max - min)
-#define LERP(a, b, value) a + (b - a) * value
-
 #import "LWORBTapGestureRecognizer.h"
 
 #import "Core/LWORBTapGestureRecognizerDelegate.h"
@@ -51,7 +48,11 @@
 	UITouch* touch = touches.anyObject;
 	_touchStartLocation = [touch locationInView:self.view];
 	
+#if TARGET_OS_SIMULATOR
+	_usingLongPress = YES;
+#else
 	_usingLongPress = (touch.type != UITouchTypeStylus && UIScreen.mainScreen.traitCollection.forceTouchCapability != UIForceTouchCapabilityAvailable);
+#endif
 	
 	if (_usingLongPress) {
 		[self _updateLongPressForTouchesBegan:touches event:event];

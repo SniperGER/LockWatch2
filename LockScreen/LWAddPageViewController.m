@@ -62,7 +62,7 @@ void LWLaunchApplication(NSString* bundleIdentifier, NSURL* url) {
 		_externalFaceCollection = externalFaceCollection;
 		_libraryFaceCollection = libraryFaceCollection;
 		
-		_localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
+		_localizableBundle = [NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH];
 		
 		_activationButton = [[LWAddPageActivationButton alloc] initWithFrame:(CGRect){{ 0, 0 }, { 57, 57 }}];
 		[_activationButton addTarget:self action:@selector(_activationButtonPress) forControlEvents:UIControlEventTouchUpInside];

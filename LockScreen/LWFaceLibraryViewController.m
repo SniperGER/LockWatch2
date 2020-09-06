@@ -6,9 +6,6 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#define CLAMP(value, min, max) (value - min) / (max - min)
-#define LERP(a, b, value) a + (b - a) * value
-
 #import <objc/runtime.h>
 #import <ClockKit/CLKDevice.h>
 #import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>

@@ -4,7 +4,8 @@ PACKAGE_VERSION = $(shell cat VERSION)
 ARCHS = arm64 arm64e
 TARGET = iphone:13.3:latest
 # ARCHS = x86_64
-# TARGET = simulator:clang::latest
+# TARGET = simulator:clang:13.2:latest
+# TARGET_CODESIGN = 
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 
@@ -18,12 +19,14 @@ LockWatch2_PRIVATE_FRAMEWORKS = ClockKit MaterialKit MobileTimer NanoRegistry Na
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
-ifeq ($(THEOS_TARGET_NAME), iphone)
 SUBPROJECTS += LockWatch2Complications
+
+ifeq ($(THEOS_TARGET_NAME), iphone)
 SUBPROJECTS += LockWatch2Preferences
 SUBPROJECTS += LockWatch2OnBoarding
-include $(THEOS_MAKE_PATH)/aggregate.mk
 endif
+
+include $(THEOS_MAKE_PATH)/aggregate.mk
 
 before-stage::
 	@find . -name ".DS_Store" -delete

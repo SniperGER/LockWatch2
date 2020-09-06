@@ -6,8 +6,6 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#define PREFERENCES_PATH @"/var/mobile/Library/Preferences/ml.festival.lockwatch2.plist"
-
 #import "LWPreferences.h"
 
 @implementation LWPreferences

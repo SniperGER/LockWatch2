@@ -6,9 +6,6 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#define LIBRARY_PATH @"/var/mobile/Library/Preferences/ml.festival.lockwatch2.CurrentFaces.plist"
-#define CLAMP(value, min, max) (value - min) / (max - min)
-
 #import <AudioToolbox/AudioServices.h>
 #import <ClockKit/CLKDevice.h>
 #import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>

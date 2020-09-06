@@ -6,15 +6,8 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#define DPKG_PATH "/var/lib/dpkg/info/ml.festival.lockwatch2.list"
-
-#if TARGET_OS_SIMULATOR
-#define WATCH_DATA_PATH @"/Users/janikschmidt/Desktop/EmulatedDevices.plist"
-#else
-#define WATCH_DATA_PATH @"/Library/Application Support/LockWatch2/EmulatedDevices.plist"
-#endif
-
 #include <substrate.h>
+
 #import <ClockKit/CLKDevice.h>
 #import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 #import <NTKCustomization/NTKCCLibraryListViewController.h>

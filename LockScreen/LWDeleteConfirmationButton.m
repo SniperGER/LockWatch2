@@ -20,7 +20,7 @@ extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 	if (self = [super initWithFrame:frame]) {
 		// _device = [CLKDevice currentDevice];
 		
-		UIImage* deleteConfirmationImage = [UIImage imageNamed:@"DeleteConfirmation" inBundle:[NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"] compatibleWithTraitCollection:nil];
+		UIImage* deleteConfirmationImage = [UIImage imageNamed:@"DeleteConfirmation" inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil];
 		_deleteIconView = [[UIImageView alloc] initWithImage:[deleteConfirmationImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
 		[_deleteIconView setTintColor:[UIColor colorWithRed:255.0/255.0 green:69.0/255.0 blue:58.0/255.0 alpha:1]];
 		[self addSubview:_deleteIconView];

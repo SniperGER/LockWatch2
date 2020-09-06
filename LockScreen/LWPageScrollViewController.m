@@ -6,8 +6,6 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#define CLAMP(value, min, max) (value - min) / (max - min)
-
 #import <ClockKit/CLKDevice.h>
 #import <NanoTimeKitCompanion/NTKFaceViewController.h>
 

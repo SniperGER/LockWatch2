@@ -6,7 +6,26 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#define __VERSION "2.0b3-u2"
+#define __VERSION "2.0b4"
+
+#define DPKG_PATH "/var/lib/dpkg/info/ml.festival.lockwatch2.list"
+
+#if TARGET_OS_SIMULATOR
+#define LIBRARY_PATH @"/var/mobile/Library/Preferences/ml.festival.lockwatch2.CurrentFaces.plist"
+#define LOCALIZABLE_BUNDLE_PATH @"/opt/simject/Application Support/LockWatch2"
+#define PREFERENCES_PATH @"/opt/simject/Preferences/ml.festival.lockwatch2.plist"
+#define THIRD_PARTY_FACES_PATH @"/Library/Application Support/LockWatch2/Faces"
+#define WATCH_DATA_PATH @"/opt/simject/Application Support/LockWatch2/EmulatedDevices.plist"
+#else
+#define LIBRARY_PATH @"/opt/simject/Preferences/ml.festival.lockwatch2.CurrentFaces.plist"
+#define LOCALIZABLE_BUNDLE_PATH @"/Library/Application Support/LockWatch2"
+#define PREFERENCES_PATH @"/var/mobile/Library/Preferences/ml.festival.lockwatch2.plist"
+#define THIRD_PARTY_FACES_PATH @"/opt/simject/Application Support/LockWatch2/Faces"
+#define WATCH_DATA_PATH @"/Library/Application Support/LockWatch2/EmulatedDevices.plist"
+#endif
+
+#define CLAMP(value, min, max) (value - min) / (max - min)
+#define LERP(a, b, value) a + (b - a) * value
 
 
 
