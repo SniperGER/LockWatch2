@@ -24,16 +24,16 @@
 	"WHATS_NEW_DONE" = "Done";
 	
 	"SYNC_TO_LOCK_SCREEN" = "Sync to Lock Screen";
-	"SYNC_TO_LOCK_SCREEN_PROMPT" = "This will replace the watch faces on your lock screen with the faces on your Apple Watch. Any customization to existing faces will be lost.\n\nAre you sure you want to continue? Some watch faces, customizations or complications may not be available for certain models.";
+	"SYNC_TO_LOCK_SCREEN_PROMPT" = "This will replace the watch faces on your lock screen with the faces on your Apple Watch. Any customization to existing faces will be lost. Some watch faces, customizations or complications may not be available for certain models.\n\nAre you sure you want to continue?";
 	
 	"ADD_TO_PROMPT" = "Choose a location to add this watch face to.";
 	"ADD_TO_LOCK_SCREEN" = "Lock Screen";
 	
 	"IMPORT_WATCH_FACE" = "Add watch face";
-	"ERROR_MISSING_FACE_TITLE" = "Additional watch face required";
+	"ERROR_MISSING_FACE_TITLE" = "Additional watch face package required";
 	"ERROR_MISSING_FACE_MESSAGE" = "This watch face requires an additional watch face package. Would you like to install it?";
 	"ERROR_MISSING_FACE_INSTALL" = "Install";
 	
 	"ERROR_INCOMPATIBLE_FACE_TITLE" = "Incompatible watch face";
-	"ERROR_INCOMPATIBLE_FACE_MESSAGE" = "The watch face could not be imported, because it's incompatible with the selected Apple Watch model.";
+	"ERROR_INCOMPATIBLE_FACE_MESSAGE" = "The watch face could not be imported because it's incompatible with the selected Apple Watch model.";
 }

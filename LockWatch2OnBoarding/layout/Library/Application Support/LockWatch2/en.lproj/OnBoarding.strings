@@ -39,13 +39,13 @@
 	
 	// Device Type
 	"ONBOARDING_DEVICE_TITLE" = "Do you own an Apple Watch?";
-	"ONBOARDING_DEVICE_DETAIL" = "Use your existing Apple Watch for LockWatch 2 and sync your watch faces to the lock screen.";
+	"ONBOARDING_DEVICE_DETAIL" = "Use your existing Apple Watch for LockWatch 2 and add your watch faces to the lock screen.";
 	
 	"ONBOARDING_DEVICE_PHYSICAL" = "Use \"%@\"";
 	"ONBOARDING_DEVICE_PHYSICAL_NOT_AVAILABLE" = "No Apple Watch available";
 	"ONBOARDING_DEVICE_EMULATED" = "I don't own an Apple Watch";
 	
-	"ONBOARDING_DEVICE_FOOTER" = "Own an Apple Watch, but you want a different model to be displayed? Choose \"I don't own an Apple Watch\" to emulate a different device. Your watch faces can be synced later via the \"Watch\" app.";
+	"ONBOARDING_DEVICE_FOOTER" = "You own an Apple Watch, but you want a different model to be displayed? Choose \"I don't own an Apple Watch\" to emulate a different device. Your watch faces can be synced later via the \"Watch\" app.";
 	
 	
 	

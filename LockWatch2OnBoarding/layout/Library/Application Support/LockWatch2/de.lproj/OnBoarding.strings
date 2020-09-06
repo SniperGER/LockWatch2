@@ -39,7 +39,7 @@
 	
 	// Device Type
 	"ONBOARDING_DEVICE_TITLE" = "Hast du eine Apple Watch?";
-	"ONBOARDING_DEVICE_DETAIL" = "Nutze deine Apple Watch für LockWatch 2 und synchronisiere deine Zifferblätter auf dem Sperrbildschirm.";
+	"ONBOARDING_DEVICE_DETAIL" = "Nutze deine Apple Watch für LockWatch 2 und füge deine Zifferblätter auf dem Sperrbildschirm hinzu.";
 	
 	"ONBOARDING_DEVICE_PHYSICAL" = "„%@” benutzen";
 	"ONBOARDING_DEVICE_PHYSICAL_NOT_AVAILABLE" = "Keine Apple Watch verfügbar";

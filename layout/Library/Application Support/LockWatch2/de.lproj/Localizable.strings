@@ -24,14 +24,14 @@
 	"WHATS_NEW_DONE" = "Fertig";
 	
 	"SYNC_TO_LOCK_SCREEN" = "Sperrbildschirm synchronisieren";
-	"SYNC_TO_LOCK_SCREEN_PROMPT" = "Hiermit werden die Zifferblätter auf dem Sperrbildschirm mit denen auf deiner Apple Watch synchronisiert. Jegliche Änderungen an den bisherigen Zifferblättern gehen verloren.\n\nBist du sicher, dass du fortfahren möchtest? Einige Zifferblätter, Anpassungen oder Komplikationen sind für bestimmte Modelle möglicherweise nicht verfügbar.";
+	"SYNC_TO_LOCK_SCREEN_PROMPT" = "Hiermit werden die Zifferblätter auf dem Sperrbildschirm mit denen auf deiner Apple Watch ersetzt. Jegliche Änderungen an den bisherigen Zifferblättern gehen dabei verloren. Einige Zifferblätter, Anpassungen oder Komplikationen sind für bestimmte Modelle möglicherweise nicht verfügbar.\n\nBist du sicher, dass du fortfahren möchtest?";
 	
 	"ADD_TO_PROMPT" = "Wähle einen Ort, zu dem du das Zifferblatt hinzufügen möchtest.";
 	"ADD_TO_LOCK_SCREEN" = "Sperrbildschirm";
 	
 	"IMPORT_WATCH_FACE" = "Zifferblatt hinzufügen";
-	"ERROR_MISSING_FACE_TITLE" = "Zusätliches Zifferblatt benötigt";
-	"ERROR_MISSING_FACE_MESSAGE" = "Dieses Zifferblatt benötigt ein zusätzliches Zifferblatt-Paket. Möchtest du es installieren?";
+	"ERROR_MISSING_FACE_TITLE" = "Zusätliches Zifferblatt-Paket benötigt";
+	"ERROR_MISSING_FACE_MESSAGE" = "Dieses Zifferblatt benötigt ein zusätzliches Zifferblatt-Paket, bevor es hinzugefügt werden kann. Möchtest du es installieren?";
 	"ERROR_MISSING_FACE_INSTALL" = "Installieren";
 	
 	"ERROR_INCOMPATIBLE_FACE_TITLE" = "Ziffernblatt imkompatibel";
