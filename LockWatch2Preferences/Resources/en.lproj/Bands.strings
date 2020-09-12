@@ -1,0 +1,103 @@
+{
+	"DEVICE_FRAME_NOT_SUPPORTED" = "This device does currently not support cases or bands.";
+	
+	"38MM" = "38mm";
+	"40MM" = "40mm";
+	"42MM" = "42mm";
+	"44MM" = "44mm";
+	
+	"CASE_ALUMINUM_SPACEGRAY" = "Space Gray Aluminum Case";
+	"CASE_ALUMINUM_SILVER" = "Silver Aluminum Case";
+	"CASE_ALUMINUM_GOLD" = "Gold Aluminum Case";
+	"CASE_STAINLESS_SILVER" = "Stainless Steel Case";
+	"CASE_STAINLESS_GOLD" = "Gold Stainless Steel Case";
+	"CASE_STAINLESS_SPACE_BLACK" = "Space Black Stainless Steel Case";
+	"CASE_TITANIUM_SPACE_BLACK" = "Space Black Titanium Case";
+	"CASE_TITANIUM" = "Titanium Case";
+	"CASE_CERAMIC" = "White Ceramic Case";
+	
+	"BAND_SPORT_SEAFOAM" = "Seafoam Sport Band";
+	"BAND_SPORT_VITAMIN_C" = "Vitamin C Sport Band";
+	"BAND_SPORT_LINEN_BLUE" = "Linen Blue Sport Band";
+	"BAND_SPORT_COASTAL_GRAY" = "Coastal Gray Sport Band";
+	"BAND_SPORT_PRIDE" = "Pride Edition Sport Band";
+	"BAND_SPORT_CACTUS" = "Cactus Sport Band";
+	"BAND_SPORT_GRAPEFRUIT" = "Grapefruit Sport Band";
+	"BAND_SPORT_SURF_BLUE" = "Surf Blue Sport Band";
+	"BAND_SPORT_BERYL" = "Berly Sport Band";
+	"BAND_SPORT_KHAKI" = "Khaki Sport Band";
+	"BAND_SPORT_LEMON_CREAM" = "Lemon Cream Sport Band";
+	"BAND_SPORT_CLEMENTINE" = "Clementine Sport Band";
+	"BAND_SPORT_PINE_GREEN" = "Pine Green Sport Band";
+	"BAND_SPORT_ALASKAN_BLUE" = "Alaskan Blue Sport Band";
+	"BAND_SPORT_STONE" = "Stone Sport Band";
+	"BAND_SPORT_PINK_SAND" = "Pink Sand Sport Band";
+	"BAND_SPORT_WHITE" = "White Sport Band";
+	"BAND_SPORT_BLACK" = "Black Sport Band";
+	"BAND_SPORT_PRODUCT_RED" = "(PRODUCT)RED Sport Band";
+	
+	"BAND_SPORT_LOOP_VITAMIN_C" = "Vitamin C Sport Loop";
+	"BAND_SPORT_LOOP_SUNSHINE" = "Sunshine Sport Loop";
+	"BAND_SPORT_LOOP_SURF_BLUE" = "Surf Blue Sport Loop";
+	"BAND_SPORT_LOOP_NEON_LIME" = "Neon Lime Sport Loop";
+	"BAND_SPORT_LOOP_NEON_PINK" = "Neon Pink Sport Loop";
+	"BAND_SPORT_LOOP_POMEGRANATE" = "Pomegranate Sport Loop";
+	"BAND_SPORT_LOOP_KHAKI" = "Khaki Sport Loop";
+	"BAND_SPORT_LOOP_ALASKAN_BLUE" = "Alaskan Blue Sport Loop";
+	"BAND_SPORT_LOOP_ANCHOR_GRAY" = "Anchor Gray Sport Loop";
+	"BAND_SPORT_LOOP_CAMEL" = "Camel Sport Loop";
+	"BAND_SPORT_LOOP_MIDNIGHT_BLUE" = "Midnight Blue Sport Loop";
+	"BAND_SPORT_LOOP_PRODUCT_RED" = "(PRODUCT)RED Sport Loop";
+	
+	"BAND_BUCKLE_RASPBERRY" = "Raspberry Modern Buckle";
+	"BAND_BUCKLE_DEEP_SEA_BLUE" = "Deep Sea Blue Modern Buckle";
+	"BAND_BUCKLE_AUBERGINE" = "Aubergine Modern Buckle";
+	"BAND_BUCKLE_SADDLE_BROWN" = "Saddle Brown Modern Buckle";
+	"BAND_BUCKLE_BLACK" = "Black Modern Buckle";
+	
+	"BAND_LEATHER_PEACOCK" = "Peacock Leather Loop";
+	"BAND_LEATHER_MEYER_LEMON" = "Meyer Lemon Leather Loop";
+	"BAND_LEATHER_SADDLE_BROWN" = "Saddle Brown Leather Loop";
+	"BAND_LEATHER_BLACK" = "Black Leather Loop";
+	
+	"BAND_MILANESE" = "Milanese Loop";
+	"BAND_MILANESE_GOLD" = "Gold Milanese Loop";
+	"BAND_MILANESE_SPACE_BLACK" = "Space Black Milanese Loop";
+	
+	"BAND_BRACELET" = "Link Bracelet";
+	"BAND_BRACELET_SPACE_BLACK" = "Space Black Link Bracelet";
+	
+	"BAND_NIKE_SPORT_PRIDE" = "Pride Edition Nike Sport Band";
+	"BAND_NIKE_SPORT_BLACK_LIME_BLAST" = "Black/Lime Blast Nike Sport Band";
+	"BAND_NIKE_SPORT_TURQUOISE_GREEN" = "Midnight Turquoise/Aurora Green Nike Sport Band";
+	"BAND_NIKE_SPORT_DESERT_SAND_BLACK" = "Desert Sand/Black Nike Sport Band";
+	"BAND_NIKE_SPORT_ROYAL_PULSE_BLACK" = "Black/Pink Blast Nike Sport Band";
+	"BAND_NIKE_SPORT_BLACK_PINK_BLAST" = "Royal Pulse/Black Nike Sport Band";
+	"BAND_NIKE_SPORT_PLATINUM_BLACK" = "Pure Platinum/Black Nike Sport Band";
+	"BAND_NIKE_SPORT_ANTHRACITE_BLACK" = "Anthracite/Black Nike Sport Band";
+	"BAND_NIKE_SPORT_LOOP_INDIGO_LIME" = "World Indigo/Lime Blast Nike Sport Loop";
+	"BAND_NIKE_SPORT_LOOP_CRIMSON_GREEN" = "Hyper Crimson/Neptune Green Nike Sport Loop";
+	"BAND_NIKE_SPORT_LOOP_DESERT_SAND_VOLT" = "Desert Sand/Volt Nike Sport Loop";
+	"BAND_NIKE_SPORT_LOOP_PINK_BLAST_BERRY" = "Pink Blast/True Berry Nike Sport Loop";
+	"BAND_NIKE_SPORT_LOOP_ROYAL_PULSE_LAVA" = "Royal Pulse/Lava Glow Nike Sport Loop";
+	"BAND_NIKE_SPORT_LOOP_SUMMIT_WHITE" = "Summit White Nike Sport Loop";
+	"BAND_NIKE_SPORT_LOOP_BLACK" = "Black Nike Sport Loop";
+	
+	"BAND_HERMES_SINGLE_NOIR_BLANC_GOLD" = "Noir/Blanc/Gold Swift Leather Single Tour";
+	"BAND_HERMES_SINGLE_ORANGE" = "Orange Swift Leather Single Tour";
+	"BAND_HERMES_SINGLE_NOIR" = "Noir Swift Leather Single Tour";
+	"BAND_HERMES_SINGLE_BRIQUE_BETON" = "Brique/Béton Swift Leather Single Tour";
+	"BAND_HERMES_SINGLE_ENCRE_BETON" = "Encre/Béton Swift Leather Single Tour";
+	"BAND_HERMES_SINGLE_ETAIN_BETON" = "Étain/Béton Swift Leather Single Tour";
+	"BAND_HERMES_SINGLE_EPSOM_FEU" = "Feu Epsom Leather Single Tour ";
+	"BAND_HERMES_SINGLE_FAUVE_BARENIA" = "Fauve Barénia Leather Single Tour";
+	"BAND_HERMES_SINGLE_EBENE_BARENIA_BUCKLE" = "Ébène Barénia Leather Single Tour Deployment Buckle";
+	"BAND_HERMES_SINGLE_FAUVE_BARENIA_BUCKLE" = "Fauve Barénia Leather Single Tour Deployment Buckle";
+	"BAND_HERMES_DOUBLE_ALLOVER_NOIR" = "Noir Swift Leather Double Tour Allover Print";
+	"BAND_HERMES_DOUBLE_ALLOVER_BLANC" = "Blanc Swift Leather Double Tour Allover Print";
+	"BAND_HERMES_DOUBLE_NOIR" = "Noir Swift Leather Double Tour";
+	"BAND_HERMES_DOUBLE_BRIQUE_BETON" = "Brique/Béton Swift Leather Double Tour";
+	"BAND_HERMES_DOUBLE_ENCRE_BETON" = "Encre/Béton Swift Leather Double Tour";
+	"BAND_HERMES_DOUBLE_ETAIN_BETON" = "Étain/Béton Swift Leather Double Tour";
+	"BAND_HERMES_DOUBLE_FAUVE_BARENIA" = "Fauve Barénia Leather Double Tour";
+}

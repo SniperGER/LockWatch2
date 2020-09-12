@@ -10,6 +10,8 @@
 	NSBundle* localizableBundle;
 	
 	PSSpecifier* _emulatedDeviceSelectionSpecifier;
+	PSSpecifier* _showWatchBandSpecifier;
+	PSSpecifier* _configureCaseSpecifier;
 }
 
 @end

@@ -356,6 +356,7 @@ static BOOL scrollEnabled = YES;
 	if ([dateViewController respondsToSelector:@selector(ptnFaceViewController)] && dateViewController.ptnFaceViewController != nil) {
 		[(LWClockView*)clockViewController.view setAlpha:arg1 ? 0 : 1 animated:YES];
 	} else {
+		[clockViewController.clockFrameController setAlpha:arg1 ? 0 : 1 animated:YES];
 		[clockViewController.faceViewController setBackgroundViewAlpha:arg1 ? 0 : 1 animated:YES];
 	}
 	
@@ -389,6 +390,12 @@ BOOL _NTKShowHardwareSpecificFaces() {
 
 static void LWPreferencesChanged(CFNotificationCenterRef center, void* observer, CFStringRef name, const void* object, CFDictionaryRef userInfo) {
 	[preferences reloadPreferences];
+}
+
+static void LWWatchFrameSelected(CFNotificationCenterRef center, void* observer, CFStringRef name, const void* object, CFDictionaryRef userInfo) {
+	[preferences reloadPreferences];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"ml.festival.lockwatch2/WatchFrameSelected" object:nil userInfo:nil];
 }
 
 static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* observer, CFStringRef name, const void* object, CFDictionaryRef userInfo) {
@@ -479,6 +486,7 @@ static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* obs
 				
 				CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, LWPreferencesChanged, CFSTR("ml.festival.lockwatch2/PreferencesChanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 				CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, LWEmulatedWatchTypeChanged, CFSTR("ml.festival.lockwatch2/WatchSelected"), NULL, CFNotificationSuspensionBehaviorCoalesce);
+				CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, LWWatchFrameSelected, CFSTR("ml.festival.lockwatch2/WatchFrameSelected"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 				LWEmulatedWatchTypeChanged(NULL, NULL, NULL, NULL, NULL);
 				
 				%init(SpringBoard);

@@ -120,6 +120,34 @@
 		[_defaults setObject:@"" forKey:@"upgradeLastVersion"];
 	}
 	_upgradeLastVersion = [_defaults objectForKey:@"upgradeLastVersion"];
+	
+	
+	
+	if (![_defaults.allKeys containsObject:@"showFrame"]) {
+		[_defaults setObject:@NO forKey:@"showFrame"];
+	}
+	_showFrame = [[_defaults objectForKey:@"showFrame"] boolValue];
+	
+	if (![_defaults.allKeys containsObject:@"showBand"]) {
+		[_defaults setObject:@NO forKey:@"showBand"];
+	}
+	_showBand = [[_defaults objectForKey:@"showBand"] boolValue];
+	
+	if (![_defaults.allKeys containsObject:@"caseImageNames"]) {
+		[_defaults setObject:@{
+			@"394h": @"case-aluminum-spacegray_394h",
+			@"448h": @"case-aluminum-spacegray_448h"
+		} forKey:@"caseImageNames"];
+	}
+	_caseImageNames = [_defaults objectForKey:@"caseImageNames"];
+	
+	if (![_defaults.allKeys containsObject:@"bandImageNames"]) {
+		[_defaults setObject:@{
+			@"394h": @"sport-black_compact",
+			@"448h": @"sport-black_regular"
+		} forKey:@"bandImageNames"];
+	}
+	_bandImageNames = [_defaults objectForKey:@"bandImageNames"];
 }
 
 - (void)setEnabled:(BOOL)enabled {

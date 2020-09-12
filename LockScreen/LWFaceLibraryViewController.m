@@ -22,6 +22,7 @@
 #import "Core/LWEmulatedNRDevice.h"
 #import "Core/LWFaceLibraryViewControllerDelegate.h"
 #import "Core/LWPersistentFaceCollection.h"
+#import "Core/LWPreferences.h"
 
 extern NSString* NTKClockFaceLocalizedString(NSString* key, NSString* comment);
 extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
@@ -79,6 +80,14 @@ extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 	CLKDevice* device = [CLKDevice currentDevice];
 	
 	[self.view setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[self.view.layer setCornerRadius:[[CLKDevice currentDevice] screenCornerRadius]];
+	if (@available(iOS 13, *)) {
+		[self.view.layer setCornerCurve:kCACornerCurveContinuous];
+	}
+	
+	if ([[LWPreferences sharedInstance] showFrame]) {
+		[self.view setClipsToBounds:YES];
+	}
 
 	LWDeleteConfirmationButton* deleteConfirmationButton = [[LWDeleteConfirmationButton alloc] initWithFrame:CGRectZero];
 	[deleteConfirmationButton addTarget:self action:@selector(_confirmDelete) forControlEvents:UIControlEventTouchUpInside];

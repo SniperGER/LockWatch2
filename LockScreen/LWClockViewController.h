@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class _UILegibilitySettings, CLKDevice, LWFaceLibraryViewController, LWORBAnimator, LWORBTapGestureRecognizer, LWPersistentFaceCollection, LWPreferences, NTKFaceCollection, NTKFaceViewController;
+@class _UILegibilitySettings, CLKDevice, LWClockFrameViewController, LWFaceLibraryViewController, LWORBAnimator, LWORBTapGestureRecognizer, LWPersistentFaceCollection, LWPreferences, NTKFaceCollection, NTKFaceViewController;
 
 @interface LWClockViewController : UIViewController <LWClockViewDelegate, LWFaceLibraryViewControllerDelegate, LWORBTapGestureRecognizerDelegate, NTKFaceCollectionObserver> {
 	LWFaceLibraryViewController* _libraryViewController;
@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (class, nonatomic) _UILegibilitySettings* legibilitySettings;
 
+@property (nonatomic, readonly) LWClockFrameViewController* clockFrameController;
 @property (nonatomic, readonly) NTKFaceViewController* faceViewController;
 @property (nonatomic, readonly) LWPreferences* preferences;
 @property (nonatomic) CLKDevice* device;
@@ -43,7 +44,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init;
 - (void)loadView;
-- (void)didMoveToParentViewController:(nullable UIViewController*)viewController;
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator;
 - (BOOL)_canShowWhileLocked;
 - (void)__addChildViewController:(UIViewController*)viewController;

@@ -21,6 +21,7 @@
 #import "Core/LWEmulatedCLKDevice.h"
 #import "Core/LWEmulatedNRDevice.h"
 #import "Core/LWPersistentFaceCollection.h"
+#import "LockScreen/LWClockFrameViewController.h"
 #import "LockScreen/LWClockView.h"
 #import "LockScreen/LWClockViewController.h"
 

@@ -90,6 +90,51 @@
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>CASE_AND_BAND</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>ml.festival.lockwatch2</string>
+			<key>key</key>
+			<string>showFrame</string>
+			<key>label</key>
+			<string>SHOW_CASE</string>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/WatchSelected</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>ml.festival.lockwatch2</string>
+			<key>key</key>
+			<string>showBand</string>
+			<key>label</key>
+			<string>SHOW_BAND</string>
+			<key>PostNotification</key>
+			<string>ml.festival.lockwatch2/WatchFrameSelected</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>label</key>
+			<string>CONFIGURE_CASE_AND_BAND</string>
+			<key>detail</key>
+			<string>LWBandSelectionViewController</string>
+			<key>isController</key>
+			<true/>
+		</dict>
+		
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
 		</dict>
 		<dict>
 			<key>cell</key>

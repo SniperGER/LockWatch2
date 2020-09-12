@@ -7,6 +7,9 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
+	prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/LockWatch2Preferences.bundle"];
+	localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
+	
 	[self reloadSpecifiers];
 }
 
@@ -14,9 +17,6 @@
 	if (!_specifiers) {
 		_specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
 	}
-	
-	prefBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/LockWatch2Preferences.bundle"];
-	localizableBundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
 
 	return _specifiers;
 }
@@ -25,9 +25,13 @@
 	[super reloadSpecifiers];
 	
 	_emulatedDeviceSelectionSpecifier = [self specifierForID:@"EMULATED_DEVICE"];
-	[self removeContiguousSpecifiers:@[ _emulatedDeviceSelectionSpecifier ] animated:NO];
+	_showWatchBandSpecifier = [self specifierForID:@"SHOW_BAND"];
+	_configureCaseSpecifier = [self specifierForID:@"CONFIGURE_CASE_AND_BAND"];
+	
+	[self removeContiguousSpecifiers:@[ _emulatedDeviceSelectionSpecifier, _showWatchBandSpecifier, _configureCaseSpecifier ] animated:NO];
 	
 	[self _updateEmulatedWatchAvailability];
+	[self _updateCaseConfigurationAvailability];
 }
 
 - (id)readPreferenceValue:(PSSpecifier*)specifier {
@@ -50,10 +54,23 @@
 	
 	if ([[specifier propertyForKey:@"key"] isEqualToString:@"isEmulatingDevice"]) {
 		[self _updateEmulatedWatchAvailability];
+	} else if ([[specifier propertyForKey:@"key"] isEqualToString:@"showFrame"]) {
+		[self _updateCaseConfigurationAvailability];
 	}
 }
 
 #pragma mark - Instance Methods
+
+- (void)_updateCaseConfigurationAvailability {
+	PSSpecifier* showWatchCaseSpecifier = [self specifierForID:@"SHOW_CASE"];
+	BOOL showFrame = [[self readPreferenceValue:showWatchCaseSpecifier] boolValue];
+
+	if (showFrame && ![self containsSpecifier:_showWatchBandSpecifier] && ![self containsSpecifier:_configureCaseSpecifier]) {
+		[self insertContiguousSpecifiers:@[ _showWatchBandSpecifier, _configureCaseSpecifier ] afterSpecifier:showWatchCaseSpecifier animated:YES];
+	} else if (!showFrame) {
+		[self removeContiguousSpecifiers:@[ _showWatchBandSpecifier, _configureCaseSpecifier ] animated:YES];
+	}
+}
 
 - (void)_updateEmulatedWatchAvailability {
 	PSSpecifier* useEmulatedDeviceSpecifier = [self specifierForID:@"USE_EMULATED_DEVICE"];
@@ -61,7 +78,7 @@
 
 	if (isEmulatingDevice && ![self containsSpecifier:_emulatedDeviceSelectionSpecifier]) {
 		[self insertContiguousSpecifiers:@[ _emulatedDeviceSelectionSpecifier ] afterSpecifier:useEmulatedDeviceSpecifier animated:YES];
-	} else {
+	} else if (!isEmulatingDevice) {
 		[self removeContiguousSpecifiers:@[ _emulatedDeviceSelectionSpecifier ] animated:YES];
 	}
 }

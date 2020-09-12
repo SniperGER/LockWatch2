@@ -1,0 +1,106 @@
+{
+	"DEVICE_FRAME_NOT_SUPPORTED" = "Dieses Gerät unterstützt derzeit keine Gehäuse oder Armbänder.";
+	
+	"CASE" = "Gehäuse";
+	"BAND" = "Armband";
+	
+	"38MM" = "38mm";
+	"40MM" = "40mm";
+	"42MM" = "42mm";
+	"44MM" = "44mm";
+	
+	"CASE_ALUMINUM_SPACEGRAY" = "Aluminiumgehäuse Space Grau";
+	"CASE_ALUMINUM_SILVER" = "Aluminiumgehäuse Silber";
+	"CASE_ALUMINUM_GOLD" = "Aluminiumgehäuse Gold";
+	"CASE_STAINLESS_SILVER" = "Edelstahlgehäuse";
+	"CASE_STAINLESS_GOLD" = "Edelstahlgehäuse Gold";
+	"CASE_STAINLESS_SPACE_BLACK" = "Edelstahlgehäuse Space Schwarz";
+	"CASE_TITANIUM_SPACE_BLACK" = "Titangehäuse Space Schwarz";
+	"CASE_TITANIUM" = "Titangehäuse";
+	"CASE_CERAMIC" = "Keramikgehäuse Weiß";
+	
+	"BAND_SPORT_SEAFOAM" = "Sportarmband Meerschaum";
+	"BAND_SPORT_VITAMIN_C" = "Sportarmband Vitamin C";
+	"BAND_SPORT_LINEN_BLUE" = "Sportarmband Leinenblau";
+	"BAND_SPORT_COASTAL_GRAY" = "Sportarmband Küstengrau";
+	"BAND_SPORT_PRIDE" = "Sportarmband Pride Edition";
+	"BAND_SPORT_CACTUS" = "Sportarmband Kaktus";
+	"BAND_SPORT_GRAPEFRUIT" = "Sportarmband Grapefruit";
+	"BAND_SPORT_SURF_BLUE" = "Sportarmband Surfblau";
+	"BAND_SPORT_BERYL" = "Sportarmband Beryll";
+	"BAND_SPORT_KHAKI" = "Sportarmband Khaki";
+	"BAND_SPORT_LEMON_CREAM" = "Sportarmband Zitruscreme";
+	"BAND_SPORT_CLEMENTINE" = "Sportarmband Clementine";
+	"BAND_SPORT_PINE_GREEN" = "Sportarmband Piniengrün";
+	"BAND_SPORT_ALASKAN_BLUE" = "Sportarmband Alaska Blau";
+	"BAND_SPORT_STONE" = "Sportarmband Stein";
+	"BAND_SPORT_PINK_SAND" = "Sportarmband Sandrosa";
+	"BAND_SPORT_WHITE" = "Sportarmband Weiß";
+	"BAND_SPORT_BLACK" = "Sportarmband Schwarz";
+	"BAND_SPORT_PRODUCT_RED" = "Sportarmband (PRODUCT)RED";
+	
+	"BAND_SPORT_LOOP_VITAMIN_C" = "Sport Loop Vitamin C";
+	"BAND_SPORT_LOOP_SUNSHINE" = "Sport Loop Warmgelb";
+	"BAND_SPORT_LOOP_SURF_BLUE" = "Sport Loop Surfblau";
+	"BAND_SPORT_LOOP_NEON_LIME" = "Sport Loop Neonlimette";
+	"BAND_SPORT_LOOP_NEON_PINK" = "Sport Loop Ultrapink";
+	"BAND_SPORT_LOOP_POMEGRANATE" = "Sport Loop Granatapfel";
+	"BAND_SPORT_LOOP_KHAKI" = "Sport Loop Khaki";
+	"BAND_SPORT_LOOP_ALASKAN_BLUE" = "Sport Loop Alaska Blau";
+	"BAND_SPORT_LOOP_ANCHOR_GRAY" = "Sport Loop Eisengrau";
+	"BAND_SPORT_LOOP_CAMEL" = "Sport Loop Kamelbraun";
+	"BAND_SPORT_LOOP_MIDNIGHT_BLUE" = "Sport Loop Mitternachtsblau";
+	"BAND_SPORT_LOOP_PRODUCT_RED" = "Sport Loop (PRODUCT)RED";
+	
+	"BAND_BUCKLE_RASPBERRY" = "Modernes Lederarmband Himbeere";
+	"BAND_BUCKLE_DEEP_SEA_BLUE" = "Modernes Lederarmband Tiefseeblau";
+	"BAND_BUCKLE_AUBERGINE" = "Modernes Lederarmband Aubergine";
+	"BAND_BUCKLE_SADDLE_BROWN" = "Modernes Lederarmband Sattelbraun";
+	"BAND_BUCKLE_BLACK" = "Modernes Lederarmband Schwarz";
+	
+	"BAND_LEATHER_PEACOCK" = "Lederarmband mit Schlaufe Pfauenblau";
+	"BAND_LEATHER_MEYER_LEMON" = "Lederarmband mit Schlaufe Sonnengelb";
+	"BAND_LEATHER_SADDLE_BROWN" = "Lederarmband mit Schlaufe Sattelbraun";
+	"BAND_LEATHER_BLACK" = "Lederarmband mit Schlaufe Schwarz";
+	
+	"BAND_MILANESE" = "Milanaise Armband";
+	"BAND_MILANESE_GOLD" = "Milanaise Armband Gold";
+	"BAND_MILANESE_SPACE_BLACK" = "Milanaise Armband Space Schwarz";
+	
+	"BAND_BRACELET" = "Gliederarmband";
+	"BAND_BRACELET_SPACE_BLACK" = "Gliederarmband Space Schwarz";
+	
+	"BAND_NIKE_SPORT_PRIDE" = "Nike Sportarmband Pride Edition";
+	"BAND_NIKE_SPORT_BLACK_LIME_BLAST" = "Nike Sportarmband Schwarz/Lime Blast";
+	"BAND_NIKE_SPORT_TURQUOISE_GREEN" = "Nike Sportarmband Midnight Turquiose/Aurora Green";
+	"BAND_NIKE_SPORT_DESERT_SAND_BLACK" = "Nike Sportarmband Desert Sand/Schwarz";
+	"BAND_NIKE_SPORT_ROYAL_PULSE_BLACK" = "Nike Sportarmband Royal Pulse/Schwarz";
+	"BAND_NIKE_SPORT_BLACK_PINK_BLAST" = "Nike Sportarmband Schwarz/Pink Blast";
+	"BAND_NIKE_SPORT_PLATINUM_BLACK" = "Nike Sportarmband Pure Platinum/Schwarz";
+	"BAND_NIKE_SPORT_ANTHRACITE_BLACK" = "Nike Sportarmband Anthrazit/Schwarz";
+	"BAND_NIKE_SPORT_LOOP_INDIGO_LIME" = "Nike Sport Loop World Indigo/Lime Blast";
+	"BAND_NIKE_SPORT_LOOP_CRIMSON_GREEN" = "Nike Sport Loop Hyper Crimson/Neptune Green";
+	"BAND_NIKE_SPORT_LOOP_DESERT_SAND_VOLT" = "Nike Sport Loop Desert Sand/Volt";
+	"BAND_NIKE_SPORT_LOOP_PINK_BLAST_BERRY" = "Nike Sport Loop Pink Blast/True Berry";
+	"BAND_NIKE_SPORT_LOOP_ROYAL_PULSE_LAVA" = "Nike Sport Loop Royal Pulse/Lava Glow";
+	"BAND_NIKE_SPORT_LOOP_SUMMIT_WHITE" = "Nike Sport Loop Summit White";
+	"BAND_NIKE_SPORT_LOOP_BLACK" = "Nike Sport Loop Schwarz";
+	
+	"BAND_HERMES_SINGLE_NOIR_BLANC_GOLD" = "Hermès Single Tour Swift-Lederarmband Noir/Blanc/Gold";
+	"BAND_HERMES_SINGLE_ORANGE" = "Hermès Single Tour Swift-Lederarmband Orange";
+	"BAND_HERMES_SINGLE_NOIR" = "Hermès Single Tour Swift-Lederarmband Noir";
+	"BAND_HERMES_SINGLE_BRIQUE_BETON" = "Hermès Single Tour Swift-Lederarmband Brique/Béton";
+	"BAND_HERMES_SINGLE_ENCRE_BETON" = "Hermès Single Tour Swift-Lederarmband Encre/Béton";
+	"BAND_HERMES_SINGLE_ETAIN_BETON" = "Hermès Single Tour Swift-Lederarmband Étain/Béton";
+	"BAND_HERMES_SINGLE_EPSOM_FEU" = "Hermès Single Tour Epsom-Lederarmband Feu";
+	"BAND_HERMES_SINGLE_FAUVE_BARENIA" = "Hermès Single Tour Barénia-Lederarmband Fauve";
+	"BAND_HERMES_SINGLE_EBENE_BARENIA_BUCKLE" = "Hermès Single Tour Barénia-Lederarmband mit Faltschließe Ébène";
+	"BAND_HERMES_SINGLE_FAUVE_BARENIA_BUCKLE" = "Hermès Single Tour Barénia-Lederarmband mit Faltschließe Fauve";
+	"BAND_HERMES_DOUBLE_ALLOVER_NOIR" = "Hermès Double Tour Allover Print Swift-Lederarmband Noir";
+	"BAND_HERMES_DOUBLE_ALLOVER_BLANC" = "Hermès Double Tour Allover Print Swift-Lederarmband Blanc";
+	"BAND_HERMES_DOUBLE_NOIR" = "Hermès Double Tour Swift-Lederarmband Noir";
+	"BAND_HERMES_DOUBLE_BRIQUE_BETON" = "Hermès Double Tour Swift-Lederarmband Brique/Béton";
+	"BAND_HERMES_DOUBLE_ENCRE_BETON" = "Hermès Double Tour Swift-Lederarmband Encre/Béton";
+	"BAND_HERMES_DOUBLE_ETAIN_BETON" = "Hermès Double Tour Swift-Lederarmband Étain/Béton";
+	"BAND_HERMES_DOUBLE_FAUVE_BARENIA" = "Hermès Double Tour Barénia-Lederarmband Fauve";
+}

@@ -11,6 +11,7 @@
 #import <NanoTimeKitCompanion/NanoTimeKitCompanion.h>
 
 #import "LWAddPageViewController.h"
+#import "LWClockFrameViewController.h"
 #import "LWClockView.h"
 #import "LWClockViewController.h"
 #import "LWFaceLibraryOverlayView.h"
@@ -112,10 +113,6 @@ static _UILegibilitySettings* _legibilitySettings;
 	_haveLoadedView = YES;
 }
 
-- (void)didMoveToParentViewController:(nullable UIViewController*)viewController {
-	[super didMoveToParentViewController:viewController];
-}
-
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
 	
@@ -127,22 +124,27 @@ static _UILegibilitySettings* _legibilitySettings;
 		
 		CGFloat scale = [[LWPreferences sharedInstance] scaleLandscapePhone];
 		[_libraryViewController.view setTransform:CGAffineTransformMakeScale(scale, scale)];
+		[_clockFrameController.view setTransform:CGAffineTransformMakeScale(scale, scale)];
 	} else if (UIInterfaceOrientationIsPortrait(_effectiveInterfaceOrientation)) {
 		_centerX = CGRectGetMidX(UIScreen.mainScreen.bounds) + [[LWPreferences sharedInstance] horizontalOffsetPortrait];
 		
 		CGFloat scale = [[LWPreferences sharedInstance] scalePortrait];
 		[_libraryViewController.view setTransform:CGAffineTransformMakeScale(scale, scale)];
+		[_clockFrameController.view setTransform:CGAffineTransformMakeScale(scale, scale)];
 	} else if (UIInterfaceOrientationIsLandscape(_effectiveInterfaceOrientation)) {
 		_centerX = CGRectGetMidX(UIScreen.mainScreen.bounds) + [[LWPreferences sharedInstance] horizontalOffsetLandscape];
 		
 		CGFloat scale = [[LWPreferences sharedInstance] scaleLandscape];
 		[_libraryViewController.view setTransform:CGAffineTransformMakeScale(scale, scale)];
+		[_clockFrameController.view setTransform:CGAffineTransformMakeScale(scale, scale)];
 	}
 	
 	[_libraryViewController.view setCenter:(CGPoint) {
 		_centerX,
 		_libraryViewController.view.center.y
 	}];
+	
+	[_clockFrameController.view setCenter:_libraryViewController.view.center];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
@@ -187,6 +189,13 @@ static _UILegibilitySettings* _legibilitySettings;
 - (void)_createOrRecreateFaceContent {
 	[self _finishLoadingViewIfNecessary];
 	[self _teardownExistingFaceViewControllerIfNeeded];
+	
+	if (_clockFrameController ) {
+		[self __removeChildViewController:_clockFrameController];
+	}
+	
+	_clockFrameController = [LWClockFrameViewController new];
+	[self __addChildViewController:_clockFrameController];
 	
 	if (_libraryViewController) {
 		[_libraryViewController setDelegate:nil];

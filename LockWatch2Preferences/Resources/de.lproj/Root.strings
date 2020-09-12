@@ -13,6 +13,11 @@
 	"DEVICE_SETTINGS" = "Geräteeinstellungen";
 	"USE_EMULATED_DEVICE" = "Apple Watch simulieren";
 	"EMULATED_DEVICE" = "Apple Watch-Modell";
+	
+	"CASE_AND_BAND" = "Gehäuse & Armband";
+	"SHOW_CASE" = "Gehäuse anzeigen";
+	"SHOW_BAND" = "Armband anzeigen";
+	"CONFIGURE_CASE_AND_BAND" = "Gehäuse & Armband konfigurieren";
 
 	"RESET_LIBRARY_TITLE" = "Zifferblätter zurücksetzen";
 	"RESET_LIBRARY_PROMPT" = "Hiermit werden die Zifferblätter auf Werkseinstellungen zurückgesetzt. Jegliche Änderungen an deinen Zifferblättern gehen verloren.\n\nBist du sicher, dass du deine Zifferblätter zurücksetzen möchtest?";

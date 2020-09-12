@@ -14,6 +14,11 @@
 	"USE_EMULATED_DEVICE" = "Use Emulated Apple Watch";
 	"EMULATED_DEVICE" = "Apple Watch Model";
 	
+	"CASE_AND_BAND" = "Case & Band";
+	"SHOW_CASE" = "Show Case";
+	"SHOW_BAND" = "Show Band";
+	"CONFIGURE_CASE_AND_BAND" = "Configure Case & Band";
+	
 	"RESET_LIBRARY_TITLE" = "Reset Watch Faces";
 	"RESET_LIBRARY_PROMPT" = "This will reset your watch face library to system defaults. Any customization to your watch faces will be lost.\n\nAre you sure you want to reset your watch face library?";
 	"RESET_LIBRARY_CONFIRM" = "Reset";
