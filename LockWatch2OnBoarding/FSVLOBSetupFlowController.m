@@ -14,7 +14,7 @@ NSBundle* LWOLocalizableBundle() {
 	static NSBundle* bundle = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        bundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
+        bundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2OnBoarding"];
     });
 	
 	return bundle;
