@@ -13,13 +13,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LWBandSelectionViewController : PSDetailController <UIScrollViewDelegate> {
 	NSBundle* _localizableBundle;
-	NSDictionary* _frameAssets;
+	NSDictionary* _caseAssets;
 	NSArray* _bandAssets;
 	
+	NSUInteger _bandIndex;
+	NSUInteger _caseIndex;
+	
 	UISegmentedControl* _segmentedControl;
-	UIScrollView* _frameScrollView;
+	UIScrollView* _caseScrollView;
 	UIScrollView* _bandScrollView;
-	UILabel* _frameLabel;
+	UILabel* _caseLabel;
 	UILabel* _bandLabel;
 }
 
