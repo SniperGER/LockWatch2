@@ -20,9 +20,8 @@
 	
 	"POSITIONING" = "Position";
 	
-	"COMPLICATION_CONTENT" = "🛠 Komplikations-Inhalt";
-	"COMPLICATION_CONTENT_NONE" = "Kein Inhalt";
+	"COMPLICATION_CONTENT" = "Komplikationen";
+	"COMPLICATION_CONTENT_NONE" = "Keine Komplikationen";
 	"COMPLICATION_CONTENT_DEFAULT" = "Standard-Vorlagen";
-	"COMPLICATION_CONTENT_MIXED" = "Gemischt (Vorlagen & Fertiggestellt)";
-	"COMPLICATION_CONTENT_FINISHED" = "Nur Fertiggestellte";
+	"COMPLICATION_CONTENT_MIXED" = "LockWatch 2-Vorlagen";
 }

@@ -90,14 +90,12 @@
 				<string>COMPLICATION_CONTENT_NONE</string>
 				<string>COMPLICATION_CONTENT_DEFAULT</string>
 				<string>COMPLICATION_CONTENT_MIXED</string>
-				<string>COMPLICATION_CONTENT_FINISHED</string>
 			</array>
 			<key>validValues</key>
 			<array>
 				<real>0</real>
 				<real>1</real>
 				<real>2</real>
-				<real>3</real>
 			</array>
 			<key>PostNotification</key>
 			<string>ml.festival.lockwatch2/WatchSelected</string>

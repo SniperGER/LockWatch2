@@ -20,9 +20,8 @@
 	
 	"POSITIONING" = "Position";
 	
-	"COMPLICATION_CONTENT" = "🛠 Complication Content";
-	"COMPLICATION_CONTENT_NONE" = "None";
+	"COMPLICATION_CONTENT" = "Complications";
+	"COMPLICATION_CONTENT_NONE" = "No Complications";
 	"COMPLICATION_CONTENT_DEFAULT" = "Default Templates";
-	"COMPLICATION_CONTENT_MIXED" = "Mixed (Templates & Finished)";
-	"COMPLICATION_CONTENT_FINISHED" = "Finished Only";
+	"COMPLICATION_CONTENT_MIXED" = "LockWatch 2 Templates";
 }
