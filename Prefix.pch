@@ -6,7 +6,7 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#define __VERSION "2.0b4-u1"
+#define __VERSION "2.0-1"
 
 #define DPKG_PATH "/var/lib/dpkg/info/ml.festival.lockwatch2.list"
 
