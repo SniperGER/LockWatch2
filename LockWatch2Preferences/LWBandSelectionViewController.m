@@ -261,15 +261,17 @@
 #pragma mark - Scroll view delegate
 
 - (void)scrollViewDidScroll:(UIScrollView*)scrollView {
+	NSInteger page = (scrollView.contentOffset.x + (CGRectGetWidth(scrollView.bounds) / 2)) / CGRectGetWidth(scrollView.bounds);
+	
 	if (scrollView == _caseScrollView) {
-		NSInteger page = MIN(MAX(scrollView.contentOffset.x / CGRectGetWidth(scrollView.bounds), 0), [_caseAssets[@"assets"] count] - 1);
+		page = MIN(MAX(page, 0), [_caseAssets[@"assets"] count] - 1);
 		
 		[_caseLabel setText:[NSString stringWithFormat:@"%@ %@", 
 			[[NSBundle bundleForClass:self.class] localizedStringForKey:_caseAssets[@"prefix"] value:nil table:@"Bands"],
 			[[NSBundle bundleForClass:self.class] localizedStringForKey:[_caseAssets[@"assets"] objectAtIndex:page][@"label"] value:nil table:@"Bands"]
 		]];
 	} else if (scrollView == _bandScrollView) {
-		NSInteger page = MIN(MAX(scrollView.contentOffset.x / CGRectGetWidth(scrollView.bounds), 0), [_bandAssets count] - 1);
+		page = MIN(MAX(page, 0), [_bandAssets count] - 1);
 		[_bandLabel setText:[[NSBundle bundleForClass:self.class] localizedStringForKey:[_bandAssets objectAtIndex:page][@"label"] value:nil table:@"Bands"]];
 	}
 }
