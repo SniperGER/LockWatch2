@@ -64,7 +64,7 @@ NSString* LWOLocalizedString(NSString* key, NSString* value) {
 		[[OBLinkTrayButton appearanceWhenContainedInInstancesOfClasses:@[ OBBaseWelcomeController.class ]] setTintColor:UIColor.systemOrangeColor];
 		
 		_flowControllers = [NSMutableDictionary dictionary];
-		flowItems = [NSDictionary dictionaryWithContentsOfFile:@"/Library/Application Support/LockWatch2/OnBoarding.plist"];
+		flowItems = [NSDictionary dictionaryWithContentsOfFile:@"/Library/Application Support/LockWatch2OnBoarding/OnBoarding.plist"];
 		
 		[flowItems[@"Items"] enumerateObjectsUsingBlock:^(NSDictionary* flowItem, NSUInteger index, BOOL* stop) {
 			if (!flowItem[@"Controller"] || !NSClassFromString(flowItem[@"Controller"])) return;
