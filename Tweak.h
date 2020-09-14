@@ -26,6 +26,7 @@
 #import "LockScreen/LWClockViewController.h"
 
 extern "C" CFNotificationCenterRef CFNotificationCenterGetDistributedCenter();
+extern "C" bool CLKIsClockFaceApp();
 
 
 

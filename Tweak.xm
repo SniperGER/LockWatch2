@@ -386,6 +386,10 @@ static BOOL (*old_NTKShowHardwareSpecificFaces)();
 BOOL _NTKShowHardwareSpecificFaces() {
 	return YES;
 }
+
+MSHook(bool, CLKIsClockFaceApp) {
+	return true;
+}
 #endif
 
 static void LWPreferencesChanged(CFNotificationCenterRef center, void* observer, CFStringRef name, const void* object, CFDictionaryRef userInfo) {
@@ -472,6 +476,7 @@ static void LWEmulatedWatchTypeChanged(CFNotificationCenterRef center, void* obs
 			if ([bundleIdentifier isEqualToString:@"com.apple.springboard"]) {
 #if !TARGET_OS_SIMULATOR
 				MSHookFunction(((void*)MSFindSymbol(NULL, "_NTKShowHardwareSpecificFaces")),(void*)_NTKShowHardwareSpecificFaces, (void**)&old_NTKShowHardwareSpecificFaces);
+				MSHookFunction(CLKIsClockFaceApp, MSHake(CLKIsClockFaceApp));
 #endif
 				
 				void* customizationBundle = dlopen("/System/Library/NanoPreferenceBundles/Customization/NTKCustomization.bundle/NTKCustomization", RTLD_LAZY);

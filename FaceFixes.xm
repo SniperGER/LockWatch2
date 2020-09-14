@@ -138,6 +138,67 @@
 }
 %end	/// NTKAnalogVideoFaceView
 
+%hook NTKAVListingFaceBaseView
+- (void)_handleFaceStyleDidChange {
+	if ([self.videoPlayerView playing]) {
+		[self.videoPlayerView pause];
+	}
+	
+	[self _cancelAllTasks];
+	
+	if (self.dataMode == 1) {
+		[self _fadeToCurtainViewWithDuration:0.2 completion:^() {
+			[self _playNextVideo];
+		}];
+	} else {
+		[self _queuePreloadVideoTask];
+		[self setShouldChangeVariantForScreenWake:YES];
+	}
+}
+
+- (void)_performPreloadVideoTask {
+	%orig;
+	
+	if ([[%c(SBBacklightController) sharedInstance] screenIsOn]) {
+		[self _playVideoForScreenWake:nil];
+	}
+}
+
+- (void)_playVideo {
+	if (![self.videoPlayerView playing]) {
+		[self _playNextVideo];
+	}
+}
+
+- (void)_playVideoForScreenWake:(id)arg1 {
+	MSHookIvar<BOOL>(self, "_shouldPlayOnWake") = YES;
+	
+	%orig;
+}
+
+- (void)_updatePaused {
+	%orig;
+	
+	if (MSHookIvar<BOOL>(self, "_isPauseLockedout") || MSHookIvar<BOOL>(self, "_isPaused")) return;
+	
+	if (!MSHookIvar<BOOL>(self, "_isPaused")) {
+		if ([[%c(SBBacklightController) sharedInstance] screenIsOn]) {
+			MSHookIvar<BOOL>(self, "_shouldPlayOnWake") = NO;
+			[self _playVideo];
+		} else {
+			MSHookIvar<BOOL>(self, "_shouldPlayOnWake") = YES;
+			[MSHookIvar<NSTimer*>(self, "_playOnWakeTimeout") invalidate];
+			MSHookIvar<NSTimer*>(self, "_playOnWakeTimeout") = [NSTimer scheduledTimerWithTimeInterval:0.25 target:self selector:@selector(_playVideoForScreenWake:) userInfo:nil repeats:nil];
+		}
+	} else {
+		[self _pauseImmediately];
+	}
+	
+	[self setNeedsLayout];
+	MSHookIvar<BOOL>(self, "_updateWhenUnpausing") = NO;
+}
+%end	/// %hook NTKAVListingFaceBaseView
+
 %hook NTKCircularAnalogDialView
 - (void)setBackgroundColor:(UIColor*)arg1 {
 	%orig(UIColor.clearColor);
@@ -331,12 +392,6 @@
 	}
 }
 
-- (void)handleStyleDidChange {
-	%orig;
-	
-	[self _playNextVideoForEvent:5 animated:NO];
-}
-
 - (void)_updatePauseState {
 	if ([self _shouldPause] != MSHookIvar<BOOL>(self, "_paused")) {
 		if ([self _shouldPause]) {
@@ -349,6 +404,12 @@
 			[self _play];
 		}
 	}
+}
+
+- (void)handleStyleDidChange {
+	%orig;
+	
+	[self _playNextVideoForEvent:5 animated:NO];
 }
 %end	/// NTKVideoPlayerView
 
