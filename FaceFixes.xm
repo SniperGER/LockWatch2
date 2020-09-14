@@ -116,13 +116,18 @@
 }
 %end	/// %hook NTKAnalogFaceView
 
-// %hook NTKAnalogHandsView
-// - (void)setOverrideDate:(id)arg1 duration:(CGFloat)arg2 {
-// 	[UIView animateWithDuration:0.3 animations:^{
-// 		%orig;
-// 	}];
-// }
-// %end
+%hook NTKAnalogHandsView
+- (void)setOverrideDate:(id)arg1 duration:(CGFloat)arg2 {
+	if (![[%c(SBBacklightController) sharedInstance] screenIsOn]) {
+		%orig;
+		return;
+	}
+	
+	[UIView animateWithDuration:0.3 animations:^{
+		%orig;
+	}];
+}
+%end
 
 %hook NTKAnalogScene
 - (void)setBackgroundColor:(UIColor*)arg1 {
