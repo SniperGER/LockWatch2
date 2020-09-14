@@ -210,6 +210,10 @@ static _UILegibilitySettings* _legibilitySettings;
 	[self _putLibraryViewControllerIntoClockViewController];
 	[_libraryViewController.view layoutIfNeeded];
 	
+	if ([[LWPreferences sharedInstance] showCase] && _clockFrameController.caseImage != nil) {
+		[_libraryViewController.view setClipsToBounds:YES];
+	}
+	
 	CLKDevice* device = [CLKDevice currentDevice];
 	
 	[NSLayoutConstraint activateConstraints:@[

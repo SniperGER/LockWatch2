@@ -123,10 +123,10 @@
 	
 	
 	
-	if (![_defaults.allKeys containsObject:@"showFrame"]) {
-		[_defaults setObject:@NO forKey:@"showFrame"];
+	if (![_defaults.allKeys containsObject:@"showCase"]) {
+		[_defaults setObject:@NO forKey:@"showCase"];
 	}
-	_showFrame = [[_defaults objectForKey:@"showFrame"] boolValue];
+	_showCase = [[_defaults objectForKey:@"showCase"] boolValue];
 	
 	if (![_defaults.allKeys containsObject:@"showBand"]) {
 		[_defaults setObject:@NO forKey:@"showBand"];

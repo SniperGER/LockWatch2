@@ -101,7 +101,7 @@
 			<key>defaults</key>
 			<string>ml.festival.lockwatch2</string>
 			<key>key</key>
-			<string>showFrame</string>
+			<string>showCase</string>
 			<key>label</key>
 			<string>SHOW_CASE</string>
 			<key>PostNotification</key>

@@ -32,16 +32,20 @@
 	[self.view addSubview:_caseImageView];
 	
 	NSString* sizeClass = [NSString stringWithFormat:@"%ldh", [[[[CLKDevice currentDevice] nrDevice] valueForProperty:@"mainScreenHeight"] integerValue]];
-	BOOL showFrame = [[LWPreferences sharedInstance] showFrame];
+	BOOL showCase = [[LWPreferences sharedInstance] showCase];
 	BOOL showBand = [[LWPreferences sharedInstance] showBand];
 	
-	if (showFrame) {
-		[_caseImageView setImage:[UIImage imageNamed:[[LWPreferences sharedInstance] caseImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil]];
+	if (showCase) {
+		_caseImage = [UIImage imageNamed:[[LWPreferences sharedInstance] caseImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil];
 	}
 	
-	if (showFrame && showBand) {
-		[_bandImageView setImage:[UIImage imageNamed:[[LWPreferences sharedInstance] bandImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil]];
+	[_caseImageView setImage:_caseImage];
+	
+	if (showCase && showBand) {
+		_bandImage = [UIImage imageNamed:[[LWPreferences sharedInstance] bandImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil];
 	}
+	
+	[_bandImageView setImage:_bandImage];
 	
 	[NSLayoutConstraint activateConstraints:@[
 		[self.view.widthAnchor constraintEqualToConstant:455],
@@ -74,20 +78,24 @@
 
 - (void)watchFrameChanged {
 	NSString* sizeClass = [NSString stringWithFormat:@"%ldh", [[[[CLKDevice currentDevice] nrDevice] valueForProperty:@"mainScreenHeight"] integerValue]];
-	BOOL showFrame = [[LWPreferences sharedInstance] showFrame];
+	BOOL showCase = [[LWPreferences sharedInstance] showCase];
 	BOOL showBand = [[LWPreferences sharedInstance] showBand];
 	
-	if (showFrame) {
-		[_caseImageView setImage:[UIImage imageNamed:[[LWPreferences sharedInstance] caseImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil]];
+	if (showCase) {
+		_caseImage = [UIImage imageNamed:[[LWPreferences sharedInstance] caseImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil];
 	} else {
-		[_caseImageView setImage:nil];
+		_caseImage = nil;
 	}
 	
-	if (showFrame && showBand) {
-		[_bandImageView setImage:[UIImage imageNamed:[[LWPreferences sharedInstance] bandImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil]];
+	[_caseImageView setImage:_caseImage];
+	
+	if (showCase && showBand) {
+		_bandImage = [UIImage imageNamed:[[LWPreferences sharedInstance] bandImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil];
 	} else {
-		[_bandImageView setImage:nil];
+		_bandImage = nil;
 	}
+	
+	[_bandImageView setImage:_bandImage];
 }
 
 @end

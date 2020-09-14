@@ -84,10 +84,6 @@ extern NSString* NTKLocalizedNameForFaceStyle(NSUInteger style);
 	if (@available(iOS 13, *)) {
 		[self.view.layer setCornerCurve:kCACornerCurveContinuous];
 	}
-	
-	if ([[LWPreferences sharedInstance] showFrame]) {
-		[self.view setClipsToBounds:YES];
-	}
 
 	LWDeleteConfirmationButton* deleteConfirmationButton = [[LWDeleteConfirmationButton alloc] initWithFrame:CGRectZero];
 	[deleteConfirmationButton addTarget:self action:@selector(_confirmDelete) forControlEvents:UIControlEventTouchUpInside];

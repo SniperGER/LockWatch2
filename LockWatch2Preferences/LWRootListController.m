@@ -54,7 +54,7 @@
 	
 	if ([[specifier propertyForKey:@"key"] isEqualToString:@"isEmulatingDevice"]) {
 		[self _updateEmulatedWatchAvailability];
-	} else if ([[specifier propertyForKey:@"key"] isEqualToString:@"showFrame"]) {
+	} else if ([[specifier propertyForKey:@"key"] isEqualToString:@"showCase"]) {
 		[self _updateCaseConfigurationAvailability];
 	}
 }
@@ -63,11 +63,11 @@
 
 - (void)_updateCaseConfigurationAvailability {
 	PSSpecifier* showWatchCaseSpecifier = [self specifierForID:@"SHOW_CASE"];
-	BOOL showFrame = [[self readPreferenceValue:showWatchCaseSpecifier] boolValue];
+	BOOL showCase = [[self readPreferenceValue:showWatchCaseSpecifier] boolValue];
 
-	if (showFrame && ![self containsSpecifier:_showWatchBandSpecifier] && ![self containsSpecifier:_configureCaseSpecifier]) {
+	if (showCase && ![self containsSpecifier:_showWatchBandSpecifier] && ![self containsSpecifier:_configureCaseSpecifier]) {
 		[self insertContiguousSpecifiers:@[ _showWatchBandSpecifier, _configureCaseSpecifier ] afterSpecifier:showWatchCaseSpecifier animated:YES];
-	} else if (!showFrame) {
+	} else if (!showCase) {
 		[self removeContiguousSpecifiers:@[ _showWatchBandSpecifier, _configureCaseSpecifier ] animated:YES];
 	}
 }

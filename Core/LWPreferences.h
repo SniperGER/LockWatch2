@@ -39,7 +39,7 @@ typedef NS_ENUM(NSUInteger, LWComplicationContentType) {
 @property (nonatomic) BOOL onBoardingCompleted;
 @property (nonatomic) NSString* upgradeLastVersion;
 
-@property (nonatomic) BOOL showFrame;
+@property (nonatomic) BOOL showCase;
 @property (nonatomic) BOOL showBand;
 @property (nonatomic) NSDictionary* caseImageNames;
 @property (nonatomic) NSDictionary* bandImageNames;
