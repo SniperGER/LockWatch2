@@ -8,6 +8,78 @@
 		<array>
 			<dict>
 				<key>asset</key>
+				<string>solo-deep-navy_compact</string>
+				<key>label</key>
+				<string>BAND_SOLO_DEEP_NAVY</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>solo-ginger_compact</string>
+				<key>label</key>
+				<string>BAND_SOLO_GINGER</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>solo-cyprus-green_compact</string>
+				<key>label</key>
+				<string>BAND_SOLO_CYPRUS_GREEN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>solo-pink-citrus_compact</string>
+				<key>label</key>
+				<string>BAND_SOLO_PINK_CITRUS</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>solo-white_compact</string>
+				<key>label</key>
+				<string>BAND_SOLO_WHITE</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>solo-black_compact</string>
+				<key>label</key>
+				<string>BAND_SOLO_BLACK</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>solo-red_compact</string>
+				<key>label</key>
+				<string>BAND_SOLO_PRODUCT_RED</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>braided-solo-inverness-green_compact</string>
+				<key>label</key>
+				<string>BAND_BRAIDED_SOLO_INVERNESS_GREEN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>braided-solo-charcoal_compact</string>
+				<key>label</key>
+				<string>BAND_BRAIDED_SOLO_CHARCOAL</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>braided-solo-pink-punch_compact</string>
+				<key>label</key>
+				<string>BAND_BRAIDED_SOLO_PINK_PUNCH</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>braided-solo-atlantic-blue_compact</string>
+				<key>label</key>
+				<string>BAND_BRAIDED_SOLO_ATLANTIC_BLUE</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>braided-solo-red_compact</string>
+				<key>label</key>
+				<string>BAND_BRAIDED_SOLO_PRODUCT_RED</string>
+			</dict>
+			<dict>
+				<key>asset</key>
 				<string>sport-seafoam_compact</string>
 				<key>label</key>
 				<string>BAND_SPORT_SEAFOAM</string>
@@ -29,6 +101,30 @@
 				<string>sport-coastal-gray_compact</string>
 				<key>label</key>
 				<string>BAND_SPORT_COASTAL_GRAY</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-deep-navy_compact</string>
+				<key>label</key>
+				<string>BAND_SPORT_DEEP_NAVY</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-ginger_compact</string>
+				<key>label</key>
+				<string>BAND_SPORT_GINGER</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-cyprus-green_compact</string>
+				<key>label</key>
+				<string>BAND_SPORT_CYPRUS_GREEN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-pink-citrus_compact</string>
+				<key>label</key>
+				<string>BAND_SPORT_PINK_CITRUS</string>
 			</dict>
 			<dict>
 				<key>asset</key>
@@ -188,6 +284,42 @@
 			</dict>
 			<dict>
 				<key>asset</key>
+				<string>sport-loop-plum_compact</string>
+				<key>label</key>
+				<string>BAND_SPORT_LOOP_PLUM</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-loop-inverness-green_compact</string>
+				<key>label</key>
+				<string>BAND_SPORT_LOOP_INVERNESS_GREEN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-loop-deep-navy_compact</string>
+				<key>label</key>
+				<string>BAND_SPORT_LOOP_DEEP_NAVY</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-loop-kumquat_compact</string>
+				<key>label</key>
+				<string>BAND_SPORT_LOOP_KUMQUAT</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-loop-charcoal_compact</string>
+				<key>label</key>
+				<string>BAND_SPORT_LOOP_CHARCOAL</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-loop-cream_compact</string>
+				<key>label</key>
+				<string>BAND_SPORT_LOOP_CREAM</string>
+			</dict>
+			<dict>
+				<key>asset</key>
 				<string>sport-loop-red_compact</string>
 				<key>label</key>
 				<string>BAND_SPORT_LOOP_PRODUCT_RED</string>
@@ -218,9 +350,51 @@
 			</dict>
 			<dict>
 				<key>asset</key>
+				<string>buckle-pink-citrus_compact</string>
+				<key>label</key>
+				<string>BAND_BUCKLE_PINK_CITRUS</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>buckle-garnet_compact</string>
+				<key>label</key>
+				<string>BAND_BUCKLE_GARNET</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>buckle-scarlet_compact</string>
+				<key>label</key>
+				<string>BAND_BUCKLE_SCARLET</string>
+			</dict>
+			<dict>
+				<key>asset</key>
 				<string>buckle-black_compact</string>
 				<key>label</key>
 				<string>BAND_BUCKLE_BLACK</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>leather-link-baltic-blue_compact</string>
+				<key>label</key>
+				<string>BAND_LEATHER_LINK_BALTIC_BLUE</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>leather-link-poppy_compact</string>
+				<key>label</key>
+				<string>BAND_LEATHER_LINK_POPPY</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>leather-link-saddle-brown_compact</string>
+				<key>label</key>
+				<string>BAND_LEATHER_LINK_SADDLE_BROWN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>leather-link-black_compact</string>
+				<key>label</key>
+				<string>BAND_LEATHER_LINK_BLACK</string>
 			</dict>
 			<dict>
 				<key>asset</key>
@@ -230,9 +404,15 @@
 			</dict>
 			<dict>
 				<key>asset</key>
-				<string>milanese-gold_compact</string>
+				<string>milanese-yellow-gold_compact</string>
 				<key>label</key>
-				<string>BAND_MILANESE_GOLD</string>
+				<string>BAND_MILANESE_YELLOW_GOLD</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>milanese-graphite_compact</string>
+				<key>label</key>
+				<string>BAND_MILANESE_GRAPHITE</string>
 			</dict>
 			<dict>
 				<key>asset</key>
@@ -278,15 +458,33 @@
 			</dict>
 			<dict>
 				<key>asset</key>
+				<string>nike-sport-black-pink-blast_compact</string>
+				<key>label</key>
+				<string>BAND_NIKE_SPORT_BLACK_PINK_BLAST</string>
+			</dict>
+			<dict>
+				<key>asset</key>
 				<string>nike-sport-royal-pulse-black_compact</string>
 				<key>label</key>
 				<string>BAND_NIKE_SPORT_ROYAL_PULSE_BLACK</string>
 			</dict>
 			<dict>
 				<key>asset</key>
-				<string>nike-sport-black-pink-blast_compact</string>
+				<string>nike-sport-spruce-green_compact</string>
 				<key>label</key>
-				<string>BAND_NIKE_SPORT_BLACK_PINK_BLAST</string>
+				<string>BAND_NIKE_SPORT_SPRUCE_GREEN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>nike-sport-black-mango_compact</string>
+				<key>label</key>
+				<string>BAND_NIKE_SPORT_BLACK_MANGO</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>nike-sport-obsidian-black_compact</string>
+				<key>label</key>
+				<string>BAND_NIKE_SPORT_OBSIDIAN_BLACK</string>
 			</dict>
 			<dict>
 				<key>asset</key>
@@ -332,6 +530,24 @@
 			</dict>
 			<dict>
 				<key>asset</key>
+				<string>nike-sport-loop-spruce-green_compact</string>
+				<key>label</key>
+				<string>BAND_NIKE_SPORT_LOOP_SPRUCE_GREEN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>nike-sport-loop-purple_compact</string>
+				<key>label</key>
+				<string>BAND_NIKE_SPORT_LOOP_PURPLE</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>nike-sport-loop-obsidian_compact</string>
+				<key>label</key>
+				<string>BAND_NIKE_SPORT_LOOP_OBSIDIAN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
 				<string>nike-sport-loop-summit-white_compact</string>
 				<key>label</key>
 				<string>BAND_NIKE_SPORT_LOOP_SUMMIT_WHITE</string>
@@ -353,6 +569,30 @@
 				<string>hermes-single-orange_compact</string>
 				<key>label</key>
 				<string>BAND_HERMES_SINGLE_ORANGE</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>hermes-single-jaune-ambre_compact</string>
+				<key>label</key>
+				<string>BAND_HERMES_SINGLE_JAUNE_AMBRE</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>hermes-single-navy_compact</string>
+				<key>label</key>
+				<string>BAND_HERMES_SINGLE_NAVY</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>hermes-single-rouge-piment_compact</string>
+				<key>label</key>
+				<string>BAND_HERMES_SINGLE_ROUGE_PIMENT</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>hermes-single-anemone_compact</string>
+				<key>label</key>
+				<string>BAND_HERMES_SINGLE_ANEMONE</string>
 			</dict>
 			<dict>
 				<key>asset</key>
@@ -410,13 +650,85 @@
 			</dict>
 			<dict>
 				<key>asset</key>
-				<string>hermes-double-fauve-barenia_compact</string>
+				<string>hermes-double-fauve-attelage_compact</string>
 				<key>label</key>
-				<string>BAND_HERMES_DOUBLE_FAUVE_BARENIA</string>
+				<string>BAND_HERMES_DOUBLE_FAUVE_ATTELAGE</string>
 			</dict>
 		</array>
 		<key>regular</key>
 		<array>
+			<dict>
+				<key>asset</key>
+				<string>solo-deep-navy_regular</string>
+				<key>label</key>
+				<string>BAND_SOLO_DEEP_NAVY</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>solo-ginger_regular</string>
+				<key>label</key>
+				<string>BAND_SOLO_GINGER</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>solo-cyprus-green_regular</string>
+				<key>label</key>
+				<string>BAND_SOLO_CYPRUS_GREEN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>solo-pink-citrus_regular</string>
+				<key>label</key>
+				<string>BAND_SOLO_PINK_CITRUS</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>solo-white_regular</string>
+				<key>label</key>
+				<string>BAND_SOLO_WHITE</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>solo-black_regular</string>
+				<key>label</key>
+				<string>BAND_SOLO_BLACK</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>solo-red_regular</string>
+				<key>label</key>
+				<string>BAND_SOLO_PRODUCT_RED</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>braided-solo-inverness-green_regular</string>
+				<key>label</key>
+				<string>BAND_BRAIDED_SOLO_INVERNESS_GREEN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>braided-solo-charcoal_regular</string>
+				<key>label</key>
+				<string>BAND_BRAIDED_SOLO_CHARCOAL</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>braided-solo-pink-punch_regular</string>
+				<key>label</key>
+				<string>BAND_BRAIDED_SOLO_PINK_PUNCH</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>braided-solo-atlantic-blue_regular</string>
+				<key>label</key>
+				<string>BAND_BRAIDED_SOLO_ATLANTIC_BLUE</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>braided-solo-red_regular</string>
+				<key>label</key>
+				<string>BAND_BRAIDED_SOLO_PRODUCT_RED</string>
+			</dict>
 			<dict>
 				<key>asset</key>
 				<string>sport-seafoam_regular</string>
@@ -440,6 +752,30 @@
 				<string>sport-coastal-gray_regular</string>
 				<key>label</key>
 				<string>BAND_SPORT_COASTAL_GRAY</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-deep-navy_regular</string>
+				<key>label</key>
+				<string>BAND_SPORT_DEEP_NAVY</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-ginger_regular</string>
+				<key>label</key>
+				<string>BAND_SPORT_GINGER</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-cyprus-green_regular</string>
+				<key>label</key>
+				<string>BAND_SPORT_CYPRUS_GREEN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-pink-citrus_regular</string>
+				<key>label</key>
+				<string>BAND_SPORT_PINK_CITRUS</string>
 			</dict>
 			<dict>
 				<key>asset</key>
@@ -599,9 +935,75 @@
 			</dict>
 			<dict>
 				<key>asset</key>
+				<string>sport-loop-plum_regular</string>
+				<key>label</key>
+				<string>BAND_SPORT_LOOP_PLUM</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-loop-inverness-green_regular</string>
+				<key>label</key>
+				<string>BAND_SPORT_LOOP_INVERNESS_GREEN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-loop-deep-navy_regular</string>
+				<key>label</key>
+				<string>BAND_SPORT_LOOP_DEEP_NAVY</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-loop-kumquat_regular</string>
+				<key>label</key>
+				<string>BAND_SPORT_LOOP_KUMQUAT</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-loop-charcoal_regular</string>
+				<key>label</key>
+				<string>BAND_SPORT_LOOP_CHARCOAL</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>sport-loop-cream_regular</string>
+				<key>label</key>
+				<string>BAND_SPORT_LOOP_CREAM</string>
+			</dict>
+			<dict>
+				<key>asset</key>
 				<string>sport-loop-red_regular</string>
 				<key>label</key>
 				<string>BAND_SPORT_LOOP_PRODUCT_RED</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>leather-link-baltic-blue_regular</string>
+				<key>label</key>
+				<string>BAND_LEATHER_LINK_BALTIC_BLUE</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>leather-link-poppy_regular</string>
+				<key>label</key>
+				<string>BAND_LEATHER_LINK_POPPY</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>leather-link-saddle-brown_regular</string>
+				<key>label</key>
+				<string>BAND_LEATHER_LINK_SADDLE_BROWN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>leather-link-black_regular</string>
+				<key>label</key>
+				<string>BAND_LEATHER_LINK_BLACK</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>leather-diver-blue_regular</string>
+				<key>label</key>
+				<string>BAND_LEATHER_DIVER_BLUE</string>
 			</dict>
 			<dict>
 				<key>asset</key>
@@ -635,9 +1037,15 @@
 			</dict>
 			<dict>
 				<key>asset</key>
-				<string>milanese-gold_regular</string>
+				<string>milanese-yellow-gold_regular</string>
 				<key>label</key>
-				<string>BAND_MILANESE_GOLD</string>
+				<string>BAND_MILANESE_YELLOW_GOLD</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>milanese-graphite_regular</string>
+				<key>label</key>
+				<string>BAND_MILANESE_GRAPHITE</string>
 			</dict>
 			<dict>
 				<key>asset</key>
@@ -647,7 +1055,7 @@
 			</dict>
 			<dict>
 				<key>asset</key>
-				<string>bracelet_compact</string>
+				<string>bracelet_regular</string>
 				<key>label</key>
 				<string>BAND_BRACELET</string>
 			</dict>
@@ -683,15 +1091,33 @@
 			</dict>
 			<dict>
 				<key>asset</key>
+				<string>nike-sport-black-pink-blast_regular</string>
+				<key>label</key>
+				<string>BAND_NIKE_SPORT_BLACK_PINK_BLAST</string>
+			</dict>
+			<dict>
+				<key>asset</key>
 				<string>nike-sport-royal-pulse-black_regular</string>
 				<key>label</key>
 				<string>BAND_NIKE_SPORT_ROYAL_PULSE_BLACK</string>
 			</dict>
 			<dict>
 				<key>asset</key>
-				<string>nike-sport-black-pink-blast_regular</string>
+				<string>nike-sport-spruce-green_regular</string>
 				<key>label</key>
-				<string>BAND_NIKE_SPORT_BLACK_PINK_BLAST</string>
+				<string>BAND_NIKE_SPORT_SPRUCE_GREEN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>nike-sport-black-mango_regular</string>
+				<key>label</key>
+				<string>BAND_NIKE_SPORT_BLACK_MANGO</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>nike-sport-obsidian-black_regular</string>
+				<key>label</key>
+				<string>BAND_NIKE_SPORT_OBSIDIAN_BLACK</string>
 			</dict>
 			<dict>
 				<key>asset</key>
@@ -737,6 +1163,24 @@
 			</dict>
 			<dict>
 				<key>asset</key>
+				<string>nike-sport-loop-spruce-green_regular</string>
+				<key>label</key>
+				<string>BAND_NIKE_SPORT_LOOP_SPRUCE_GREEN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>nike-sport-loop-purple_regular</string>
+				<key>label</key>
+				<string>BAND_NIKE_SPORT_LOOP_PURPLE</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>nike-sport-loop-obsidian_regular</string>
+				<key>label</key>
+				<string>BAND_NIKE_SPORT_LOOP_OBSIDIAN</string>
+			</dict>
+			<dict>
+				<key>asset</key>
 				<string>nike-sport-loop-summit-white_regular</string>
 				<key>label</key>
 				<string>BAND_NIKE_SPORT_LOOP_SUMMIT_WHITE</string>
@@ -746,6 +1190,24 @@
 				<string>nike-sport-loop-black_regular</string>
 				<key>label</key>
 				<string>BAND_NIKE_SPORT_LOOP_BLACK</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>hermes-single-bambou_regular</string>
+				<key>label</key>
+				<string>BAND_HERMES_SINGLE_BAMBOU</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>hermes-single-navy_regular</string>
+				<key>label</key>
+				<string>BAND_HERMES_SINGLE_NAVY</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>hermes-single-rouge-piment_regular</string>
+				<key>label</key>
+				<string>BAND_HERMES_SINGLE_ROUGE_PIMENT</string>
 			</dict>
 			<dict>
 				<key>asset</key>
@@ -775,13 +1237,19 @@
 				<key>asset</key>
 				<string>hermes-single-feu-epsom_regular</string>
 				<key>label</key>
-				<string>BAND_HERMES_SINGLE_EPSOM_FEU</string>
+				<string>BAND_HERMES_SINGLE_FEU_EPSOM</string>
 			</dict>
 			<dict>
 				<key>asset</key>
 				<string>hermes-single-fauve-barenia_regular</string>
 				<key>label</key>
 				<string>BAND_HERMES_SINGLE_FAUVE_BARENIA</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>hermes-single-noir-buckle_regular</string>
+				<key>label</key>
+				<string>BAND_HERMES_SINGLE_NOIR_BUCKLE</string>
 			</dict>
 			<dict>
 				<key>asset</key>
@@ -794,6 +1262,12 @@
 				<string>hermes-single-fauve-barenia-buckle_regular</string>
 				<key>label</key>
 				<string>BAND_HERMES_SINGLE_FAUVE_BARENIA_BUCKLE</string>
+			</dict>
+			<dict>
+				<key>asset</key>
+				<string>hermes-single-fauve-attelage_regular</string>
+				<key>label</key>
+				<string>BAND_HERMES_SINGLE_FAUVE_ATTELAGE</string>
 			</dict>
 		</array>
 	</dict>
@@ -823,19 +1297,43 @@
 				</dict>
 				<dict>
 					<key>asset</key>
+					<string>case-aluminum-red_394h</string>
+					<key>label</key>
+					<string>CASE_ALUMINUM_PRODUCT_RED</string>
+				</dict>
+				<dict>
+					<key>asset</key>
+					<string>case-aluminum-blue_394h</string>
+					<key>label</key>
+					<string>CASE_ALUMINUM_BLUE</string>
+				</dict>
+				<dict>
+					<key>asset</key>
+					<string>case-stainless-graphite_394h</string>
+					<key>label</key>
+					<string>CASE_STAINLESS_GRAPHITE</string>
+				</dict>
+				<dict>
+					<key>asset</key>
 					<string>case-stainless-silver_394h</string>
 					<key>label</key>
 					<string>CASE_STAINLESS_SILVER</string>
 				</dict>
 				<dict>
 					<key>asset</key>
-					<string>case-stainless-gold_394h</string>
+					<string>case-stainless-gold-series5_394h</string>
 					<key>label</key>
-					<string>CASE_STAINLESS_GOLD</string>
+					<string>CASE_STAINLESS_GOLD_SERIES5</string>
 				</dict>
 				<dict>
 					<key>asset</key>
-					<string>case-stainless-spacegray_394h</string>
+					<string>case-stainless-gold-series6_394h</string>
+					<key>label</key>
+					<string>CASE_STAINLESS_GOLD_SERIES6</string>
+				</dict>
+				<dict>
+					<key>asset</key>
+					<string>case-stainless-black_394h</string>
 					<key>label</key>
 					<string>CASE_STAINLESS_SPACE_BLACK</string>
 				</dict>
@@ -887,19 +1385,43 @@
 				</dict>
 				<dict>
 					<key>asset</key>
+					<string>case-aluminum-blue_448h</string>
+					<key>label</key>
+					<string>CASE_ALUMINUM_BLUE</string>
+				</dict>
+				<dict>
+					<key>asset</key>
+					<string>case-aluminum-red_448h</string>
+					<key>label</key>
+					<string>CASE_ALUMINUM_PRODUCT_RED</string>
+				</dict>
+				<dict>
+					<key>asset</key>
+					<string>case-stainless-graphite_448h</string>
+					<key>label</key>
+					<string>CASE_STAINLESS_GRAPHITE</string>
+				</dict>
+				<dict>
+					<key>asset</key>
 					<string>case-stainless-silver_448h</string>
 					<key>label</key>
 					<string>CASE_STAINLESS_SILVER</string>
 				</dict>
 				<dict>
 					<key>asset</key>
-					<string>case-stainless-gold_448h</string>
+					<string>case-stainless-gold-series5_448h</string>
 					<key>label</key>
-					<string>CASE_STAINLESS_GOLD</string>
+					<string>CASE_STAINLESS_GOLD_SERIES5</string>
 				</dict>
 				<dict>
 					<key>asset</key>
-					<string>case-stainless-spacegray_448h</string>
+					<string>case-stainless-gold-series6_448h</string>
+					<key>label</key>
+					<string>CASE_STAINLESS_GOLD_SERIES6</string>
+				</dict>
+				<dict>
+					<key>asset</key>
+					<string>case-stainless-black_448h</string>
 					<key>label</key>
 					<string>CASE_STAINLESS_SPACE_BLACK</string>
 				</dict>

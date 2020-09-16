@@ -12,17 +12,39 @@
 	"CASE_ALUMINUM_SPACEGRAY" = "Aluminiumgehäuse Space Grau";
 	"CASE_ALUMINUM_SILVER" = "Aluminiumgehäuse Silber";
 	"CASE_ALUMINUM_GOLD" = "Aluminiumgehäuse Gold";
-	"CASE_STAINLESS_SILVER" = "Edelstahlgehäuse";
-	"CASE_STAINLESS_GOLD" = "Edelstahlgehäuse Gold";
+	"CASE_ALUMINUM_BLUE" = "Aluminiumgehäuse Blau";
+	"CASE_ALUMINUM_PRODUCT_RED" = "Aluminiumgehäuse (PRODUCT)RED";
+	"CASE_STAINLESS_GRAPHITE" = "Edelstahlgehäuse Graphit";
+	"CASE_STAINLESS_SILVER" = "Edelstahlgehäuse Silber";
+	"CASE_STAINLESS_GOLD_SERIES5" = "Edelstahlgehäuse Gold (Series 5)";
+	"CASE_STAINLESS_GOLD_SERIES6" = "Edelstahlgehäuse Gold (Series 6)";
 	"CASE_STAINLESS_SPACE_BLACK" = "Edelstahlgehäuse Space Schwarz";
 	"CASE_TITANIUM_SPACE_BLACK" = "Titangehäuse Space Schwarz";
 	"CASE_TITANIUM" = "Titangehäuse";
 	"CASE_CERAMIC" = "Keramikgehäuse Weiß";
 	
+	"BAND_SOLO_DEEP_NAVY" = "Solo Loop Dunkelmarine";
+	"BAND_SOLO_GINGER" = "Solo Loop Ingwer";
+	"BAND_SOLO_CYPRUS_GREEN" = "Solo Loop Zyperngrün";
+	"BAND_SOLO_PINK_CITRUS" = "Solo Loop Zitruspink";
+	"BAND_SOLO_WHITE" = "Solo Loop Weiß";
+	"BAND_SOLO_BLACK" = "Solo Loop Schwarz";
+	"BAND_SOLO_PRODUCT_RED" = "Solo Loop (PRODUCT)RED";
+	
+	"BAND_BRAIDED_SOLO_INVERNESS_GREEN" = "Geflochtenes Solo Loop Invernessgrün";
+	"BAND_BRAIDED_SOLO_CHARCOAL" = "Geflochtenes Solo Loop Kohlegrau";
+	"BAND_BRAIDED_SOLO_PINK_PUNCH" = "Geflochtenes Solo Loop Limonadenpink";
+	"BAND_BRAIDED_SOLO_ATLANTIC_BLUE" = "Geflochtenes Solo Loop Atlantikblau";
+	"BAND_BRAIDED_SOLO_PRODUCT_RED" = "Geflochtenes Solo Loop (PRODUCT)RED";
+	
 	"BAND_SPORT_SEAFOAM" = "Sportarmband Meerschaum";
 	"BAND_SPORT_VITAMIN_C" = "Sportarmband Vitamin C";
 	"BAND_SPORT_LINEN_BLUE" = "Sportarmband Leinenblau";
 	"BAND_SPORT_COASTAL_GRAY" = "Sportarmband Küstengrau";
+	"BAND_SPORT_DEEP_NAVY" = "Sportarmband Dunkelmarine";
+	"BAND_SPORT_GINGER" = "Sportarmband Ingwer";
+	"BAND_SPORT_CYPRUS_GREEN" = "Sportarmband Zyperngrün";
+	"BAND_SPORT_PINK_CITRUS" = "Sportarmband Zitruspink";
 	"BAND_SPORT_PRIDE" = "Sportarmband Pride Edition";
 	"BAND_SPORT_CACTUS" = "Sportarmband Kaktus";
 	"BAND_SPORT_GRAPEFRUIT" = "Sportarmband Grapefruit";
@@ -50,21 +72,37 @@
 	"BAND_SPORT_LOOP_ANCHOR_GRAY" = "Sport Loop Eisengrau";
 	"BAND_SPORT_LOOP_CAMEL" = "Sport Loop Kamelbraun";
 	"BAND_SPORT_LOOP_MIDNIGHT_BLUE" = "Sport Loop Mitternachtsblau";
+	"BAND_SPORT_LOOP_PLUM" = "Sport Loop Pflaume";
+	"BAND_SPORT_LOOP_INVERNESS_GREEN" = "Sport Loop Invernessgrün";
+	"BAND_SPORT_LOOP_DEEP_NAVY" = "Sport Loop Dunkelmarine";
+	"BAND_SPORT_LOOP_KUMQUAT" = "Sport Loop Kumquat";
+	"BAND_SPORT_LOOP_CHARCOAL" = "Sport Loop Kohlegrau";
+	"BAND_SPORT_LOOP_CREAM" = "Sport Loop Creme";
 	"BAND_SPORT_LOOP_PRODUCT_RED" = "Sport Loop (PRODUCT)RED";
 	
 	"BAND_BUCKLE_RASPBERRY" = "Modernes Lederarmband Himbeere";
 	"BAND_BUCKLE_DEEP_SEA_BLUE" = "Modernes Lederarmband Tiefseeblau";
 	"BAND_BUCKLE_AUBERGINE" = "Modernes Lederarmband Aubergine";
 	"BAND_BUCKLE_SADDLE_BROWN" = "Modernes Lederarmband Sattelbraun";
+	"BAND_BUCKLE_PINK_CITRUS" = "Modernes Lederarmband Zitruspink";
+	"BAND_BUCKLE_GARNET" = "Modernes Lederarmband Granat";
+	"BAND_BUCKLE_SCARLET" = "Modernes Lederarmband Scharlachrot";
 	"BAND_BUCKLE_BLACK" = "Modernes Lederarmband Schwarz";
 	
+	"BAND_LEATHER_LINK_BALTIC_BLUE" = "Lederarmband mit Endstück Baltischblau";
+	"BAND_LEATHER_LINK_POPPY" = "Lederarmband mit Endstück California Poppy";
+	"BAND_LEATHER_LINK_SADDLE_BROWN" = "Lederarmband mit Endstück Sattelbraun";
+	"BAND_LEATHER_LINK_BLACK" = "Lederarmband mit Endstück Schwarz";
+	
+	"BAND_LEATHER_DIVER_BLUE" = "Lederarmband mit Schlaufe Taucherblau";
 	"BAND_LEATHER_PEACOCK" = "Lederarmband mit Schlaufe Pfauenblau";
 	"BAND_LEATHER_MEYER_LEMON" = "Lederarmband mit Schlaufe Sonnengelb";
 	"BAND_LEATHER_SADDLE_BROWN" = "Lederarmband mit Schlaufe Sattelbraun";
 	"BAND_LEATHER_BLACK" = "Lederarmband mit Schlaufe Schwarz";
 	
 	"BAND_MILANESE" = "Milanaise Armband";
-	"BAND_MILANESE_GOLD" = "Milanaise Armband Gold";
+	"BAND_MILANESE_YELLOW_GOLD" = "Milanaise Armband Gold";
+	"BAND_MILANESE_GRAPHITE" = "Milanaise Armband Graphit";
 	"BAND_MILANESE_SPACE_BLACK" = "Milanaise Armband Space Schwarz";
 	
 	"BAND_BRACELET" = "Gliederarmband";
@@ -74,33 +112,49 @@
 	"BAND_NIKE_SPORT_BLACK_LIME_BLAST" = "Nike Sportarmband Schwarz/Lime Blast";
 	"BAND_NIKE_SPORT_TURQUOISE_GREEN" = "Nike Sportarmband Midnight Turquiose/Aurora Green";
 	"BAND_NIKE_SPORT_DESERT_SAND_BLACK" = "Nike Sportarmband Desert Sand/Schwarz";
-	"BAND_NIKE_SPORT_ROYAL_PULSE_BLACK" = "Nike Sportarmband Royal Pulse/Schwarz";
 	"BAND_NIKE_SPORT_BLACK_PINK_BLAST" = "Nike Sportarmband Schwarz/Pink Blast";
+	"BAND_NIKE_SPORT_ROYAL_PULSE_BLACK" = "Nike Sportarmband Royal Pulse/Schwarz";
+	"BAND_NIKE_SPORT_SPRUCE_GREEN" = "Nike Sportarmband Spruce Aura/Vapor Green";
+	"BAND_NIKE_SPORT_BLACK_MANGO" = "Nike Sportarmband Blue Black/Bright Mango";
+	"BAND_NIKE_SPORT_OBSIDIAN_BLACK" = "Nike Sportarmband Obsidian Mist/Schwarz";
 	"BAND_NIKE_SPORT_PLATINUM_BLACK" = "Nike Sportarmband Pure Platinum/Schwarz";
 	"BAND_NIKE_SPORT_ANTHRACITE_BLACK" = "Nike Sportarmband Anthrazit/Schwarz";
+	
 	"BAND_NIKE_SPORT_LOOP_INDIGO_LIME" = "Nike Sport Loop World Indigo/Lime Blast";
 	"BAND_NIKE_SPORT_LOOP_CRIMSON_GREEN" = "Nike Sport Loop Hyper Crimson/Neptune Green";
 	"BAND_NIKE_SPORT_LOOP_DESERT_SAND_VOLT" = "Nike Sport Loop Desert Sand/Volt";
 	"BAND_NIKE_SPORT_LOOP_PINK_BLAST_BERRY" = "Nike Sport Loop Pink Blast/True Berry";
 	"BAND_NIKE_SPORT_LOOP_ROYAL_PULSE_LAVA" = "Nike Sport Loop Royal Pulse/Lava Glow";
+	"BAND_NIKE_SPORT_LOOP_SPRUCE_GREEN" = "Nike Sport Loop Spruce Aura";
+	"BAND_NIKE_SPORT_LOOP_PURPLE" = "Nike Sport Loop Purple Pulse";
+	"BAND_NIKE_SPORT_LOOP_OBSIDIAN" = "Nike Sport Loop Obsidian Mist";
 	"BAND_NIKE_SPORT_LOOP_SUMMIT_WHITE" = "Nike Sport Loop Summit White";
 	"BAND_NIKE_SPORT_LOOP_BLACK" = "Nike Sport Loop Schwarz";
 	
-	"BAND_HERMES_SINGLE_NOIR_BLANC_GOLD" = "Hermès Single Tour Swift-Lederarmband Noir/Blanc/Gold";
-	"BAND_HERMES_SINGLE_ORANGE" = "Hermès Single Tour Swift-Lederarmband Orange";
-	"BAND_HERMES_SINGLE_NOIR" = "Hermès Single Tour Swift-Lederarmband Noir";
-	"BAND_HERMES_SINGLE_BRIQUE_BETON" = "Hermès Single Tour Swift-Lederarmband Brique/Béton";
-	"BAND_HERMES_SINGLE_ENCRE_BETON" = "Hermès Single Tour Swift-Lederarmband Encre/Béton";
-	"BAND_HERMES_SINGLE_ETAIN_BETON" = "Hermès Single Tour Swift-Lederarmband Étain/Béton";
-	"BAND_HERMES_SINGLE_EPSOM_FEU" = "Hermès Single Tour Epsom-Lederarmband Feu";
-	"BAND_HERMES_SINGLE_FAUVE_BARENIA" = "Hermès Single Tour Barénia-Lederarmband Fauve";
-	"BAND_HERMES_SINGLE_EBENE_BARENIA_BUCKLE" = "Hermès Single Tour Barénia-Lederarmband mit Faltschließe Ébène";
-	"BAND_HERMES_SINGLE_FAUVE_BARENIA_BUCKLE" = "Hermès Single Tour Barénia-Lederarmband mit Faltschließe Fauve";
-	"BAND_HERMES_DOUBLE_ALLOVER_NOIR" = "Hermès Double Tour Allover Print Swift-Lederarmband Noir";
-	"BAND_HERMES_DOUBLE_ALLOVER_BLANC" = "Hermès Double Tour Allover Print Swift-Lederarmband Blanc";
-	"BAND_HERMES_DOUBLE_NOIR" = "Hermès Double Tour Swift-Lederarmband Noir";
-	"BAND_HERMES_DOUBLE_BRIQUE_BETON" = "Hermès Double Tour Swift-Lederarmband Brique/Béton";
-	"BAND_HERMES_DOUBLE_ENCRE_BETON" = "Hermès Double Tour Swift-Lederarmband Encre/Béton";
-	"BAND_HERMES_DOUBLE_ETAIN_BETON" = "Hermès Double Tour Swift-Lederarmband Étain/Béton";
-	"BAND_HERMES_DOUBLE_FAUVE_BARENIA" = "Hermès Double Tour Barénia-Lederarmband Fauve";
+	"BAND_HERMES_SINGLE_NOIR_BLANC_GOLD" = "Single Tour Swift-Lederarmband Noir/Blanc/Gold";
+	"BAND_HERMES_SINGLE_BAMBOU" = "Single Tour Swift-Lederarmband Bambou";
+	"BAND_HERMES_SINGLE_JAUNE_AMBRE" = "Single Tour Swift-Lederarmband Jaune Ambre";
+	"BAND_HERMES_SINGLE_NAVY" = "Single Tour Swift-Lederarmband Navy";
+	"BAND_HERMES_SINGLE_ROUGE_PIMENT" = "Single Tour Swift-Lederarmband Rouge Piment";
+	"BAND_HERMES_SINGLE_ANEMONE" = "Single Tour Swift-Lederarmband Anémone";
+	"BAND_HERMES_SINGLE_ORANGE" = "Single Tour Swift-Lederarmband Orange";
+	"BAND_HERMES_SINGLE_NOIR" = "Single Tour Swift-Lederarmband Noir";
+	"BAND_HERMES_SINGLE_BRIQUE_BETON" = "Single Tour Swift-Lederarmband Brique/Béton";
+	"BAND_HERMES_SINGLE_ENCRE_BETON" = "Single Tour Swift-Lederarmband Encre/Béton";
+	"BAND_HERMES_SINGLE_ETAIN_BETON" = "Single Tour Swift-Lederarmband Étain/Béton";
+	"BAND_HERMES_SINGLE_FEU_EPSOM" = "Single Tour Epsom-Lederarmband Feu";
+	"BAND_HERMES_SINGLE_FAUVE_BARENIA" = "Single Tour Barénia-Lederarmband Fauve";
+	"BAND_HERMES_SINGLE_NOIR_BUCKLE" = "Single Tour Swift-Lederarmband mit Faltschließe Noir";
+	"BAND_HERMES_SINGLE_EBENE_BARENIA_BUCKLE" = "Single Tour Barénia-Lederarmband mit Faltschließe Ébène";
+	"BAND_HERMES_SINGLE_FAUVE_BARENIA_BUCKLE" = "Single Tour Barénia-Lederarmband mit Faltschließe Fauve";
+	"BAND_HERMES_SINGLE_FAUVE_ATTELAGE" = "Attelage Single Tour Barénia-Lederarmband Fauve";
+	
+	"BAND_HERMES_DOUBLE_ALLOVER_NOIR" = "Double Tour Allover Print Swift-Lederarmband Noir";
+	"BAND_HERMES_DOUBLE_ALLOVER_BLANC" = "Double Tour Allover Print Swift-Lederarmband Blanc";
+	"BAND_HERMES_DOUBLE_NOIR" = "Double Tour Swift-Lederarmband Noir";
+	"BAND_HERMES_DOUBLE_BRIQUE_BETON" = "Double Tour Swift-Lederarmband Brique/Béton";
+	"BAND_HERMES_DOUBLE_ENCRE_BETON" = "Double Tour Swift-Lederarmband Encre/Béton";
+	"BAND_HERMES_DOUBLE_ETAIN_BETON" = "Double Tour Swift-Lederarmband Étain/Béton";
+	"BAND_HERMES_DOUBLE_FAUVE_BARENIA" = "Double Tour Barénia-Lederarmband Fauve";
+	"BAND_HERMES_DOUBLE_FAUVE_ATTELAGE" = "Attelage Double Tour Barénia-Lederarmband Fauve";
 }
