@@ -69,27 +69,19 @@
 			[[NSBundle bundleForClass:self.class] localizedStringForKey:@"CASE" value:nil table:@"Bands"],
 			[[NSBundle bundleForClass:self.class] localizedStringForKey:@"BAND" value:nil table:@"Bands"]
 		]];
-		[_segmentedControl addTarget:self action:@selector(segmentControlDidChange:) forControlEvents:UIControlEventValueChanged];
+		[_segmentedControl addTarget:self action:@selector(segmentedControlDidChange:) forControlEvents:UIControlEventValueChanged];
 		[_segmentedControl setSelectedSegmentIndex:0];
 	}
 	[self.navigationItem setTitleView:_segmentedControl];
 	
 	if (!_bandLabel) {
-		_bandLabel = [UILabel new];
-		[_bandLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+		_bandLabel = [self _newLabel];
 		[_bandLabel setFont:[UIFont systemFontOfSize:14]];
-		[_bandLabel setNumberOfLines:0];
-		[_bandLabel setLineBreakMode:NSLineBreakByWordWrapping];
-		[_bandLabel setTextAlignment:NSTextAlignmentCenter];
 		[self.view addSubview:_bandLabel];
 	}
 	
 	if (!_bandScrollView && [_bandAssets count]) {
-		_bandScrollView = [[UIScrollView alloc] initWithFrame:(CGRect){ CGPointZero, { MIN(CGRectGetWidth(self.view.bounds), 375), MIN(CGRectGetWidth(self.view.bounds), 375) }}];
-		[_bandScrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
-		[_bandScrollView setClipsToBounds:YES];
-		[_bandScrollView setPagingEnabled:YES];
-		[_bandScrollView setShowsVerticalScrollIndicator:NO];
+		_bandScrollView = [self _newScrollView];
 		[_bandScrollView setDelegate:self];
 		[self.view addSubview:_bandScrollView];
 		
@@ -98,12 +90,13 @@
 		[_bandAssets enumerateObjectsUsingBlock:^(NSDictionary* asset, NSUInteger index, BOOL* stop) {
 			if ([bandImageNames objectForKey:[self.class deviceSizeClass]] && [asset[@"asset"] isEqualToString:[bandImageNames objectForKey:[self.class deviceSizeClass]]]) {
 				_bandIndex = index;
+				*stop = YES;
 			}
 			
-			UIImageView* imageView = [[UIImageView alloc] initWithFrame:(CGRect){{ CGRectGetWidth(_bandScrollView.bounds) * index, 0 }, _bandScrollView.bounds.size }];
-			[imageView setImage:[UIImage imageNamed:asset[@"asset"] inBundle:[NSBundle bundleForClass:self.class] compatibleWithTraitCollection:nil]];
+			// UIImageView* imageView = [[UIImageView alloc] initWithFrame:(CGRect){{ CGRectGetWidth(_bandScrollView.bounds) * index, 0 }, _bandScrollView.bounds.size }];
+			// [imageView setImage:[UIImage imageNamed:asset[@"asset"] inBundle:[NSBundle bundleForClass:self.class] compatibleWithTraitCollection:nil]];
 			
-			[_bandScrollView addSubview:imageView];
+			// [_bandScrollView addSubview:imageView];
 		}];
 		
 		[_bandScrollView setContentSize:(CGSize){ CGRectGetWidth(_bandScrollView.bounds) * _bandAssets.count, CGRectGetHeight(_bandScrollView.bounds) }];
@@ -111,6 +104,12 @@
 			[_bandScrollView setContentOffset:(CGPoint){ CGRectGetWidth(_bandScrollView.bounds) * _bandIndex, 0 }];
 			[_bandLabel setText:[[NSBundle bundleForClass:self.class] localizedStringForKey:[_bandAssets objectAtIndex:_bandIndex][@"label"] value:nil table:@"Bands"]];
 		}
+		
+		_leftBandImageView = [self _newImageView];
+		[_bandScrollView addSubview:_leftBandImageView];
+		
+		_rightBandImageView = [self _newImageView];
+		[_bandScrollView addSubview:_rightBandImageView];
 		
 		[NSLayoutConstraint activateConstraints:@[
 			[_bandScrollView.leadingAnchor constraintGreaterThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
@@ -125,21 +124,13 @@
 	}
 	
 	if (!_caseLabel) {
-		_caseLabel = [UILabel new];
-		[_caseLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+		_caseLabel = [self _newLabel];
 		[_caseLabel setFont:[UIFont systemFontOfSize:16]];
-		[_caseLabel setNumberOfLines:0];
-		[_caseLabel setLineBreakMode:NSLineBreakByWordWrapping];
-		[_caseLabel setTextAlignment:NSTextAlignmentCenter];
 		[self.view addSubview:_caseLabel];
 	}
 	
 	if (!_caseScrollView && [_caseAssets[@"assets"] count]) {
-		_caseScrollView = [[UIScrollView alloc] initWithFrame:(CGRect){ CGPointZero, { MIN(CGRectGetWidth(self.view.bounds), 375), MIN(CGRectGetWidth(self.view.bounds), 375) }}];
-		[_caseScrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
-		[_caseScrollView setClipsToBounds:NO];
-		[_caseScrollView setPagingEnabled:YES];
-		[_caseScrollView setShowsVerticalScrollIndicator:NO];
+		_caseScrollView = [self _newScrollView];
 		[_caseScrollView setDelegate:self];
 		[self.view addSubview:_caseScrollView];
 		
@@ -148,12 +139,13 @@
 		[_caseAssets[@"assets"] enumerateObjectsUsingBlock:^(NSDictionary* asset, NSUInteger index, BOOL* stop) {
 			if ([caseImageNames objectForKey:[self.class deviceSizeClass]] && [asset[@"asset"] isEqualToString:[caseImageNames objectForKey:[self.class deviceSizeClass]]]) {
 				_caseIndex = index;
+				*stop = YES;
 			}
 			
-			UIImageView* imageView = [[UIImageView alloc] initWithFrame:(CGRect){{ CGRectGetWidth(_caseScrollView.bounds) * index, 0 }, _caseScrollView.bounds.size }];
-			[imageView setImage:[UIImage imageNamed:asset[@"asset"] inBundle:[NSBundle bundleForClass:self.class] compatibleWithTraitCollection:nil]];
+	// 		UIImageView* imageView = [[UIImageView alloc] initWithFrame:(CGRect){{ CGRectGetWidth(_caseScrollView.bounds) * index, 0 }, _caseScrollView.bounds.size }];
+	// 		[imageView setImage:[UIImage imageNamed:asset[@"asset"] inBundle:[NSBundle bundleForClass:self.class] compatibleWithTraitCollection:nil]];
 			
-			[_caseScrollView addSubview:imageView];
+	// 		[_caseScrollView addSubview:imageView];
 		}];
 		
 		[_caseScrollView setContentSize:(CGSize){ CGRectGetWidth(_caseScrollView.bounds) * [_caseAssets[@"assets"] count], CGRectGetHeight(_caseScrollView.bounds) }];
@@ -164,6 +156,12 @@
 				[[NSBundle bundleForClass:self.class] localizedStringForKey:[_caseAssets[@"assets"] objectAtIndex:_caseIndex][@"label"] value:nil table:@"Bands"]
 			]];
 		}
+		
+		_leftCaseImageView = [self _newImageView];
+		[_caseScrollView addSubview:_leftCaseImageView];
+		
+		_rightCaseImageView = [self _newImageView];
+		[_caseScrollView addSubview:_rightCaseImageView];
 		
 		[NSLayoutConstraint activateConstraints:@[
 			[_caseScrollView.leadingAnchor constraintGreaterThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
@@ -192,7 +190,7 @@
 		[NSLayoutConstraint activateConstraints:@[
 			[_caseLabel.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:24],
 			[_caseLabel.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-24],
-			[_caseLabel.topAnchor constraintEqualToAnchor:_caseScrollView.bottomAnchor constant:24],
+			[_caseLabel.topAnchor constraintEqualToAnchor:_bandScrollView.bottomAnchor constant:24],
 			
 			[_bandLabel.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:24],
 			[_bandLabel.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-24],
@@ -202,19 +200,106 @@
 	
 	[self.view bringSubviewToFront:_caseLabel];
 	[self.view bringSubviewToFront:_bandLabel];
+	
+	if ([self _isValidPageIndex:_bandIndex forScrollView:_bandScrollView]) {
+		[self setLeftBandImageOffset:(_bandIndex * CGRectGetWidth(_bandScrollView.bounds))];
+		[_leftBandImageView setImage:[self bandImageForIndex:_bandIndex]];
+	} else {
+		[_leftBandImageView setImage:nil];
+	}
+	
+	if ([self _isValidPageIndex:(_bandIndex + 1) forScrollView:_bandScrollView]) {
+		[self setRightBandImageOffset:((_bandIndex + 1) * CGRectGetWidth(_bandScrollView.bounds))];
+		[_rightBandImageView setImage:[self bandImageForIndex:(_bandIndex + 1)]];
+	} else {
+		[_rightBandImageView setImage:nil];
+	}
+	
+	if ([self _isValidPageIndex:_caseIndex forScrollView:_caseScrollView]) {
+		[self setLeftCaseImageOffset:(_caseIndex * CGRectGetWidth(_caseScrollView.bounds))];
+		[_leftCaseImageView setImage:[self caseImageForIndex:_caseIndex]];
+	} else {
+		[_leftCaseImageView setImage:nil];
+	}
+	
+	if ([self _isValidPageIndex:(_caseIndex + 1) forScrollView:_caseScrollView]) {
+		[self setRightCaseImageOffset:((_caseIndex + 1) * CGRectGetWidth(_caseScrollView.bounds))];
+		[_rightCaseImageView setImage:[self caseImageForIndex:(_caseIndex + 1)]];
+	} else {
+		[_rightCaseImageView setImage:nil];
+	}
 }
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
-	if ([_caseScrollView isUserInteractionEnabled]) {
-		[_caseScrollView flashScrollIndicators];
-	} else if ([_bandScrollView isUserInteractionEnabled]) {
-		[_bandScrollView flashScrollIndicators];
-	}
+	[self segmentedControlDidChange:_segmentedControl];
+	
+	// if ([_caseScrollView isUserInteractionEnabled]) {
+	// 	[_caseScrollView flashScrollIndicators];
+	// } else if ([_bandScrollView isUserInteractionEnabled]) {
+	// 	[_bandScrollView flashScrollIndicators];
+	// }
+}
+
+- (void)viewDidLayoutSubviews {
+	[_leftBandImageView setCenter:(CGPoint){
+		(CGRectGetWidth(_bandScrollView.bounds) / 2) + _leftBandImageOffset,
+		CGRectGetMidY(_bandScrollView.bounds)
+	}];
+	
+	[_rightBandImageView setCenter:(CGPoint){
+		(CGRectGetWidth(_bandScrollView.bounds) / 2) + _rightBandImageOffset,
+		CGRectGetMidY(_bandScrollView.bounds)
+	}];
+	
+	[_leftCaseImageView setCenter:(CGPoint){
+		(CGRectGetWidth(_caseScrollView.bounds) / 2) + _leftCaseImageOffset,
+		CGRectGetMidY(_caseScrollView.bounds)
+	}];
+	
+	[_rightCaseImageView setCenter:(CGPoint){
+		(CGRectGetWidth(_caseScrollView.bounds) / 2) + _rightCaseImageOffset,
+		CGRectGetMidY(_caseScrollView.bounds)
+	}];
 }
 
 #pragma mark - Instance Methods
+
+- (BOOL)_isValidPageIndex:(NSInteger)pageIndex forScrollView:(UIScrollView*)scrollView {
+	if (scrollView == _bandScrollView) {
+		return pageIndex >= 0 && [_bandAssets count] > pageIndex;
+	} else if (scrollView == _caseScrollView) {
+		return pageIndex >= 0 && [_caseAssets[@"assets"] count] > pageIndex;
+	}
+	
+	return NO;
+}
+
+- (UIImageView*)_newImageView {
+	UIImageView* imageView = [[UIImageView alloc] initWithFrame:(CGRect){ CGPointZero, { MIN(CGRectGetWidth(self.view.bounds), 375), MIN(CGRectGetWidth(self.view.bounds), 375) }}];
+	return imageView;
+}
+
+- (UILabel*)_newLabel {
+	UILabel* label = [UILabel new];
+	[label setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[label setNumberOfLines:0];
+	[label setLineBreakMode:NSLineBreakByWordWrapping];
+	[label setTextAlignment:NSTextAlignmentCenter];
+	
+	return label;
+}
+
+- (UIScrollView*)_newScrollView {
+	UIScrollView* scrollView = [[UIScrollView alloc] initWithFrame:(CGRect){ CGPointZero, { MIN(CGRectGetWidth(self.view.bounds), 375), MIN(CGRectGetWidth(self.view.bounds), 375) }}];
+	[scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[scrollView setClipsToBounds:NO];
+	[scrollView setPagingEnabled:YES];
+	[scrollView setShowsVerticalScrollIndicator:NO];
+	
+	return scrollView;
+}
 
 - (void)applySelectedFrame {
 	[self.navigationItem.rightBarButtonItem setEnabled:NO];
@@ -234,7 +319,23 @@
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("ml.festival.lockwatch2/WatchFrameSelected"), NULL, NULL, YES);
 }
 
-- (void)segmentControlDidChange:(UISegmentedControl*)segmentedControl {
+- (UIImage*)bandImageForIndex:(NSInteger)index {
+	if ([self _isValidPageIndex:index forScrollView:_bandScrollView]) {
+		return [UIImage imageNamed:[_bandAssets objectAtIndex:index][@"asset"] inBundle:[NSBundle bundleForClass:self.class] compatibleWithTraitCollection:nil];
+	}
+	
+	return nil;
+}
+
+- (UIImage*)caseImageForIndex:(NSInteger)index {
+	if ([self _isValidPageIndex:index forScrollView:_caseScrollView]) {
+		return [UIImage imageNamed:[_caseAssets[@"assets"] objectAtIndex:index][@"asset"] inBundle:[NSBundle bundleForClass:self.class] compatibleWithTraitCollection:nil];
+	}
+	
+	return nil;
+}
+
+- (void)segmentedControlDidChange:(UISegmentedControl*)segmentedControl {
 	switch (segmentedControl.selectedSegmentIndex) {
 		case 0:
 			[_caseScrollView setUserInteractionEnabled:YES];
@@ -258,21 +359,77 @@
 	}
 }
 
+- (void)setLeftBandImageOffset:(CGFloat)leftBandImageOffset {
+	_leftBandImageOffset = leftBandImageOffset;
+	
+	[self.view setNeedsLayout];
+}
+
+- (void)setRightBandImageOffset:(CGFloat)rightBandImageOffset {
+	_rightBandImageOffset = rightBandImageOffset;
+	
+	[self.view setNeedsLayout];
+}
+
+- (void)setLeftCaseImageOffset:(CGFloat)leftCaseImageOffset {
+	_leftCaseImageOffset = leftCaseImageOffset;
+	
+	[self.view setNeedsLayout];
+}
+
+- (void)setRightCaseImageOffset:(CGFloat)rightCaseImageOffset {
+	_rightCaseImageOffset = rightCaseImageOffset;
+	
+	[self.view setNeedsLayout];
+}
+
 #pragma mark - Scroll view delegate
 
 - (void)scrollViewDidScroll:(UIScrollView*)scrollView {
-	NSInteger page = (scrollView.contentOffset.x + (CGRectGetWidth(scrollView.bounds) / 2)) / CGRectGetWidth(scrollView.bounds);
+	NSInteger page = scrollView.contentOffset.x / CGRectGetWidth(scrollView.bounds);
+	NSInteger halfPage = (scrollView.contentOffset.x + (CGRectGetWidth(scrollView.bounds) / 2)) / CGRectGetWidth(scrollView.bounds);
 	
-	if (scrollView == _caseScrollView) {
+	if (scrollView == _bandScrollView) {
+		page = MIN(MAX(page, 0), [_bandAssets count] - 1);
+		halfPage = MIN(MAX(halfPage, 0), [_bandAssets count] - 1);
+		
+		if ([self _isValidPageIndex:page forScrollView:_bandScrollView]) {
+			[self setLeftBandImageOffset:(page * CGRectGetWidth(_bandScrollView.bounds))];
+			[_leftBandImageView setImage:[self bandImageForIndex:page]];
+		} else {
+			[_leftBandImageView setImage:nil];
+		}
+		
+		if ([self _isValidPageIndex:(page + 1) forScrollView:_bandScrollView]) {
+			[self setRightBandImageOffset:((page + 1) * CGRectGetWidth(_bandScrollView.bounds))];
+			[_rightBandImageView setImage:[self bandImageForIndex:(page + 1)]];
+		} else {
+			[_leftBandImageView setImage:nil];
+		}
+		
+		[_bandLabel setText:[[NSBundle bundleForClass:self.class] localizedStringForKey:[_bandAssets objectAtIndex:halfPage][@"label"] value:nil table:@"Bands"]];
+	} else if (scrollView == _caseScrollView) {
 		page = MIN(MAX(page, 0), [_caseAssets[@"assets"] count] - 1);
+		halfPage = MIN(MAX(halfPage, 0), [_caseAssets[@"assets"] count] - 1);
+		
+		if ([self _isValidPageIndex:page forScrollView:_caseScrollView]) {
+			[self setLeftCaseImageOffset:(page * CGRectGetWidth(_caseScrollView.bounds))];
+			[_leftCaseImageView setImage:[self caseImageForIndex:page]];
+		} else {
+			[_leftCaseImageView setImage:nil];
+		}
+		
+		if ([self _isValidPageIndex:(page + 1) forScrollView:_caseScrollView]) {
+			[self setRightCaseImageOffset:((page + 1) * CGRectGetWidth(_caseScrollView.bounds))];
+			[_rightCaseImageView setImage:[self caseImageForIndex:(page + 1)]];
+		} else {
+			[_rightCaseImageView setImage:nil];
+		}
 		
 		[_caseLabel setText:[NSString stringWithFormat:@"%@ %@", 
 			[[NSBundle bundleForClass:self.class] localizedStringForKey:_caseAssets[@"prefix"] value:nil table:@"Bands"],
-			[[NSBundle bundleForClass:self.class] localizedStringForKey:[_caseAssets[@"assets"] objectAtIndex:page][@"label"] value:nil table:@"Bands"]
+			[[NSBundle bundleForClass:self.class] localizedStringForKey:[_caseAssets[@"assets"] objectAtIndex:halfPage][@"label"] value:nil table:@"Bands"]
 		]];
-	} else if (scrollView == _bandScrollView) {
-		page = MIN(MAX(page, 0), [_bandAssets count] - 1);
-		[_bandLabel setText:[[NSBundle bundleForClass:self.class] localizedStringForKey:[_bandAssets objectAtIndex:page][@"label"] value:nil table:@"Bands"]];
 	}
 }
 

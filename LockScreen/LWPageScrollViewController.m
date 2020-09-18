@@ -238,8 +238,9 @@
 		}];
 		
 		[_scrollView setWillAddPageToViewHandler:^(NSInteger index) {
-			
-			[_weak_self addChildViewController:[_weak_self _viewControllerForPageAtIndex:index]];
+			if ([_weak_self _viewControllerForPageAtIndex:index]) {
+				[_weak_self addChildViewController:[_weak_self _viewControllerForPageAtIndex:index]];
+			}
 		}];
 		
 		[_scrollView setDidAddPageToViewHandler:^(NSInteger index) {
