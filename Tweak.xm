@@ -179,9 +179,9 @@ static CGFloat notificationOffset = 0;
 	}
 	
 	if (UIInterfaceOrientationIsPortrait([[[[%c(SBLockScreenManager) sharedInstance] coverSheetViewController] _window] interfaceOrientation])) {
-		r.top += notificationOffset + MAX([[LWPreferences sharedInstance] verticalOffsetPortrait], 0);
+		r.top += notificationOffset + [[LWPreferences sharedInstance] verticalOffsetPortrait];
 	} else {
-		r.top += notificationOffset + MAX([[LWPreferences sharedInstance] verticalOffsetLandscape], 0);
+		r.top += notificationOffset + [[LWPreferences sharedInstance] verticalOffsetLandscape];
 	}
     
     return r;
