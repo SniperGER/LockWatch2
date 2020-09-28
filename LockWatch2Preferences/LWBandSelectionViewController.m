@@ -116,8 +116,8 @@
 			[_bandScrollView.trailingAnchor constraintLessThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
 			[_bandScrollView.topAnchor constraintGreaterThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
 			[_bandScrollView.bottomAnchor constraintLessThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
-			[_bandScrollView.widthAnchor constraintLessThanOrEqualToConstant:375],
-			[_bandScrollView.heightAnchor constraintEqualToAnchor:_bandScrollView.widthAnchor],
+			// [_bandScrollView.heightAnchor constraintEqualToAnchor:_bandScrollView.widthAnchor],
+			[_bandScrollView.heightAnchor constraintLessThanOrEqualToConstant:375],
 			[_bandScrollView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
 			[_bandScrollView.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor]
 		]];
@@ -168,8 +168,8 @@
 			[_caseScrollView.trailingAnchor constraintLessThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
 			[_caseScrollView.topAnchor constraintGreaterThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
 			[_caseScrollView.bottomAnchor constraintLessThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
-			[_caseScrollView.widthAnchor constraintLessThanOrEqualToConstant:375],
-			[_caseScrollView.heightAnchor constraintEqualToAnchor:_caseScrollView.widthAnchor],
+			// [_caseScrollView.heightAnchor constraintEqualToAnchor:_caseScrollView.widthAnchor],
+			[_caseScrollView.heightAnchor constraintLessThanOrEqualToConstant:375],
 			[_caseScrollView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
 			[_caseScrollView.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor]
 		]];
@@ -277,7 +277,8 @@
 }
 
 - (UIImageView*)_newImageView {
-	UIImageView* imageView = [[UIImageView alloc] initWithFrame:(CGRect){ CGPointZero, { MIN(CGRectGetWidth(self.view.bounds), 375), MIN(CGRectGetWidth(self.view.bounds), 375) }}];
+	UIImageView* imageView = [[UIImageView alloc] initWithFrame:(CGRect){ CGPointZero, { CGRectGetWidth(self.view.bounds), MIN(CGRectGetWidth(self.view.bounds), 375) }}];
+	[imageView setContentMode:UIViewContentModeScaleAspectFit];
 	return imageView;
 }
 
@@ -292,7 +293,7 @@
 }
 
 - (UIScrollView*)_newScrollView {
-	UIScrollView* scrollView = [[UIScrollView alloc] initWithFrame:(CGRect){ CGPointZero, { MIN(CGRectGetWidth(self.view.bounds), 375), MIN(CGRectGetWidth(self.view.bounds), 375) }}];
+	UIScrollView* scrollView = [[UIScrollView alloc] initWithFrame:(CGRect){ CGPointZero, { CGRectGetWidth(self.view.bounds), MIN(CGRectGetWidth(self.view.bounds), 375) }}];
 	[scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[scrollView setClipsToBounds:NO];
 	[scrollView setPagingEnabled:YES];
