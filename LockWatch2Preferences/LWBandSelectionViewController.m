@@ -78,6 +78,11 @@
 		_bandLabel = [self _newLabel];
 		[_bandLabel setFont:[UIFont systemFontOfSize:14]];
 		[self.view addSubview:_bandLabel];
+		
+		[NSLayoutConstraint activateConstraints:@[
+			[_bandLabel.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:24],
+			[_bandLabel.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-24],
+		]];
 	}
 	
 	if (!_bandScrollView && [_bandAssets count]) {
@@ -92,11 +97,6 @@
 				_bandIndex = index;
 				*stop = YES;
 			}
-			
-			// UIImageView* imageView = [[UIImageView alloc] initWithFrame:(CGRect){{ CGRectGetWidth(_bandScrollView.bounds) * index, 0 }, _bandScrollView.bounds.size }];
-			// [imageView setImage:[UIImage imageNamed:asset[@"asset"] inBundle:[NSBundle bundleForClass:self.class] compatibleWithTraitCollection:nil]];
-			
-			// [_bandScrollView addSubview:imageView];
 		}];
 		
 		[_bandScrollView setContentSize:(CGSize){ CGRectGetWidth(_bandScrollView.bounds) * _bandAssets.count, CGRectGetHeight(_bandScrollView.bounds) }];
@@ -112,14 +112,9 @@
 		[_bandScrollView addSubview:_rightBandImageView];
 		
 		[NSLayoutConstraint activateConstraints:@[
-			[_bandScrollView.leadingAnchor constraintGreaterThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
-			[_bandScrollView.trailingAnchor constraintLessThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
-			[_bandScrollView.topAnchor constraintGreaterThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
-			[_bandScrollView.bottomAnchor constraintLessThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
-			// [_bandScrollView.heightAnchor constraintEqualToAnchor:_bandScrollView.widthAnchor],
-			[_bandScrollView.heightAnchor constraintLessThanOrEqualToConstant:375],
-			[_bandScrollView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
-			[_bandScrollView.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor]
+			[_bandScrollView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+			[_bandScrollView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
+			[_bandScrollView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor]
 		]];
 	}
 	
@@ -127,6 +122,11 @@
 		_caseLabel = [self _newLabel];
 		[_caseLabel setFont:[UIFont systemFontOfSize:16]];
 		[self.view addSubview:_caseLabel];
+		
+		[NSLayoutConstraint activateConstraints:@[
+			[_caseLabel.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:24],
+			[_caseLabel.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-24]
+		]];
 	}
 	
 	if (!_caseScrollView && [_caseAssets[@"assets"] count]) {
@@ -141,11 +141,6 @@
 				_caseIndex = index;
 				*stop = YES;
 			}
-			
-	// 		UIImageView* imageView = [[UIImageView alloc] initWithFrame:(CGRect){{ CGRectGetWidth(_caseScrollView.bounds) * index, 0 }, _caseScrollView.bounds.size }];
-	// 		[imageView setImage:[UIImage imageNamed:asset[@"asset"] inBundle:[NSBundle bundleForClass:self.class] compatibleWithTraitCollection:nil]];
-			
-	// 		[_caseScrollView addSubview:imageView];
 		}];
 		
 		[_caseScrollView setContentSize:(CGSize){ CGRectGetWidth(_caseScrollView.bounds) * [_caseAssets[@"assets"] count], CGRectGetHeight(_caseScrollView.bounds) }];
@@ -166,12 +161,7 @@
 		[NSLayoutConstraint activateConstraints:@[
 			[_caseScrollView.leadingAnchor constraintGreaterThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
 			[_caseScrollView.trailingAnchor constraintLessThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
-			[_caseScrollView.topAnchor constraintGreaterThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
-			[_caseScrollView.bottomAnchor constraintLessThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
-			// [_caseScrollView.heightAnchor constraintEqualToAnchor:_caseScrollView.widthAnchor],
-			[_caseScrollView.heightAnchor constraintLessThanOrEqualToConstant:375],
-			[_caseScrollView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
-			[_caseScrollView.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor]
+			[_caseScrollView.topAnchor constraintGreaterThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor]
 		]];
 	}
 	
@@ -182,19 +172,15 @@
 		
 		
 		[NSLayoutConstraint activateConstraints:@[
-			[_caseLabel.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:24],
-			[_caseLabel.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-24],
 			[_caseLabel.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor]
 		]];
 	} else {
 		[NSLayoutConstraint activateConstraints:@[
-			[_caseLabel.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:24],
-			[_caseLabel.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-24],
-			[_caseLabel.topAnchor constraintEqualToAnchor:_bandScrollView.bottomAnchor constant:24],
-			
-			[_bandLabel.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:24],
-			[_bandLabel.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-24],
+			[_caseLabel.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor constant:-(24 + 34)],
 			[_bandLabel.topAnchor constraintEqualToAnchor:_caseLabel.bottomAnchor],
+			
+			[_bandScrollView.bottomAnchor constraintEqualToAnchor:_caseLabel.topAnchor constant:-24],
+			[_caseScrollView.bottomAnchor constraintEqualToAnchor:_caseLabel.topAnchor constant:-24],
 		]];
 	}
 	
