@@ -42,6 +42,11 @@ BOOL isLandscapePhone() {
 
 %hook SBFLockScreenDateView
 - (void)layoutSubviews {
+	if (![self.nextResponder isKindOfClass:%c(SBFLockScreenDateViewController)]) {
+		%orig;
+		return;
+	}
+	
 	if (clockViewController) {
 		[MSHookIvar<UILabel *>(self,"_timeLabel") removeFromSuperview];
 		[MSHookIvar<UILabel *>(self,"_dateSubtitleView") removeFromSuperview];
@@ -57,6 +62,11 @@ BOOL isLandscapePhone() {
 }
 
 - (void)setAlignmentPercent:(CGFloat)arg1 {
+	if (![self.nextResponder isKindOfClass:%c(SBFLockScreenDateViewController)]) {
+		%orig;
+		return;
+	}
+	
 	SBLockScreenManager* manager = [%c(SBLockScreenManager) sharedInstance];
 	CSCoverSheetViewController* coverSheetController = [manager coverSheetViewController];
 	
