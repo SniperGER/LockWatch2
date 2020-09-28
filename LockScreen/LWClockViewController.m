@@ -431,6 +431,14 @@ static _UILegibilitySettings* _legibilitySettings;
 	if (!view && !CGRectContainsPoint(convertedRect, point)) view = _libraryViewController.switcherController.scrollView;
 	if (!view) view = [_libraryViewController.view hitTest:convertedPoint withEvent:event];
 	
+	if ([[LWPreferences sharedInstance] showCase] && _clockFrameController.caseImage) {
+		if (CGRectContainsPoint([self.view convertRect:_libraryViewController.view.frame toView:self.view], point)) {
+			return view;
+		}
+	
+		return nil;
+	}
+	
 	if ((!_libraryViewIsPresented && CGRectContainsPoint(convertedRect, point)) || _libraryViewIsPresented) {
 		return view;
 	}
