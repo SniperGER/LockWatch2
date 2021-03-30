@@ -2,7 +2,7 @@ THEOS_DEVICE_IP = Janiks-iPhone-X.local
 
 PACKAGE_VERSION = $(shell cat VERSION)
 ARCHS = arm64 arm64e
-TARGET = iphone:13.3:latest
+TARGET = iphone:13.7:latest
 # ARCHS = x86_64
 # TARGET = simulator:clang:13.2:latest
 # TARGET_CODESIGN = 

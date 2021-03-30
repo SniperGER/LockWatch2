@@ -6,7 +6,15 @@
 // Copyright © 2020 Team FESTIVAL. All rights reserved
 //
 
-#define __VERSION "2.0f-2"
+#include <dlfcn.h>
+#include <substrate.h>
+#include <theos/IOSMacros.h>
+#include <objc/runtime.h>
+
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+#define __VERSION "2.0f-3"
 
 #define DPKG_PATH "/var/lib/dpkg/info/ml.festival.lockwatch2.list"
 

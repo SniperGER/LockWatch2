@@ -15,6 +15,16 @@
 
 @implementation LWClockFrameViewController
 
++ (NSBundle*)localizableBundle {
+	static NSBundle* bundle = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        bundle = [NSBundle bundleWithPath:@"/Library/Application Support/LockWatch2"];
+    });
+	
+	return bundle;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
@@ -22,12 +32,12 @@
 	[self.view setTranslatesAutoresizingMaskIntoConstraints:NO];
 	
 	_bandImageView = [UIImageView new];
-	[_bandImageView setContentMode:UIViewContentModeCenter];
+	[_bandImageView setContentMode:UIViewContentModeScaleAspectFit];
 	[_bandImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[self.view addSubview:_bandImageView];
 	
 	_caseImageView = [UIImageView new];
-	[_caseImageView setContentMode:UIViewContentModeCenter];
+	[_caseImageView setContentMode:UIViewContentModeScaleAspectFit];
 	[_caseImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[self.view addSubview:_caseImageView];
 	
@@ -36,13 +46,15 @@
 	BOOL showBand = [[LWPreferences sharedInstance] showBand];
 	
 	if (showCase) {
-		_caseImage = [UIImage imageNamed:[[LWPreferences sharedInstance] caseImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil];
+		// _caseImage = [UIImage imageNamed:[[LWPreferences sharedInstance] caseImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil];
+		_caseImage = [UIImage imageWithCIImage:[CIImage imageWithContentsOfURL:[self.class.localizableBundle.bundleURL URLByAppendingPathComponent: [NSString stringWithFormat:@"Cases/%@.heic", [[LWPreferences sharedInstance] caseImageNames][sizeClass]]]] scale:2.0 orientation:UIImageOrientationUp];
 	}
 	
 	[_caseImageView setImage:_caseImage];
 	
 	if (showCase && showBand) {
-		_bandImage = [UIImage imageNamed:[[LWPreferences sharedInstance] bandImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil];
+		// _bandImage = [UIImage imageNamed:[[LWPreferences sharedInstance] bandImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil];
+		_bandImage = [UIImage imageWithCIImage:[CIImage imageWithContentsOfURL:[self.class.localizableBundle.bundleURL URLByAppendingPathComponent: [NSString stringWithFormat:@"Bands/%@.heic", [[LWPreferences sharedInstance] bandImageNames][sizeClass]]]] scale:2.0 orientation:UIImageOrientationUp];
 	}
 	
 	[_bandImageView setImage:_bandImage];
@@ -82,7 +94,8 @@
 	BOOL showBand = [[LWPreferences sharedInstance] showBand];
 	
 	if (showCase) {
-		_caseImage = [UIImage imageNamed:[[LWPreferences sharedInstance] caseImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil];
+		// _caseImage = [UIImage imageNamed:[[LWPreferences sharedInstance] caseImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil];
+		_caseImage = [UIImage imageWithCIImage:[CIImage imageWithContentsOfURL:[self.class.localizableBundle.bundleURL URLByAppendingPathComponent: [NSString stringWithFormat:@"Cases/%@.heic", [[LWPreferences sharedInstance] caseImageNames][sizeClass]]]] scale:2.0 orientation:UIImageOrientationUp];
 	} else {
 		_caseImage = nil;
 	}
@@ -90,7 +103,8 @@
 	[_caseImageView setImage:_caseImage];
 	
 	if (showCase && showBand) {
-		_bandImage = [UIImage imageNamed:[[LWPreferences sharedInstance] bandImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil];
+		// _bandImage = [UIImage imageNamed:[[LWPreferences sharedInstance] bandImageNames][sizeClass] inBundle:[NSBundle bundleWithPath:LOCALIZABLE_BUNDLE_PATH] compatibleWithTraitCollection:nil];
+		_bandImage = [UIImage imageWithCIImage:[CIImage imageWithContentsOfURL:[self.class.localizableBundle.bundleURL URLByAppendingPathComponent: [NSString stringWithFormat:@"Bands/%@.heic", [[LWPreferences sharedInstance] bandImageNames][sizeClass]]]] scale:2.0 orientation:UIImageOrientationUp];
 	} else {
 		_bandImage = nil;
 	}

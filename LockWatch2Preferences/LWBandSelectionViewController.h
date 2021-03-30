@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 	NSUInteger _bandIndex;
 	NSUInteger _caseIndex;
 	
+	NSUInteger _currentBandPage;
+	NSUInteger _currentCasePage;
+	
 	UISegmentedControl* _segmentedControl;
 	UIScrollView* _caseScrollView;
 	UIScrollView* _bandScrollView;
